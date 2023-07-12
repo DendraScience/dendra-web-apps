@@ -1,0 +1,10 @@
+*/
+*.html
+*.ico
+*.jpg
+*.js
+*.json
+*.png
+*.svg
+*.webmanifest
+*.xml
