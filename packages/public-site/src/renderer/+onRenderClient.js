@@ -8,9 +8,9 @@ import '@fontsource/roboto/900.css'
 import { tracker } from './tracker'
 import { createApp } from './app'
 
-export { render }
+export default onRenderClient
 
-async function render(pageContext) {
+async function onRenderClient(pageContext) {
   const app = createApp(pageContext)
 
   tracker.pageView(pageContext)

@@ -15,3 +15,5 @@ This is a multi-app monorepo.
 
 - This is a proof of concept and work in progress.
 - See Makefile for more.
+
+https://vite-plugin-ssr.com/migration/v1-design

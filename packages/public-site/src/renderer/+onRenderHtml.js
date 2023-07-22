@@ -1,19 +1,9 @@
 import { renderToNodeStream } from '@vue/server-renderer'
 import { escapeInject } from 'vite-plugin-ssr/server'
 import { createApp } from './app'
-import { createCustomPageContext } from './custom'
 import { logger } from '#common/lib/log'
 
-export { onBeforeRender, render }
-
-// SEE: https://vite-plugin-ssr.com/data-fetching
-export const passToClient = [
-  'canonicalPaths',
-  'pageProps',
-  'title',
-  'titleFull',
-  'urlPathname'
-]
+export default onRenderHtml
 
 const appName = import.meta.env.VITE_APP_NAME || ''
 const maskIconColor = import.meta.env.VITE_MASK_ICON_COLOR || '#4caf50'
@@ -35,15 +25,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 const sitemapExclusions = []
 
-async function onBeforeRender(pageContext) {
-  return {
-    pageContext: {
-      ...(await createCustomPageContext(pageContext))
-    }
-  }
-}
-
-async function render(pageContext) {
+async function onRenderHtml(pageContext) {
   const { movedTo, redirectTo, sitemap } = pageContext
   if (movedTo)
     return {

@@ -1,0 +1,11 @@
+{
+    "compilerOptions":
+    {
+        "outDir": "../../output/data-query-app/server"
+    },
+    "extends": "../../tsconfig",
+    "include":
+    [
+        "src/server/index.ts"
+    ]
+}

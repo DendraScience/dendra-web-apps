@@ -1,6 +1,6 @@
 import { createCustomPageContext } from '#root/renderer/custom'
 
-export { onBeforeRender }
+export default onBeforeRender
 
 async function onBeforeRender(pageContext) {
   const pageProps = {}

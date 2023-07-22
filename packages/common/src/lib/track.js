@@ -29,11 +29,14 @@ export class Tracker {
     throw new Error('getGAClientId timed out')
   }
 
-  pageView({ canonicalPaths, title }) {
+  pageView({ canonicalPaths, documentProps }) {
     const { dataLayer, dev, logger, plausable } = this
 
     if (dev && logger)
-      logger.info({ title, url: canonicalPaths.relative }, 'Track pagevew')
+      logger.info(
+        { title: documentProps.title, url: canonicalPaths.relative },
+        'Track pagevew'
+      )
     if (plausable)
       plausable.trackPageview({
         url: canonicalPaths.absolute
@@ -42,7 +45,7 @@ export class Tracker {
       dataLayer.push({
         event: 'pageView',
         pagePath: canonicalPaths.relative,
-        pageTitle: title
+        pageTitle: documentProps.title
       })
   }
 }

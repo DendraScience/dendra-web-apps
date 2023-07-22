@@ -14,7 +14,7 @@ import Components from 'unplugin-vue-components/vite'
 import { Vuetify3Resolver } from 'unplugin-vue-components/resolvers'
 // https://github.com/vuetifyjs/vuetify-loader/tree/next/packages/vite-plugin
 import vuetify from 'vite-plugin-vuetify'
-import { pkgName } from './build-utils'
+import { pkgName } from './build-utils.js'
 
 const envConfig = process.env.NODE_ENV === 'production' ? {} : {}
 const isPrerender = process.argv[1].endsWith('/prerender.js')
