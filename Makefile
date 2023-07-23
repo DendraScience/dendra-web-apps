@@ -42,6 +42,19 @@ setup-public-site:
 
 
 ##
+# dev
+##
+
+.PHONY: dev
+dev: brand-data-query-app brand-public-site
+	@echo "Starting dev servers..."
+	@bash -c "trap 'echo Bye!; exit 0' SIGINT; \
+		PORT=3001 npm run --prefix $(PKG_DATA_QUERY_APP) dev & \
+		PORT=3000 npm run --prefix $(PKG_PUBLIC_SITE) dev"
+	@printf "\e[32mSuccess!\e[39m\n"
+
+
+##
 # branding
 ##
 
@@ -138,9 +151,3 @@ serve-public-site:
 	@echo "Starting production server..."
 	npm run --prefix $(PKG_PUBLIC_SITE) server:prod
 	@printf "\e[32mSuccess!\e[39m\n"
-
-
-# TODO: single dev make
-# https://vitejs.dev/guide/features.html
-# https://vuejs.org/guide/typescript/overview.html#volar-takeover-mode
-# https://github.com/vuejs/language-tools#readme

@@ -1,6 +1,7 @@
 import { renderToNodeStream } from '@vue/server-renderer'
 import { escapeInject } from 'vite-plugin-ssr/server'
 import { createApp } from './app'
+import { getCustomProps } from './getCustomProps'
 import { logger } from '#common/lib/log'
 
 export default onRenderHtml
@@ -42,43 +43,15 @@ async function onRenderHtml(pageContext) {
 
   const app = createApp(pageContext)
   const stream = renderToNodeStream(app)
+  const customProps = getCustomProps(pageContext)
+  const { canonicalPaths, documentProps } = customProps
 
-  // Construct head elements using documentProps and getDocumentProps
-  // SEE: https://vite-plugin-ssr.com/head
-  const { canonicalPaths, pageProps } = pageContext
-  const { documentProps, getDocumentProps } = pageContext.exports
-  const documentPropsMerged = Object.assign(
-    {
-      title: import.meta.env.VITE_TITLE,
-      titleTemplate: import.meta.env.VITE_TITLE_TEMPLATE
-    },
-    documentProps,
-    typeof getDocumentProps === 'function'
-      ? getDocumentProps(pageProps)
-      : undefined
-  )
-
-  // Resolve title and description
-  const title = documentPropsMerged.title || 'Hello'
-  const titleFull = (documentPropsMerged.titleTemplate || '%s').replace(
-    '%s',
-    title
-  )
-  const descriptionTag = !documentPropsMerged.description
+  const descriptionTag = !documentProps.description
     ? ''
-    : escapeInject`<meta name="description" content="${documentPropsMerged.description}" />`
-
+    : escapeInject`<meta name="description" content="${documentProps.description}" />`
   // Process Open Graph properties
   // SEE: https://ogp.me/
-  const ogPropsMerged = Object.assign(
-    {
-      description: documentPropsMerged.description,
-      title: titleFull,
-      url: canonicalPaths.absolute
-    },
-    documentPropsMerged.og
-  )
-  const ogTags = Object.entries(ogPropsMerged).reduce((tags, [key, val]) => {
+  const ogTags = Object.entries(documentProps.og).reduce((tags, [key, val]) => {
     return !val
       ? tags
       : escapeInject`${tags}<meta property="og:${key}" content="${val}" />`
@@ -113,7 +86,7 @@ async function onRenderHtml(pageContext) {
         <link rel="shortcut icon" href="/favicon.ico?v=3" />
         <meta name="msapplication-TileColor" content="${msTileColor}" />
         <meta name="theme-color" content="#ffffff" />
-        <title>${titleFull}</title>
+        <title>${documentProps.titleFull}</title>
         ${descriptionTag}
         ${ogTags}
       </head>
@@ -126,9 +99,8 @@ async function onRenderHtml(pageContext) {
   return {
     documentHtml,
     pageContext: {
-      enableEagerStreaming: true,
-      title,
-      titleFull
+      ...customProps,
+      enableEagerStreaming: true
     }
   }
 }

@@ -28,6 +28,8 @@ startServer()
 
 async function startServer() {
   const app = express()
+  const host = process.env.HOST
+  const port = process.env.PORT ?? 3000
 
   app.use(compression())
 
@@ -43,7 +45,10 @@ async function startServer() {
           fs: {
             allow: [`${root}/../../..`] // Project root
           },
-          middlewareMode: true
+          middlewareMode: true,
+          hmr: {
+            port: +port + 10
+          }
         }
       })
     ).middlewares
@@ -65,8 +70,6 @@ async function startServer() {
     }
   })
 
-  const host = process.env.HOST
-  const port = process.env.PORT ?? 3000
   if (host) app.listen(+port, host)
   else app.listen(port)
 

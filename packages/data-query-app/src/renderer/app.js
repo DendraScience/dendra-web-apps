@@ -14,6 +14,7 @@ function createApp(pageContext) {
   const PageWithLayout = {
     setup: () => {
       rootState = reactive({
+        Layout: markRaw(pageContext.config.Layout || LayoutDefault),
         Page: markRaw(pageContext.Page),
         pageProps: markRaw(pageContext.pageProps || {})
       })
@@ -21,7 +22,7 @@ function createApp(pageContext) {
     },
     render() {
       return h(
-        pageContext.exports.Layout || LayoutDefault,
+        this.Layout,
         {},
         {
           default: () => {
@@ -40,6 +41,7 @@ function createApp(pageContext) {
   app.config.globalProperties.$spa = {
     changePage: pageContextNew => {
       Object.assign(pageContextReactive, pageContextNew)
+      rootState.Layout = markRaw(pageContextNew.config.Layout || LayoutDefault)
       rootState.Page = markRaw(pageContextNew.Page)
       rootState.pageProps = markRaw(pageContextNew.pageProps || {})
     }

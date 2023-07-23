@@ -15,8 +15,8 @@ let app
 async function onRenderClient(pageContext) {
   if (!app) {
     app = createApp(pageContext)
-    app.mount('#app')
     tracker.pageView(pageContext)
+    app.mount('#app')
   } else {
     const customProps = getCustomProps(pageContext)
     const pageContextNew = Object.assign({}, pageContext, customProps)

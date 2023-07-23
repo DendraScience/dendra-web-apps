@@ -11,7 +11,7 @@ function createApp(pageContext) {
   const PageWithLayout = {
     render() {
       return h(
-        pageContext.exports.Layout || LayoutDefault,
+        pageContext.config.Layout || LayoutDefault,
         {},
         {
           default() {

@@ -44,7 +44,9 @@
     </v-navigation-drawer>
 
     <v-main>
-      <slot />
+      <v-fade-transition leave-absolute>
+        <slot />
+      </v-fade-transition>
     </v-main>
 
     <v-footer absolute app>

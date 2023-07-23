@@ -12,8 +12,6 @@ export default onRenderClient
 
 async function onRenderClient(pageContext) {
   const app = createApp(pageContext)
-
   tracker.pageView(pageContext)
-
   app.mount('#app')
 }
