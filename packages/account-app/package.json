@@ -1,0 +1,15 @@
+{
+  "name": "account-app",
+  "version": "0.0.1",
+  "description": "Dendra data auery app.",
+  "author": "J. Scott Smith",
+  "scripts": {
+    "dev": "npm run server",
+    "prod": "npm run build && npm run server:prod",
+    "build": "vite build && node prerender.js",
+    "build-server": "tsc -p tsconfig.server.json",
+    "server": "ts-node src/server/index.ts",
+    "server:prod": "cross-env NODE_ENV=production node ../../output/account-app/server"
+  },
+  "type": "module"
+}

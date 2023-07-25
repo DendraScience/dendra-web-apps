@@ -1,0 +1,11 @@
+{
+    "compilerOptions":
+    {
+        "outDir": "../../output/account-app/server"
+    },
+    "extends": "../../tsconfig",
+    "include":
+    [
+        "src/server/index.ts"
+    ]
+}
