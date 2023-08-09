@@ -3,49 +3,46 @@ export class Tracker {
     Object.assign(this, options)
   }
 
-  event(event, props) {
-    const { dataLayer, dev, logger, plausable } = this
+  event(event, props = {}) {
+    const { dev, gtag, logger, plausable } = this
 
+    if (!event) return
     if (dev && logger) logger.info({ event, props }, 'Track event')
     if (plausable) plausable.trackEvent(event, { props })
-    if (dataLayer) dataLayer.push({ event, ...props })
-  }
-
-  async getGAClientId() {
-    // Try 5 times, 400ms sleep between tries = max 2s wait
-    for (let i = 0; i < 5; i++) {
-      const gaName = window.GoogleAnalyticsObject || 'ga'
-      const ga = window[gaName]
-
-      if (ga && typeof ga.getAll === 'function') {
-        const trackers = ga.getAll()
-        if (trackers.length) return trackers[0].get('clientId')
-      }
-
-      await new Promise(resolve => setTimeout(resolve, 400))
-    }
-
-    // Timed out
-    throw new Error('getGAClientId timed out')
+    if (gtag) gtag('event', event, props)
   }
 
   pageView({ canonicalPaths, documentProps }) {
-    const { dataLayer, dev, logger, plausable } = this
+    const { dev, gtag, logger, plausable } = this
 
-    if (dev && logger)
+    if (
+      dev &&
+      logger &&
+      canonicalPaths &&
+      canonicalPaths.relative &&
+      documentProps &&
+      documentProps.title
+    )
       logger.info(
         { title: documentProps.title, url: canonicalPaths.relative },
         'Track pagevew'
       )
-    if (plausable)
+
+    if (plausable && canonicalPaths && canonicalPaths.absolute)
       plausable.trackPageview({
         url: canonicalPaths.absolute
       })
-    if (dataLayer)
-      dataLayer.push({
-        event: 'pageView',
-        pagePath: canonicalPaths.relative,
-        pageTitle: documentProps.title
+
+    if (
+      gtag &&
+      canonicalPaths &&
+      canonicalPaths.absolute &&
+      documentProps &&
+      documentProps.title
+    )
+      gtag('event', 'page_view', {
+        page_location: canonicalPaths.absolute,
+        page_title: documentProps.title
       })
   }
 }

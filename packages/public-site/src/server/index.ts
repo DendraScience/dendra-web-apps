@@ -29,7 +29,7 @@ startServer()
 async function startServer() {
   const app = express()
   const host = process.env.HOST
-  const port = process.env.PORT ?? 3000
+  const port = process.env.PORT || 3000
 
   app.use(compression())
 

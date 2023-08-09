@@ -5,19 +5,17 @@ import { defineConfig } from 'vite'
 import checker from 'vite-plugin-checker'
 // https://lightningcss.dev/docs.html#with-vite
 import lightningcss from 'vite-plugin-lightningcss'
-// https://github.com/brillout/vite-plugin-ssr
-import ssr from 'vite-plugin-ssr/plugin'
 // https://github.com/vitejs/vite/tree/main/packages/plugin-vue#readme
 import vue from '@vitejs/plugin-vue'
 // https://github.com/antfu/unplugin-vue-components
 import Components from 'unplugin-vue-components/vite'
 import { Vuetify3Resolver } from 'unplugin-vue-components/resolvers'
-// https://github.com/vuetifyjs/vuetify-loader/tree/next/packages/vite-plugin
+// https://github.com/vuetifyjs/vuetify-loader/tree/master/packages/vite-plugin
 import vuetify from 'vite-plugin-vuetify'
 import { pkgName } from './build-utils.js'
 
 const envConfig = process.env.NODE_ENV === 'production' ? {} : {}
-const isPrerender = process.argv[1].endsWith('/prerender.js')
+const port = process.env.PORT || 3000
 
 const plugins = [
 	lightningcss({
@@ -31,23 +29,13 @@ const plugins = [
 	Components({
 		resolvers: [Vuetify3Resolver()]
 	}),
-	ssr({
-		includeAssetsImportedByServer: true,
-		prerender: {
-			disableAutoRun: true
-		}
+	checker({
+		eslint: {
+			lintCommand: 'eslint "./**/*.{js,ts,tsx,vue}"'
+		},
+		vueTsc: { root: '../../' }
 	})
 ]
-
-if (!isPrerender)
-	plugins.push(
-		checker({
-			eslint: {
-				lintCommand: 'eslint "./**/*.{js,ts,tsx,vue}"'
-			},
-			vueTsc: { root: '../../' }
-		})
-	)
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -73,7 +61,15 @@ export default defineConfig({
 		}
 	},
 
-	ssr: { noExternal: ['vuetify'] },
+	server: {
+		fs: {
+			allow: [`../..`]
+		},
+		hmr: {
+			port: +port + 10
+		},
+		port
+	},
 
 	...envConfig
 })

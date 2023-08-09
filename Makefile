@@ -48,12 +48,12 @@ $(SETUP_TASKS):
 # branding
 ##
 
-.PHONY: brand
-brand: $(BRAND_TASKS)
-
 .PHONY: clean-branding
 clean-branding:
 	rm -rf branding
+
+.PHONY: brand
+brand: $(BRAND_TASKS)
 
 .PHONY: $(BRAND_TASKS)
 $(BRAND_TASKS):
@@ -80,6 +80,10 @@ $(BRAND_TASKS):
 ##
 # build
 ##
+
+.PHONY: clean-output
+clean-output:
+	rm -rf output
 
 .PHONY: build
 build: $(BUILD_TASKS)

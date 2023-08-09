@@ -1,15 +1,15 @@
 {
   "name": "data-query-app",
   "version": "0.0.1",
-  "description": "Dendra data auery app.",
+  "description": "Dendra data query app.",
   "author": "J. Scott Smith",
   "scripts": {
-    "dev": "npm run server",
+    "dev": "vite",
     "prod": "npm run build && npm run server:prod",
-    "build": "vite build && node prerender.js",
-    "build-server": "tsc -p tsconfig.server.json",
-    "server": "ts-node src/server/index.ts",
-    "server:prod": "cross-env NODE_ENV=production node ../../output/data-query-app/server"
+    "build": "vite build",
+    "build-server": "echo \"Skipping server build\"",
+    "server": "vite preview",
+    "server:prod": "serve -s \"../../output/data-query-app/dist\""
   },
   "type": "module"
 }

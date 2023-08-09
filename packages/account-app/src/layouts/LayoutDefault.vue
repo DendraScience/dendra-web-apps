@@ -1,5 +1,5 @@
 <template>
-  <v-app v-show="isMounted">
+  <v-layout>
     <v-system-bar>
       <v-spacer></v-spacer>
       <v-icon :icon="mdiSquare" />
@@ -13,7 +13,6 @@
       <v-spacer></v-spacer>
       <div class="h-100 mr-2 pt-3" style="width: 100px">
         <v-select
-          v-if="isMounted"
           v-model="locale"
           :items="$i18n.availableLocales"
           density="compact"
@@ -22,7 +21,6 @@
         ></v-select>
       </div>
       <v-btn
-        v-if="isMounted"
         :icon="dark ? mdiWeatherNight : mdiWeatherSunny"
         @click="toggleDark()"
       />
@@ -32,21 +30,19 @@
       <v-list density="compact" nav>
         <v-list-item
           :prepend-icon="mdiHome"
-          href="/"
+          :to="{ name: 'home' }"
           title="Home"
         ></v-list-item>
         <v-list-item
           :prepend-icon="mdiFormatPaint"
-          href="/theme"
+          :to="{ name: 'theme' }"
           title="Theme"
         ></v-list-item>
       </v-list>
     </v-navigation-drawer>
 
     <v-main>
-      <v-fade-transition leave-absolute>
-        <slot />
-      </v-fade-transition>
+      <slot />
     </v-main>
 
     <v-footer absolute app>
@@ -58,14 +54,14 @@
       cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id
       est laborum.
     </v-footer>
-  </v-app>
+  </v-layout>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { onMounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useTheme } from 'vuetify'
-import { useMounted, useStorage, useToggle } from '@vueuse/core'
+import { useStorage, useToggle } from '@vueuse/core'
 import {
   mdiCircle,
   mdiFormatPaint,
@@ -77,7 +73,6 @@ import {
 } from '@mdi/js'
 
 const APP_NAME = import.meta.env.VITE_APP_NAME
-const isMounted = useMounted()
 const theme = useTheme()
 const { locale: i18nLocale } = useI18n()
 const dark = useStorage('dark', theme.global.current.value.dark)

@@ -15,8 +15,8 @@ export function getCustomProps(pageContext) {
   // documentProps
   const documentProps = Object.assign(
     {},
-    config.documentProps || {},
-    pageContext.documentProps || {}
+    config?.documentProps,
+    pageContext?.documentProps
   )
   documentProps.title =
     documentProps.title || import.meta.env.VITE_TITLE || 'Hello'
