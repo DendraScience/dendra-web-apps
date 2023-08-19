@@ -1,0 +1,23 @@
+{
+    "directoryListing": false,
+    "public": "output",
+    "redirects":
+    [
+        {
+            "destination": "/query",
+            "source": "/",
+            "type": 307
+        }
+    ],
+    "rewrites":
+    [
+        {
+            "destination": "/account-app/dist/index.html",
+            "source": "account/**"
+        },
+        {
+            "destination": "/data-query-app/dist/index.html",
+            "source": "query/**"
+        }
+    ]
+}

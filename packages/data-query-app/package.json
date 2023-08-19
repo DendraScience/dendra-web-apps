@@ -6,10 +6,9 @@
   "scripts": {
     "dev": "vite",
     "prod": "npm run build && npm run server:prod",
-    "build": "vite build",
+    "build": "vite build --base=/data-query-app/dist/",
     "build-server": "echo \"Skipping server build\"",
-    "server": "vite preview",
-    "server:prod": "serve -s \"../../output/data-query-app/dist\""
+    "server": "vite preview"
   },
   "type": "module"
 }

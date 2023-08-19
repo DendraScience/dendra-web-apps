@@ -3,7 +3,7 @@ import routes from './routes'
 import { tracker } from './tracker'
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHistory(import.meta.env.VITE_ROUTER_BASE),
   routes,
   scrollBehavior() {
     return { top: 0, left: 0 }

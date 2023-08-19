@@ -104,9 +104,10 @@ $(BUILD_TASKS):
 dev: brand
 	@echo "Starting dev servers..."
 	@bash -c "trap 'echo Bye!; exit 0' SIGINT; \
-		PORT=3002 npm run --prefix $(PKG_ACCOUNT_APP) dev & \
-		PORT=3001 npm run --prefix $(PKG_DATA_QUERY_APP) dev & \
-		PORT=3000 npm run --prefix $(PKG_PUBLIC_SITE) dev"
+		PORT=3000 npm run --prefix $(PKG_PUBLIC_SITE) dev & \
+		PORT=3002 npm run --prefix $(PKG_DATA_QUERY_APP) dev & \
+		PORT=3004 npm run --prefix $(PKG_ACCOUNT_APP) dev & \
+		wait $(jobs -p)"
 	@printf "\e[32mSuccess!\e[39m\n"
 
 .PHONY: $(DEV_TASKS)
@@ -120,8 +121,11 @@ $(DEV_TASKS):
 # serve
 ##
 
-.PHONY: $(SERVE_TASKS)
-$(SERVE_TASKS):
-	@echo "Starting production server..."
-	npm run --prefix packages/${@:-serve=} server:prod
+.PHONY: serve
+serve:
+	@echo "Starting production servers..."
+	@bash -c "trap 'echo Bye!; exit 0' SIGINT; \
+		PORT=3000 npm run --prefix $(PKG_PUBLIC_SITE) server:prod & \
+		serve -c serve.json -p 3002 & \
+		wait $(jobs -p)"
 	@printf "\e[32mSuccess!\e[39m\n"

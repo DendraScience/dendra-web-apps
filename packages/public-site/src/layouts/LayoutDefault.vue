@@ -31,9 +31,19 @@
     <v-navigation-drawer v-model="drawer" temporary>
       <v-list density="compact" nav>
         <v-list-item
+          :href="HREF_PUBLIC_SITE"
           :prepend-icon="mdiHome"
-          href="/"
-          title="Home"
+          title="Dendra Home"
+        ></v-list-item>
+        <v-list-item
+          :href="HREF_ACCOUNT_APP"
+          :prepend-icon="mdiHome"
+          title="Accounts Home"
+        ></v-list-item>
+        <v-list-item
+          :href="HREF_DATA_QUERY_APP"
+          :prepend-icon="mdiHome"
+          title="Query Home"
         ></v-list-item>
         <v-list-item
           :prepend-icon="mdiFormatPaint"
@@ -75,6 +85,10 @@ import {
 } from '@mdi/js'
 
 const APP_NAME = import.meta.env.VITE_APP_NAME
+const HREF_ACCOUNT_APP = import.meta.env.VITE_HREF_ACCOUNT_APP
+const HREF_DATA_QUERY_APP = import.meta.env.VITE_HREF_DATA_QUERY_APP
+const HREF_PUBLIC_SITE = import.meta.env.VITE_HREF_PUBLIC_SITE
+
 const isMounted = useMounted()
 const theme = useTheme()
 const { locale: i18nLocale } = useI18n()
