@@ -4,16 +4,16 @@ export class Tracker {
   }
 
   event(event, props = {}) {
-    const { dev, gtag, logger, plausable } = this
+    const { dev, gtag, logger, plausible } = this
 
     if (!event) return
     if (dev && logger) logger.info({ event, props }, 'Track event')
-    if (plausable) plausable.trackEvent(event, { props })
+    if (plausible) plausible.trackEvent(event, { props })
     if (gtag) gtag('event', event, props)
   }
 
   pageView({ canonicalPaths, documentProps }) {
-    const { dev, gtag, logger, plausable } = this
+    const { dev, gtag, logger, plausible } = this
 
     if (
       dev &&
@@ -28,8 +28,8 @@ export class Tracker {
         'Track pagevew'
       )
 
-    if (plausable && canonicalPaths && canonicalPaths.absolute)
-      plausable.trackPageview({
+    if (plausible && canonicalPaths && canonicalPaths.absolute)
+      plausible.trackPageview({
         url: canonicalPaths.absolute
       })
 
