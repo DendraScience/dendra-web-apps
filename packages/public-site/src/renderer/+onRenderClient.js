@@ -5,7 +5,7 @@ import '@fontsource/roboto/500.css'
 import '@fontsource/roboto/700.css'
 import '@fontsource/roboto/900.css'
 
-import { tracker } from './tracker'
+import { tracker } from '#common/lib/tracker'
 import { createApp } from './app'
 
 export default onRenderClient

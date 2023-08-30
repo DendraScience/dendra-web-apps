@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import routes from './routes'
-import { tracker } from './tracker'
+import { tracker } from '#common/lib/tracker'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.VITE_ROUTER_BASE),

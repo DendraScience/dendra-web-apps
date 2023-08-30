@@ -7,7 +7,7 @@ import {
   getOGProps,
   getStructuredData
 } from './helpers'
-import { logger } from '#common/lib/log'
+import { logger } from '#common/lib/logger'
 
 export default onRenderHtml
 
