@@ -1,12 +1,7 @@
 import { renderToNodeStream } from '@vue/server-renderer'
 import { escapeInject } from 'vite-plugin-ssr/server'
 import { createApp } from './app'
-import {
-  getCanonicalPaths,
-  getDocumentProps,
-  getOGProps,
-  getStructuredData
-} from './helpers'
+import { getOGProps, getStructuredData } from './helpers'
 import { logger } from '#common/lib/logger'
 
 export default onRenderHtml
@@ -40,8 +35,7 @@ async function onRenderHtml(pageContext) {
 
   const app = createApp(pageContext)
   const stream = renderToNodeStream(app)
-  const canonicalPaths = getCanonicalPaths(pageContext)
-  const documentProps = getDocumentProps(pageContext)
+  const { canonicalPaths, documentProps } = pageContext
   const ogProps = getOGProps({ canonicalPaths, documentProps, pageContext })
   const structuredData = getStructuredData({
     canonicalPaths,
@@ -80,24 +74,28 @@ async function onRenderHtml(pageContext) {
   const documentHtml = escapeInject`<!DOCTYPE html>
     <html lang="en">
       <head>
-        <meta charset="UTF-8" />
         ${gaScriptTag}
-        <meta name="application-name" content="${appName}" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="canonical" href="${canonicalPaths.absolute}" />
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=3" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=3" />
         <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=3" />
         <link rel="manifest" href="/site.webmanifest?v=3" />
         <link rel="mask-icon" href="/safari-pinned-tab.svg?v=3" color="${maskIconColor}" />
         <link rel="shortcut icon" href="/favicon.ico?v=3" />
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="application-name" content="${appName}" />
         <meta name="msapplication-TileColor" content="${msTileColor}" />
         <meta name="theme-color" content="#ffffff" />
         <title>${documentProps.titleFull}</title>
         ${descriptionTag}
         ${ldScriptTag}
         ${ogTags}
+        <style>
+          body { opacity: 0; transition: opacity 0.4s; }
+        </style>
       </head>
-      <body>
+      <body onload="document.body.style.opacity='1'">
         <div id="app">${stream}</div>
       </body>
     </html>`

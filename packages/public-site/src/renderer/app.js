@@ -1,8 +1,8 @@
 import { createSSRApp, h } from 'vue'
 import { setPageContext } from './usePageContext'
 import LayoutDefault from '#root/layouts/LayoutDefault.vue'
-import i18n from './i18n'
-import vuetify from './vuetify'
+import i18n from '#common/i18n'
+import vuetify from '#branding/config/vuetify'
 
 export { createApp }
 

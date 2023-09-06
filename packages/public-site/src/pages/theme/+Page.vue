@@ -110,6 +110,15 @@ const BUTTONS = [
   },
   {
     block: true,
+    color: 'tertiary'
+  },
+  {
+    block: true,
+    color: 'tertiary',
+    variant: 'outlined'
+  },
+  {
+    block: true,
     color: 'info'
   },
   {

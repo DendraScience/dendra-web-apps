@@ -7,8 +7,8 @@ import '@fontsource/roboto/900.css'
 
 import { createApp } from 'vue'
 import App from './App.vue'
-import i18n from './i18n'
-import vuetify from './vuetify'
+import i18n from '#common/i18n'
+import vuetify from '#branding/config/vuetify'
 import router from '#root/router'
 import { registerLayouts } from '#root/layouts/register'
 

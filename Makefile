@@ -72,6 +72,12 @@ $(BRAND_TASKS):
 		packages/${@:-brand=}/src/assets/ \
 		branding/${@:-brand=}/assets/
 	@rsync -av --ignore-existing --include-from=branding-files.txt --exclude '*' \
+		${PKG_COMMON}/src/config/ \
+		branding/${@:-brand=}/config/
+	@rsync -av --ignore-existing --include-from=branding-files.txt --exclude '*' \
+		packages/${@:-brand=}/src/config/ \
+		branding/${@:-brand=}/config/
+	@rsync -av --ignore-existing --include-from=branding-files.txt --exclude '*' \
 		packages/${@:-brand=}/src/locales/ \
 		branding/${@:-brand=}/locales/
 	@printf "\e[32mSuccess!\e[39m\n"

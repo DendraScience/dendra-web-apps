@@ -7,7 +7,10 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
+    HeroSection: typeof import('./src/components/HeroSection.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    SiteLogomark: typeof import('./../common/src/components/SiteLogomark.vue')['default']
+    SiteLogotype: typeof import('./../common/src/components/SiteLogotype.vue')['default']
   }
 }

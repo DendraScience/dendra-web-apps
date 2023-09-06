@@ -1,16 +1,33 @@
 <template>
-  <v-app v-show="isMounted">
-    <v-system-bar>
-      <v-spacer></v-spacer>
-      <v-icon :icon="mdiSquare" />
-      <v-icon :icon="mdiCircle" />
-      <v-icon :icon="mdiTriangle" />
-    </v-system-bar>
+  <v-app v-scroll="onScroll">
+    <v-app-bar
+      :color="isHome && top ? 'transparent' : 'rgba(0, 0, 0, .8)'"
+      :height="collapse ? APP_BAR_HEIGHT_COLLAPSED : APP_BAR_HEIGHT"
+    >
+      <!-- <v-app-bar-nav-icon @click="toggleDrawer()"></v-app-bar-nav-icon> -->
 
-    <v-app-bar>
-      <v-app-bar-nav-icon @click="toggleDrawer()"></v-app-bar-nav-icon>
-      <v-toolbar-title>{{ APP_NAME }}</v-toolbar-title>
-      <v-spacer></v-spacer>
+      <a class="ml-6 flex-grow-1" href="/">
+        <SiteLogotype
+          class="d-none d-sm-block"
+          :style="{
+            maxHeight: `${
+              collapse ? APP_BAR_HEIGHT_COLLAPSED - 20 : APP_BAR_HEIGHT - 40
+            }px`
+          }"
+        />
+        <SiteLogomark
+          class="d-block d-sm-none"
+          :style="{
+            maxHeight: `${
+              collapse ? APP_BAR_HEIGHT_COLLAPSED - 20 : APP_BAR_HEIGHT - 40
+            }px`
+          }"
+        />
+      </a>
+
+      <v-spacer />
+
+      <!--
       <div class="h-100 mr-2 pt-3" style="width: 100px">
         <v-select
           v-if="isMounted"
@@ -21,9 +38,59 @@
           variant="solo"
         ></v-select>
       </div>
+ -->
+
+      <div v-if="isDev && isMounted" class="bg-secondary pa-2 mr-2">
+        {{ breakpointName }}
+      </div>
+
+      <v-btn
+        v-for="item in navItems"
+        :key="item.href"
+        :active="item.href === canonicalPaths.relative"
+        :class="`d-none d-${item.visible}-flex`"
+        :color="item.color || 'white'"
+        :href="item.href"
+        class="mr-2"
+        exact
+        rounded="0"
+        variant="flat"
+        >{{ item.title }}</v-btn
+      >
+
+      <v-menu v-if="isMounted">
+        <template #activator="{ props }">
+          <v-btn
+            v-bind="props"
+            :prepend-icon="mdiMenu"
+            class="d-flex d-lg-none mr-2"
+            color="white"
+            rounded="0"
+            variant="flat"
+            >Menu</v-btn
+          >
+        </template>
+
+        <v-list>
+          <v-list-item
+            v-for="item in navItems"
+            :key="item.href"
+            :active="item.href === canonicalPaths.relative"
+            :class="`d-flex d-${item.visible}-none`"
+            :href="item.href"
+          >
+            <v-list-item-title>{{ item.title }}</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
+
       <v-btn
         v-if="isMounted"
         :icon="dark ? mdiWeatherNight : mdiWeatherSunny"
+        color="white"
+        size="small"
+        rounded="0"
+        variant="flat"
         @click="toggleDark()"
       />
     </v-app-bar>
@@ -53,11 +120,17 @@
       </v-list>
     </v-navigation-drawer>
 
-    <v-main>
+    <v-main
+      :style="{
+        marginTop: `${
+          !isHome ? 0 : collapse ? -APP_BAR_HEIGHT_COLLAPSED : -APP_BAR_HEIGHT
+        }px`
+      }"
+    >
       <slot />
     </v-main>
 
-    <v-footer absolute app>
+    <v-footer absolute app color="black">
       Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
       tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
       veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
@@ -69,26 +142,31 @@
   </v-app>
 </template>
 
-<script setup lang="ts">
-import { onMounted, ref, watch } from 'vue'
+<script setup>
+import { computed, onMounted, reactive, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useTheme } from 'vuetify'
+import { useDisplay, useTheme } from 'vuetify'
+import { usePageContext } from '../renderer/usePageContext'
 import { useMounted, useStorage, useToggle } from '@vueuse/core'
 import {
-  mdiCircle,
   mdiFormatPaint,
   mdiHome,
-  mdiSquare,
-  mdiTriangle,
+  mdiMenu,
   mdiWeatherNight,
   mdiWeatherSunny
 } from '@mdi/js'
 
-const APP_NAME = import.meta.env.VITE_APP_NAME
+const APP_BAR_HEIGHT = 120
+const APP_BAR_HEIGHT_COLLAPSED = 80
+// const APP_NAME = import.meta.env.VITE_APP_NAME
 const HREF_ACCOUNT_APP = import.meta.env.VITE_HREF_ACCOUNT_APP
 const HREF_DATA_QUERY_APP = import.meta.env.VITE_HREF_DATA_QUERY_APP
 const HREF_PUBLIC_SITE = import.meta.env.VITE_HREF_PUBLIC_SITE
 
+const { name: breakpointName } = useDisplay()
+const { canonicalPaths } = usePageContext()
+const isDev = import.meta.env.DEV
+const isHome = canonicalPaths.relative === '/'
 const isMounted = useMounted()
 const theme = useTheme()
 const { locale: i18nLocale } = useI18n()
@@ -96,7 +174,41 @@ const dark = useStorage('dark', theme.global.current.value.dark)
 const locale = useStorage('locale', i18nLocale.value)
 const drawer = ref(null)
 const toggleDark = useToggle(dark)
-const toggleDrawer = useToggle(drawer)
+// const toggleDrawer = useToggle(drawer)
+const top = ref(true)
+const collapse = computed(() => isMounted.value && !top.value)
+const navItems = reactive([
+  {
+    color: 'primary',
+    href: 'https://dendra.science/orgs',
+    title: 'Data Portal',
+    visible: 'sm'
+  },
+  {
+    href: '/learn',
+    title: 'Learn',
+    visible: 'lg'
+  },
+  {
+    href: '/faqs',
+    title: 'FAQs',
+    visible: 'lg'
+  },
+  {
+    href: '/support',
+    title: 'Support',
+    visible: 'lg'
+  },
+  {
+    href: '/theme',
+    title: 'Theme',
+    visible: 'lg'
+  }
+])
+
+function onScroll(e) {
+  top.value = e.target.documentElement.scrollTop < 120
+}
 
 onMounted(async () => {
   watch(

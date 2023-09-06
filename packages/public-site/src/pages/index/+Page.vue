@@ -1,9 +1,12 @@
 <template>
+  <div>
+    <HeroSection />
+  </div>
   <v-container>
     <v-row class="my-6">
       <v-col cols="12">
         <h1 class="text-h2 mb-4">
-          {{ $t('message.hello', { name: 'Dendra' }) }}
+          {{ t('message.hello', { name: 'Dendra' }) }}
         </h1>
         <p class="text-body-1">
           Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
@@ -30,3 +33,9 @@
     </v-row>
   </v-container>
 </template>
+
+<script setup>
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
+</script>

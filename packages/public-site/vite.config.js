@@ -29,6 +29,7 @@ const plugins = [
 		// styles: { configFile: 'src/settings.scss' }
 	}),
 	Components({
+		dirs: ['../../packages/common/src/components', 'src/components'],
 		resolvers: [Vuetify3Resolver()]
 	}),
 	ssr({
