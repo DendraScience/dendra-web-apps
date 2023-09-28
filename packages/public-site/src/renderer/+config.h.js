@@ -18,6 +18,9 @@ export default {
     getOGProps: {
       env: 'server-only'
     },
+    staticPageID: {
+      env: 'server-only'
+    },
     Layout: {
       env: 'server-and-client'
     }

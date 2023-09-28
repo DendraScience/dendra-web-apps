@@ -3,12 +3,13 @@
     <v-app-bar
       :color="isHome && top ? 'transparent' : 'rgba(0, 0, 0, .8)'"
       :height="collapse ? APP_BAR_HEIGHT_COLLAPSED : APP_BAR_HEIGHT"
+      :elevation="collapse ? undefined : 0"
     >
       <!-- <v-app-bar-nav-icon @click="toggleDrawer()"></v-app-bar-nav-icon> -->
 
       <a class="ml-6 flex-grow-1" href="/">
         <SiteLogotype
-          class="d-none d-sm-block"
+          class="d-none d-md-block"
           :style="{
             maxHeight: `${
               collapse ? APP_BAR_HEIGHT_COLLAPSED - 20 : APP_BAR_HEIGHT - 40
@@ -16,7 +17,7 @@
           }"
         />
         <SiteLogomark
-          class="d-block d-sm-none"
+          class="d-block d-md-none"
           :style="{
             maxHeight: `${
               collapse ? APP_BAR_HEIGHT_COLLAPSED - 20 : APP_BAR_HEIGHT - 40
@@ -53,7 +54,6 @@
         :href="item.href"
         class="mr-2"
         exact
-        rounded="0"
         variant="flat"
         >{{ item.title }}</v-btn
       >
@@ -65,7 +65,6 @@
             :prepend-icon="mdiMenu"
             class="d-flex d-lg-none mr-2"
             color="white"
-            rounded="0"
             variant="flat"
             >Menu</v-btn
           >
@@ -89,7 +88,6 @@
         :icon="dark ? mdiWeatherNight : mdiWeatherSunny"
         color="white"
         size="small"
-        rounded="0"
         variant="flat"
         @click="toggleDark()"
       />
@@ -130,7 +128,7 @@
       <slot />
     </v-main>
 
-    <v-footer absolute app color="black">
+    <v-footer color="black">
       Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
       tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
       veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
@@ -179,7 +177,7 @@ const top = ref(true)
 const collapse = computed(() => isMounted.value && !top.value)
 const navItems = reactive([
   {
-    color: 'primary',
+    color: 'success',
     href: 'https://dendra.science/orgs',
     title: 'Data Portal',
     visible: 'sm'

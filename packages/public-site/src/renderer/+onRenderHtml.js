@@ -1,7 +1,7 @@
 import { renderToNodeStream } from '@vue/server-renderer'
 import { escapeInject } from 'vite-plugin-ssr/server'
 import { createApp } from './app'
-import { getOGProps, getStructuredData } from './helpers'
+import { getDocumentProps, getOGProps, getStructuredData } from './helpers'
 import { logger } from '#common/lib/logger'
 
 export default onRenderHtml
@@ -35,7 +35,8 @@ async function onRenderHtml(pageContext) {
 
   const app = createApp(pageContext)
   const stream = renderToNodeStream(app)
-  const { canonicalPaths, documentProps } = pageContext
+  const { canonicalPaths } = pageContext
+  const documentProps = getDocumentProps(pageContext)
   const ogProps = getOGProps({ canonicalPaths, documentProps, pageContext })
   const structuredData = getStructuredData({
     canonicalPaths,
@@ -91,11 +92,8 @@ async function onRenderHtml(pageContext) {
         ${descriptionTag}
         ${ldScriptTag}
         ${ogTags}
-        <style>
-          body { opacity: 0; transition: opacity 0.4s; }
-        </style>
       </head>
-      <body onload="document.body.style.opacity='1'">
+      <body>
         <div id="app">${stream}</div>
       </body>
     </html>`

@@ -3,7 +3,7 @@
 import 'vuetify/styles'
 // Vuetify
 import { createVuetify } from 'vuetify/lib/framework'
-import { md3 } from 'vuetify/blueprints'
+import { md2 } from 'vuetify/blueprints'
 import * as directives from 'vuetify/lib/directives/index.mjs'
 import { dendra } from './themes'
 // https://pictogrammers.github.io/@mdi/font/7.0.96/
@@ -13,7 +13,7 @@ import { useI18n } from 'vue-i18n'
 import i18n from '#common/i18n'
 
 export default createVuetify({
-  blueprint: md3,
+  blueprint: md2,
 
   directives,
 

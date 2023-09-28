@@ -14,41 +14,45 @@ export function getCanonicalPaths(pageContext) {
 }
 
 export function getDocumentProps(pageContext) {
-  const { config, pageProps } = pageContext
-
-  const props = Object.assign(
-    {},
-    config?.documentProps,
-    pageContext?.documentProps,
-    typeof pageContext?.getDocumentProps === 'function'
-      ? pageContext.getDocumentProps(pageProps)
+  const { config } = pageContext
+  const props = {}
+  const objProps = config?.documentProps
+  const getProps =
+    typeof config?.getDocumentProps === 'function'
+      ? config.getDocumentProps(pageContext)
       : undefined
-  )
-  props.title = props.title || import.meta.env.VITE_TITLE || 'Hello'
+
+  // Defaults merge assignment
+  props.description = getProps?.description || objProps?.description || ''
+  props.title =
+    getProps?.title || objProps?.title || import.meta.env.VITE_TITLE || 'Hello'
   props.titleTemplate =
-    props.titleTemplate || import.meta.env.VITE_TITLE_TEMPLATE || '%s'
+    getProps?.titleTemplate ||
+    objProps?.titleTemplate ||
+    import.meta.env.VITE_TITLE_TEMPLATE ||
+    '%s'
   props.titleFull = props.titleTemplate.replace('%s', props.title)
 
   return props
 }
 
+// Build Open Graph properties
+// SEE: https://ogp.me/
 export function getOGProps(data) {
   const { canonicalPaths, documentProps, pageContext } = data
   const { config } = pageContext
-
-  // Process Open Graph properties
-  // SEE: https://ogp.me/
-  const props = Object.assign(
-    {},
-    config?.ogProps,
-    pageContext?.ogProps,
-    typeof pageContext?.getOGProps === 'function'
-      ? pageContext.getOGProps(data)
+  const props = {}
+  const objProps = config?.ogProps
+  const getProps =
+    typeof config?.getOGProps === 'function'
+      ? config.getOGProps(data)
       : undefined
-  )
-  props.description = props.description || documentProps.description
-  props.title = props.title || documentProps.title
-  props.url = props.url || canonicalPaths.absolute
+
+  // Defaults merge assignment
+  props.description =
+    getProps?.description || objProps?.description || documentProps?.description
+  props.title = getProps?.title || objProps?.title || documentProps?.title
+  props.url = getProps?.url || objProps?.url || canonicalPaths.absolute
 
   return props
 }
@@ -61,9 +65,8 @@ export function getStructuredData(data) {
   return Object.assign(
     {},
     config?.structuredData,
-    pageContext?.structuredData,
-    typeof pageContext?.getStructuredData === 'function'
-      ? pageContext.getStructuredData(data)
+    typeof config?.getStructuredData === 'function'
+      ? config.getStructuredData(data)
       : undefined
   )
 }
