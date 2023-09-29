@@ -1,5 +1,5 @@
 import { renderToNodeStream } from '@vue/server-renderer'
-import { escapeInject } from 'vite-plugin-ssr/server'
+import { dangerouslySkipEscape, escapeInject } from 'vite-plugin-ssr/server'
 import { createApp } from './app'
 import { getDocumentProps, getOGProps, getStructuredData } from './helpers'
 import { logger } from '#common/lib/logger'
@@ -53,8 +53,8 @@ async function onRenderHtml(pageContext) {
       : escapeInject`${tags}<meta property="og:${key}" content="${val}" />`
   }, '')
   const ldScriptTag = Object.keys(structuredData).length
-    ? escapeInject`<script type="application/ld+json">${JSON.stringify(
-        structuredData
+    ? escapeInject`<script type="application/ld+json">${dangerouslySkipEscape(
+        JSON.stringify(structuredData)
       )}</script>`
     : ''
 
@@ -90,8 +90,8 @@ async function onRenderHtml(pageContext) {
         <meta name="theme-color" content="#ffffff" />
         <title>${documentProps.titleFull}</title>
         ${descriptionTag}
-        ${ldScriptTag}
         ${ogTags}
+        ${ldScriptTag}
       </head>
       <body>
         <div id="app">${stream}</div>

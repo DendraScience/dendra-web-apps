@@ -145,6 +145,13 @@ import { computed, onMounted, reactive, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useDisplay, useTheme } from 'vuetify'
 import { usePageContext } from '../renderer/usePageContext'
+import {
+  APP_BAR_HEIGHT,
+  APP_BAR_HEIGHT_COLLAPSED,
+  HREF_ACCOUNT_APP,
+  HREF_DATA_QUERY_APP,
+  HREF_PUBLIC_SITE
+} from '#root/lib/consts'
 import { useMounted, useStorage, useToggle } from '@vueuse/core'
 import {
   mdiFormatPaint,
@@ -153,13 +160,6 @@ import {
   mdiWeatherNight,
   mdiWeatherSunny
 } from '@mdi/js'
-
-const APP_BAR_HEIGHT = 120
-const APP_BAR_HEIGHT_COLLAPSED = 80
-// const APP_NAME = import.meta.env.VITE_APP_NAME
-const HREF_ACCOUNT_APP = import.meta.env.VITE_HREF_ACCOUNT_APP
-const HREF_DATA_QUERY_APP = import.meta.env.VITE_HREF_DATA_QUERY_APP
-const HREF_PUBLIC_SITE = import.meta.env.VITE_HREF_PUBLIC_SITE
 
 const { name: breakpointName } = useDisplay()
 const { canonicalPaths } = usePageContext()
@@ -179,7 +179,7 @@ const navItems = reactive([
   {
     color: 'success',
     href: 'https://dendra.science/orgs',
-    title: 'Data Portal',
+    title: 'View Orgs',
     visible: 'sm'
   },
   {
@@ -205,7 +205,7 @@ const navItems = reactive([
 ])
 
 function onScroll(e) {
-  top.value = e.target.documentElement.scrollTop < 120
+  top.value = e.target.documentElement.scrollTop < 20
 }
 
 onMounted(async () => {

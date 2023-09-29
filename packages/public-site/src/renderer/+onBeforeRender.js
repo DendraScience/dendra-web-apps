@@ -26,6 +26,8 @@ async function onBeforeRender(pageContext) {
               }
             ],
             sections: [
+              'collection',
+              'id',
               {
                 item: {
                   section_hero: [

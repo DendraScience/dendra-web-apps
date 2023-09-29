@@ -1,7 +1,8 @@
 <template>
-  <div>
-    <HeroSection />
+  <div v-once>
+    <PageSections v-bind="props" />
   </div>
+
   <v-container>
     <v-row class="my-6">
       <v-col cols="12">
@@ -37,7 +38,7 @@
 <script setup>
 import { useI18n } from 'vue-i18n'
 
-defineProps({
+const props = defineProps({
   staticPage: {
     required: true,
     type: Object
