@@ -1,9 +1,9 @@
 <template>
-  <h2 class="text-h2 text-lowercase"><slot /></h2>
+  <h2 class="text-h3"><slot /></h2>
 </template>
 
 <style scoped>
-h2 {
+.font-comfortaa {
   font-family: 'Comfortaa', sans-serif !important;
   font-weight: 600;
 }

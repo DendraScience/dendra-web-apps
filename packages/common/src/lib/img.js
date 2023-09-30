@@ -32,9 +32,10 @@ export function useImgResponsive(data, keys, sizes) {
 
     const value = toValue(data.value)
     if (value && keys) {
-      if (keys.aspectRatio) aspectRatio = value[keys.aspectRatio]
-      if (keys.image) image = value[keys.image]
-      if (keys.transformation) transformation = value[keys.transformation]
+      if (keys.aspectRatio) aspectRatio = value[keys.aspectRatio] || aspectRatio
+      if (keys.image) image = value[keys.image] || image
+      if (keys.transformation)
+        transformation = value[keys.transformation] || transformation
     }
 
     if (!aspectRatio) aspectRatio = 1

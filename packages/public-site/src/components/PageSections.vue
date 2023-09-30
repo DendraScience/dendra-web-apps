@@ -4,6 +4,7 @@
     :key="section.id"
     :collection="section.collection"
     :item="section.item"
+    class="mb-16"
   />
 </template>
 

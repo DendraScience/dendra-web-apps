@@ -17,7 +17,7 @@
         <v-col class="text-white" cols="12" md="8"
           ><h1
             v-if="value.title"
-            class="text-h3 text-md-h2 font-weight-medium mb-4"
+            class="text-h3 text-md-h2 font-weight-regular mb-4"
           >
             {{ value.title }}
           </h1>
@@ -25,15 +25,15 @@
             {{ value.paragraph }}
           </p>
 
-          <template v-if="value.ctas && value.ctas.length">
+          <div v-if="value.ctas && value.ctas.length">
             <cta-btn
               v-for="(cta, i) of value.ctas"
               :key="i"
               v-bind="cta.ctas_id"
-              class="mr-4"
+              class="mr-4 mt-4"
               size="large"
             />
-          </template>
+          </div>
         </v-col>
       </v-row>
     </v-container>

@@ -4,7 +4,8 @@ import { readItem } from '@directus/sdk/rest'
 
 export default onBeforeRender
 
-const IMAGE_FIELDS = ['filename_disk', 'height', 'storage', 'type', 'width']
+const IMAGE = ['filename_disk', 'height', 'storage', 'type', 'width']
+const TRANSFORMATION = ['cloudinary_parameters']
 
 async function onBeforeRender(pageContext) {
   const canonicalPaths = getCanonicalPaths(pageContext)
@@ -22,7 +23,7 @@ async function onBeforeRender(pageContext) {
               'og_title',
               'og_description',
               {
-                og_image: IMAGE_FIELDS
+                og_image: IMAGE
               }
             ],
             sections: [
@@ -34,10 +35,10 @@ async function onBeforeRender(pageContext) {
                     'title',
                     'paragraph',
                     {
-                      background_image: IMAGE_FIELDS
+                      background_image: IMAGE
                     },
                     {
-                      background_transformation: ['cloudinary_parameters']
+                      background_transformation: TRANSFORMATION
                     },
                     {
                       ctas: [
@@ -48,6 +49,8 @@ async function onBeforeRender(pageContext) {
                     }
                   ],
                   section_capabilities: [
+                    'title',
+                    'paragraph',
                     {
                       capabilities: [
                         {
@@ -55,7 +58,10 @@ async function onBeforeRender(pageContext) {
                             'description',
                             'icon',
                             {
-                              image: IMAGE_FIELDS
+                              image: IMAGE
+                            },
+                            {
+                              transformation: TRANSFORMATION
                             },
                             'title'
                           ]
