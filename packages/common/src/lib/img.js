@@ -1,60 +1,58 @@
-import { computed } from 'vue'
+import { computed, toValue } from 'vue'
 import { useDisplay } from 'vuetify'
 
-function makeTrHref(image, { aspectRatio, crop, effects, gravity }, width) {
-  const c1 = []
-  const c2 = []
-  const c3 = []
+function cloudinaryHref(image, transformation, params) {
+  const parts = [
+    '',
+    import.meta.env.VITE_CLOUDINARY_CLOUD_NAME,
+    'image',
+    'upload'
+  ]
 
-  // Build c1
-  if (aspectRatio) c1.push(`ar_${+aspectRatio.toFixed(5)}`)
-  if (crop) c1.push(crop)
-  else c1.push('c_fill')
-  if (gravity) c1.push(gravity)
+  if (transformation && transformation.cloudinary_parameters)
+    parts.push(
+      transformation.cloudinary_parameters.replace(
+        /{([.\w]+)}/g,
+        (_, k) => params[k]
+      )
+    )
 
-  // Build c2
-  if (Array.isArray(effects)) c2.push(...effects)
+  parts.push(image.filename_disk)
 
-  // Build c3
-  if (width) c3.push('c_scale', `w_${width}`)
-
-  const tr = []
-  if (c1.length) tr.push(c1.join(','))
-  if (c2.length) tr.push(c2.join(','))
-  tr.push('f_auto')
-  tr.push('q_auto:best')
-  if (c3.length) tr.push(c3.join(','))
-
-  return new URL(
-    `/${import.meta.env.VITE_CLOUDINARY_CLOUD_NAME}/image/upload/${tr.join(
-      '/'
-    )}/${image.public_id}.${image.extension}`,
-    import.meta.env.VITE_CLOUDINARY_BASE
-  ).href
+  return new URL(parts.join('/'), import.meta.env.VITE_CLOUDINARY_BASE).href
 }
 
-export function useResponsive(data, key, sizes) {
+export function useImgResponsive(data, keys, sizes) {
   const { thresholds } = useDisplay()
 
   return computed(() => {
-    const image = key ? data.source.value?.[key] : data.source.value
+    let aspectRatio = toValue(data.aspectRatio)
+    let image = toValue(data.image)
+    let transformation = toValue(data.transformation)
+
+    const value = toValue(data.value)
+    if (value && keys) {
+      if (keys.aspectRatio) aspectRatio = value[keys.aspectRatio]
+      if (keys.image) image = value[keys.image]
+      if (keys.transformation) transformation = value[keys.transformation]
+    }
+
+    if (!aspectRatio) aspectRatio = 1
+    aspectRatio = +aspectRatio.toFixed(5)
 
     let resp = {}
 
-    if (image.hash && image.ext) {
-      resp.src = `${import.meta.env.VITE_UPLOADS_CDN}/${image.hash}${image.ext}`
-    } else if (image.public_id && image.extension) {
-      const aspectRatio = data.aspectRatio.value
-
+    if (
+      image &&
+      image.filename_disk &&
+      image.storage === import.meta.env.VITE_CLOUDINARY_STORAGE
+    ) {
       resp.sizes = []
-      resp.src = makeTrHref(
-        image,
-        {
-          aspectRatio,
-          ...image.transformations
-        },
-        1280 // Hardcoded default
-      )
+
+      resp.src = cloudinaryHref(image, transformation, {
+        aspectRatio,
+        width: 1280 // Hardcoded default
+      })
       resp.srcset = []
 
       for (const [bp, width] of Object.entries(thresholds.value)) {
@@ -63,14 +61,10 @@ export function useResponsive(data, key, sizes) {
         const srcSize = sizes?.[bp]
         if (srcSize) resp.sizes.push(`(min-width: ${width}px) ${srcSize}`)
 
-        const href = makeTrHref(
-          image,
-          {
-            aspectRatio,
-            ...image.transformations
-          },
+        const href = cloudinaryHref(image, transformation, {
+          aspectRatio,
           width
-        )
+        })
         resp.srcset.push(`${href} ${width}w`)
       }
 

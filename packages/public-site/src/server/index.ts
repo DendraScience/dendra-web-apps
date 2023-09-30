@@ -2,7 +2,7 @@ import { dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import express from 'express'
 import compression from 'compression'
-import { renderPage } from 'vite-plugin-ssr/server'
+import { renderPage } from 'vike/server'
 import Pino from 'pino'
 
 const isProduction = process.env.NODE_ENV === 'production'

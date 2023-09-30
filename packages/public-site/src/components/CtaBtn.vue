@@ -1,10 +1,9 @@
 <template>
-  <v-btn v-bind="props">{{ action }}</v-btn>
+  <v-btn :aria-label="action">{{ action }}</v-btn>
 </template>
 
 <script setup>
-//  TODO: alt tag for title
-const props = defineProps({
+defineProps({
   action: {
     default: 'Action',
     type: String

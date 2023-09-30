@@ -15,7 +15,10 @@
     >
       <v-row align="center">
         <v-col class="text-white" cols="12" md="8"
-          ><h1 v-if="value.title" class="text-h3 text-md-h2 mb-4">
+          ><h1
+            v-if="value.title"
+            class="text-h3 text-md-h2 font-weight-medium mb-4"
+          >
             {{ value.title }}
           </h1>
           <p v-if="value.paragraph" class="text-h6 text-md-h5 mb-4">
@@ -38,33 +41,26 @@
 </template>
 
 <script setup>
-import { ref, toRef } from 'vue'
+import { toRef } from 'vue'
 import { APP_BAR_HEIGHT } from '#root/lib/consts'
-import { useResponsive } from '#common/lib/img'
+import { useImgResponsive } from '#common/lib/img'
 
-defineProps({
+const props = defineProps({
   value: {
     required: true,
     type: Object
   }
 })
 
-// TODO: handle image and transformations
-const props2 = {
-  value: {
-    background_image: {
-      extension: 'jpg',
-      public_id: 'site-hero-section-1_xgusqd'
-    }
-  }
-}
-
-const aspectRatio = ref(16 / 9)
-const imgResp = useResponsive(
+const aspectRatio = 16 / 9
+const imgResp = useImgResponsive(
   {
     aspectRatio,
-    source: toRef(props2, 'value')
+    value: toRef(props, 'value')
   },
-  'background_image'
+  {
+    image: 'background_image',
+    transformation: 'background_transformation'
+  }
 )
 </script>

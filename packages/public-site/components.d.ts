@@ -17,6 +17,7 @@ declare module 'vue' {
     Section_hero: typeof import('./src/components/sections/section_hero.vue')['default']
     SectionCapabilities: typeof import('./src/components/SectionCapabilities.vue')['default']
     SectionHero: typeof import('./src/components/SectionHero.vue')['default']
+    SectionTitle: typeof import('./src/components/SectionTitle.vue')['default']
     SiteLogomark: typeof import('./../common/src/components/SiteLogomark.vue')['default']
     SiteLogotype: typeof import('./../common/src/components/SiteLogotype.vue')['default']
   }

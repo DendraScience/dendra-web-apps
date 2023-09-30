@@ -1,7 +1,7 @@
 import { writeFile } from 'node:fs/promises'
 import { Readable } from 'stream'
 import { SitemapStream, streamToPromise } from 'sitemap'
-import { prerender } from 'vite-plugin-ssr/prerender'
+import { prerender } from 'vike/prerender'
 import Pino from 'pino'
 import { pkgName } from './build-utils.js'
 
@@ -13,7 +13,7 @@ const sitemap = {
   links: []
 }
 
-// SEE: https://github.com/brillout/vite-plugin-ssr/issues/49
+// SEE: https://github.com/brillout/vike/issues/49
 // SEE: https://github.com/ekalinin/sitemap.js
 // SEE: https://www.sitemaps.org/protocol.html
 async function afterPrerender() {

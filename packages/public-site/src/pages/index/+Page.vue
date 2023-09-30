@@ -6,9 +6,9 @@
   <v-container>
     <v-row class="my-6">
       <v-col cols="12">
-        <h1 class="text-h2 mb-4">
+        <SectionTitle class="mb-4">
           {{ t('message.hello', { name: 'Dendra' }) }}
-        </h1>
+        </SectionTitle>
         <p class="text-body-1">
           Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
           eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad

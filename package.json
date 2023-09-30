@@ -6,6 +6,7 @@
   "type": "module",
   "dependencies": {
     "@directus/sdk": "^12.0.1",
+    "@fontsource-variable/comfortaa": "^5.0.12",
     "@fontsource/roboto": "^5.0.8",
     "@mdi/js": "^7.2.96",
     "@tanstack/vue-query": "^4.35.3",
@@ -19,8 +20,8 @@
     "qs": "^6.11.2",
     "sirv": "^2.0.3",
     "sitemap": "^7.1.1",
+    "vike": "^0.4.142",
     "vite": "^4.4.9",
-    "vite-plugin-ssr": "^0.4.142",
     "vite-plugin-vuetify": "^1.0.2",
     "vue": "^3.3.4",
     "vue-i18n": "9.4.1",

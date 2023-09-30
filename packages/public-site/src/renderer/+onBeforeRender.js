@@ -37,6 +37,9 @@ async function onBeforeRender(pageContext) {
                       background_image: IMAGE_FIELDS
                     },
                     {
+                      background_transformation: ['cloudinary_parameters']
+                    },
+                    {
                       ctas: [
                         {
                           ctas_id: ['action', 'href', 'title']

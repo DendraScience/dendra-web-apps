@@ -5,8 +5,8 @@ import { defineConfig } from 'vite'
 import checker from 'vite-plugin-checker'
 // https://lightningcss.dev/docs.html#with-vite
 import lightningcss from 'vite-plugin-lightningcss'
-// https://github.com/brillout/vite-plugin-ssr
-import ssr from 'vite-plugin-ssr/plugin'
+// https://github.com/brillout/vike
+import ssr from 'vike/plugin'
 // https://github.com/vitejs/vite/tree/main/packages/plugin-vue#readme
 import vue from '@vitejs/plugin-vue'
 // https://github.com/antfu/unplugin-vue-components
