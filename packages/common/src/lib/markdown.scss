@@ -1,0 +1,13 @@
+@use '../settings';
+
+.markdown p,
+.markdown li {
+	margin-bottom: calc(settings.$spacer * 4);
+}
+.markdown ol,
+.markdown ul {
+	margin-left: calc(settings.$spacer * 4);
+}
+.markdown li {
+	margin-bottom: calc(settings.$spacer);
+}

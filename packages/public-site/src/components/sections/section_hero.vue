@@ -21,7 +21,8 @@
           >
             {{ value.title }}
           </h1>
-          <p v-if="value.paragraph" class="text-h6 text-md-h5 mb-4">
+
+          <p v-if="value.paragraph" class="text-body-1 text-md-h5 mb-4">
             {{ value.paragraph }}
           </p>
 

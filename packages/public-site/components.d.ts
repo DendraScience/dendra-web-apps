@@ -7,6 +7,7 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
+    CoverImage: typeof import('./src/components/CoverImage.vue')['default']
     CtaBtn: typeof import('./src/components/CtaBtn.vue')['default']
     HeroSection: typeof import('./src/components/HeroSection.vue')['default']
     PageSection: typeof import('./src/components/PageSection.vue')['default']
@@ -15,8 +16,6 @@ declare module 'vue' {
     RouterView: typeof import('vue-router')['RouterView']
     Section_capabilities: typeof import('./src/components/sections/section_capabilities.vue')['default']
     Section_hero: typeof import('./src/components/sections/section_hero.vue')['default']
-    SectionCapabilities: typeof import('./src/components/SectionCapabilities.vue')['default']
-    SectionHero: typeof import('./src/components/SectionHero.vue')['default']
     SectionTitle: typeof import('./src/components/SectionTitle.vue')['default']
     SiteLogomark: typeof import('./../common/src/components/SiteLogomark.vue')['default']
     SiteLogotype: typeof import('./../common/src/components/SiteLogotype.vue')['default']

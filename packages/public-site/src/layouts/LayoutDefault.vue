@@ -62,7 +62,7 @@
         <template #activator="{ props }">
           <v-btn
             v-bind="props"
-            :prepend-icon="mdiMenu"
+            prepend-icon="menu"
             class="d-flex d-lg-none mr-2"
             color="white"
             variant="flat"
@@ -85,7 +85,7 @@
 
       <v-btn
         v-if="isMounted"
-        :icon="dark ? mdiWeatherNight : mdiWeatherSunny"
+        :icon="dark ? 'dark_mode' : 'light_mode'"
         color="white"
         size="small"
         variant="flat"
@@ -97,21 +97,21 @@
       <v-list density="compact" nav>
         <v-list-item
           :href="HREF_PUBLIC_SITE"
-          :prepend-icon="mdiHome"
+          prepend-icon="home"
           title="Dendra Home"
         ></v-list-item>
         <v-list-item
           :href="HREF_ACCOUNT_APP"
-          :prepend-icon="mdiHome"
+          prepend-icon="home"
           title="Accounts Home"
         ></v-list-item>
         <v-list-item
           :href="HREF_DATA_QUERY_APP"
-          :prepend-icon="mdiHome"
+          prepend-icon="home"
           title="Query Home"
         ></v-list-item>
         <v-list-item
-          :prepend-icon="mdiFormatPaint"
+          prepend-icon="format_paint"
           href="/theme"
           title="Theme"
         ></v-list-item>
@@ -153,13 +153,6 @@ import {
   HREF_PUBLIC_SITE
 } from '#root/lib/consts'
 import { useMounted, useStorage, useToggle } from '@vueuse/core'
-import {
-  mdiFormatPaint,
-  mdiHome,
-  mdiMenu,
-  mdiWeatherNight,
-  mdiWeatherSunny
-} from '@mdi/js'
 
 const { name: breakpointName } = useDisplay()
 const { canonicalPaths } = usePageContext()

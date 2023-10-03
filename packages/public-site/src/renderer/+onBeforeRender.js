@@ -1,4 +1,5 @@
 import { getCanonicalPaths } from './helpers'
+import { md } from '#common/lib/markdown'
 import { directusClient } from '#common/lib/directus'
 import { readItem } from '@directus/sdk/rest'
 
@@ -13,7 +14,7 @@ async function onBeforeRender(pageContext) {
   let metaInfo
 
   if (pageContext.config?.staticPageID) {
-    pageProps.staticPage = await directusClient.request(
+    const staticPage = await directusClient.request(
       readItem('static_pages', pageContext.config.staticPageID, {
         fields: [
           {
@@ -77,8 +78,28 @@ async function onBeforeRender(pageContext) {
       })
     )
 
-    metaInfo = pageProps.staticPage.meta_info
-    delete pageProps.staticPage.meta_info
+    metaInfo = staticPage.meta_info
+    delete staticPage.meta_info
+
+    if (staticPage.sections) {
+      for (const section of staticPage.sections) {
+        switch (section.collection) {
+          case 'section_capabilities':
+            if (section.item?.capabilities) {
+              for (const capability of section.item.capabilities) {
+                if (capability.capabilities_id?.description) {
+                  capability.capabilities_id.description = md.render(
+                    capability.capabilities_id.description
+                  )
+                }
+              }
+            }
+            break
+        }
+      }
+    }
+
+    pageProps.staticPage = staticPage
   }
 
   return {

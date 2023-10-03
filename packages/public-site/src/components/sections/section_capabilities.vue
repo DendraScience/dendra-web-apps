@@ -5,7 +5,8 @@
         <SectionTitle class="mb-4">
           {{ value.title }}
         </SectionTitle>
-        <p class="text-body-1">
+
+        <p class="text-body-1 text-md-h5">
           {{ value.paragraph }}
         </p>
       </v-col>
@@ -15,30 +16,52 @@
       <v-row
         v-for="({ capabilities_id: capability }, i) of value.capabilities"
         :key="i"
+        class="mb-4"
       >
         <v-col cols="12">
-          <v-card variant="tonal">
+          <v-card rounded="0" variant="tonal">
             <v-container fluid>
               <v-row align="center">
                 <v-col align="center" class="pa-10" cols="auto">
-                  <v-img
-                    :aspect-ratio="1"
-                    cover
-                    width="300"
-                    src="https://cdn.vuetifyjs.com/images/cards/cooking.png"
-                  ></v-img>
+                  <div
+                    class="d-flex align-center justify-end"
+                    style="position: relative"
+                  >
+                    <CoverImage
+                      v-if="capability.image"
+                      :image="capability.image"
+                      :transformation="capability.transformation"
+                      class="rounded"
+                      width="300"
+                    >
+                    </CoverImage>
+
+                    <v-avatar
+                      v-if="capability.icon"
+                      class="elevation-2"
+                      color="primary"
+                      size="64"
+                      style="position: absolute; right: -32px"
+                    >
+                      <v-icon :icon="capability.icon" size="48" />
+                    </v-avatar>
+                  </div>
                 </v-col>
 
                 <v-col class="text-body-1 px-10 pb-10 pa-md-10" cols="12" md="">
-                  {{ capability.title }}
-                  Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed
-                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                  Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                  laboris nisi ut aliquip ex ea commodo consequat. Duis aute
-                  irure dolor in reprehenderit in voluptate velit esse cillum
-                  dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-                  cupidatat non proident, sunt in culpa qui officia deserunt
-                  mollit anim id est laborum.
+                  <h3
+                    v-if="capability.title"
+                    class="text-h5 text-md-h4 font-weight-regular mb-4"
+                  >
+                    {{ capability.title }}
+                  </h3>
+
+                  <!-- eslint-disable vue/no-v-html -->
+                  <div
+                    v-if="capability.description"
+                    class="text-body-1 markdown"
+                    v-html="capability.description"
+                  ></div>
                 </v-col>
               </v-row>
             </v-container>
@@ -50,25 +73,10 @@
 </template>
 
 <script setup>
-// import { toRef } from 'vue'
-// import { useImgResponsive } from '#common/lib/img'
-
 defineProps({
   value: {
     required: true,
     type: Object
   }
 })
-
-// const aspectRatio = 16 / 9
-// const imgResp = useImgResponsive(
-//   {
-//     aspectRatio,
-//     value: toRef(props, 'value')
-//   },
-//   {
-//     image: 'background_image',
-//     transformation: 'background_transformation'
-//   }
-// )
 </script>
