@@ -57,8 +57,10 @@ export function useImgResponsive(data, keys, sizes) {
       resp.srcset = []
 
       for (const [bp, width] of Object.entries(thresholds.value)) {
-        if (width <= 0) continue
+        if (bp === 'xs') continue
 
+        // If viewport width is equal to ${width}px or greater,
+        // then show the image with a width of ${srcSize}
         const srcSize = sizes?.[bp]
         if (srcSize) resp.sizes.push(`(min-width: ${width}px) ${srcSize}`)
 
@@ -69,7 +71,7 @@ export function useImgResponsive(data, keys, sizes) {
         resp.srcset.push(`${href} ${width}w`)
       }
 
-      resp.sizes.push('100vw')
+      resp.sizes.push(sizes?.xs || '100vw')
       resp.sizes = resp.sizes.join(',')
       resp.srcset = resp.srcset.join(',')
     }

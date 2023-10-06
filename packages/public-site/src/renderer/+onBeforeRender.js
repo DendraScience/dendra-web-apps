@@ -69,6 +69,38 @@ async function onBeforeRender(pageContext) {
                         }
                       ]
                     }
+                  ],
+                  section_differentiators: [
+                    'title',
+                    'paragraph',
+                    {
+                      differentiators: [
+                        {
+                          differentiators_id: ['description', 'icon', 'title']
+                        }
+                      ]
+                    }
+                  ],
+                  section_tours: [
+                    'title',
+                    'paragraph',
+                    {
+                      tours: [
+                        {
+                          tours_id: [
+                            'description',
+                            'title',
+                            {
+                              ctas: [
+                                {
+                                  ctas_id: ['action', 'href', 'title']
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
                   ]
                 }
               }
@@ -90,6 +122,28 @@ async function onBeforeRender(pageContext) {
                 if (capability.capabilities_id?.description) {
                   capability.capabilities_id.description = md.render(
                     capability.capabilities_id.description
+                  )
+                }
+              }
+            }
+            break
+          case 'section_differentiators':
+            if (section.item?.differentiators) {
+              for (const differentiator of section.item.differentiators) {
+                if (differentiator.differentiators_id?.description) {
+                  differentiator.differentiators_id.description = md.render(
+                    differentiator.differentiators_id.description
+                  )
+                }
+              }
+            }
+            break
+          case 'section_tours':
+            if (section.item?.tours) {
+              for (const tour of section.item.tours) {
+                if (tour.tours_id?.description) {
+                  tour.tours_id.description = md.render(
+                    tour.tours_id.description
                   )
                 }
               }

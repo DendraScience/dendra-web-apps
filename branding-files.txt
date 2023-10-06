@@ -5,6 +5,7 @@
 *.js
 *.json
 *.png
+*.scss
 *.svg
 *.webmanifest
 *.xml

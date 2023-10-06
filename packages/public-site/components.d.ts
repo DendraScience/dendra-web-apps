@@ -15,9 +15,12 @@ declare module 'vue' {
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     Section_capabilities: typeof import('./src/components/sections/section_capabilities.vue')['default']
+    Section_differentiators: typeof import('./src/components/sections/section_differentiators.vue')['default']
     Section_hero: typeof import('./src/components/sections/section_hero.vue')['default']
+    Section_tours: typeof import('./src/components/sections/section_tours.vue')['default']
     SectionTitle: typeof import('./src/components/SectionTitle.vue')['default']
     SiteLogomark: typeof import('./../common/src/components/SiteLogomark.vue')['default']
     SiteLogotype: typeof import('./../common/src/components/SiteLogotype.vue')['default']
+    VCardItems: typeof import('vuetify/components')['VCardItems']
   }
 }

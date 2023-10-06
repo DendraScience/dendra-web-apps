@@ -7,6 +7,7 @@ import { createVuetify } from 'vuetify/lib/framework'
 import { md2 } from 'vuetify/blueprints'
 import * as directives from 'vuetify/lib/directives/index.mjs'
 import { dendra } from './themes'
+import './themes.scss'
 // https://pictogrammers.github.io/@mdi/font/7.0.96/
 import { aliases, mdi } from 'vuetify/iconsets/mdi-svg'
 import { mso } from '#common/iconsets/mso.js'

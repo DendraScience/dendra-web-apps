@@ -21,15 +21,27 @@ const props = defineProps({
     required: true,
     type: Object
   },
+  keys: {
+    default: undefined,
+    type: Object
+  },
+  sizes: {
+    default: undefined,
+    type: Object
+  },
   transformation: {
     default: undefined,
     type: Object
   }
 })
 
-const imgResp = useImgResponsive({
-  aspectRatio: toRef(props, 'aspectRatio'),
-  image: toRef(props, 'image'),
-  transformation: toRef(props, 'transformation')
-})
+const imgResp = useImgResponsive(
+  {
+    aspectRatio: toRef(props, 'aspectRatio'),
+    image: toRef(props, 'image'),
+    transformation: toRef(props, 'transformation')
+  },
+  props.keys,
+  props.sizes
+)
 </script>
