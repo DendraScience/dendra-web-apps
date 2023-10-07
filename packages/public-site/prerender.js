@@ -43,4 +43,8 @@ prerender({
   pageContextInit: {
     sitemap
   }
-}).then(afterPrerender)
+})
+  .then(afterPrerender)
+  .catch(err => {
+    console.log(err)
+  })

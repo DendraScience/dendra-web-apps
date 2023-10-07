@@ -1,10 +1,10 @@
 <template>
   <div class="bg-light-blue-lighten-5 py-16" style="position: relative">
     <div
-      class="d-none d-md-flex justify-end align-center"
+      class="d-none d-md-flex justify-end align-end"
       style="
-        top: 0px;
-        bottom: 0px;
+        top: 0;
+        bottom: 36px;
         right: -180px;
         opacity: 0.5;
         position: absolute;
@@ -12,7 +12,7 @@
         z-index: 0;
       "
     >
-      <SiteLogomark width="800" white />
+      <SiteLogomark width="720" white />
     </div>
 
     <v-container>

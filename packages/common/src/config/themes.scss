@@ -1,5 +1,0 @@
-@use '../settings';
-
-.section-border-bottom {
-	border-bottom: 28px solid #{map-get(settings.$blue, 'base')};
-}

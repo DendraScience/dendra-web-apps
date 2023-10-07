@@ -142,7 +142,8 @@
 
 <script setup>
 import { computed, onMounted, reactive, ref, watch } from 'vue'
-import { useI18n } from 'vue-i18n'
+// NOTE: Temporarily disabled due to build issues
+// import { useI18n } from 'vue-i18n'
 import { useDisplay, useTheme } from 'vuetify'
 import { usePageContext } from '../renderer/usePageContext'
 import {
@@ -160,9 +161,11 @@ const isDev = import.meta.env.DEV
 const isHome = canonicalPaths.relative === '/'
 const isMounted = useMounted()
 const theme = useTheme()
-const { locale: i18nLocale } = useI18n()
+// NOTE: Temporarily disabled due to build issues
+// const { locale: i18nLocale } = useI18n()
 const dark = useStorage('dark', theme.global.current.value.dark)
-const locale = useStorage('locale', i18nLocale.value)
+// NOTE: Temporarily disabled due to build issues
+// const locale = useStorage('locale', i18nLocale.value)
 const drawer = ref(null)
 const toggleDark = useToggle(dark)
 // const toggleDrawer = useToggle(drawer)
@@ -209,12 +212,13 @@ onMounted(async () => {
     },
     { immediate: true }
   )
-  watch(
-    locale,
-    value => {
-      i18nLocale.value = value
-    },
-    { immediate: true }
-  )
+  // NOTE: Temporarily disabled due to build issues
+  // watch(
+  //   locale,
+  //   value => {
+  //     i18nLocale.value = value
+  //   },
+  //   { immediate: true }
+  // )
 })
 </script>

@@ -21,6 +21,5 @@ declare module 'vue' {
     SectionTitle: typeof import('./src/components/SectionTitle.vue')['default']
     SiteLogomark: typeof import('./../common/src/components/SiteLogomark.vue')['default']
     SiteLogotype: typeof import('./../common/src/components/SiteLogotype.vue')['default']
-    VCardItems: typeof import('vuetify/components')['VCardItems']
   }
 }

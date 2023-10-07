@@ -3,8 +3,8 @@
 </template>
 
 <script setup>
-import logoColor from '#common/assets/site-logomark-color.svg'
-import logoWhite from '#common/assets/site-logomark-white.svg'
+import logoColor from '#branding/assets/site-logomark-color.svg'
+import logoWhite from '#branding/assets/site-logomark-white.svg'
 
 defineProps({
   white: {

@@ -1,4 +1,4 @@
-@use '../settings';
+@use './settings';
 
 .markdown p,
 .markdown li {
@@ -10,4 +10,8 @@
 }
 .markdown li {
 	margin-bottom: calc(settings.$spacer);
+}
+
+.section-border-bottom {
+	border-bottom: 28px solid #{map-get(settings.$blue, 'base')};
 }
