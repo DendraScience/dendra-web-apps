@@ -10,7 +10,7 @@
       FILLED[staticPage.sections[i + 1].collection] &&
       FILLED[section.collection]
         ? 'section-border-bottom'
-        : 'mb-16'
+        : 'mb-8 mb-md-16'
     "
   />
 </template>

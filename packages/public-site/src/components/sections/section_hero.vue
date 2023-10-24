@@ -8,22 +8,25 @@
       alt="Background image for the hero section"
       cover
       gradient="to top, rgba(0, 0, 0, .6), rgba(0, 0, 0, .2)"
-      max-height="800"
+      max-height="680"
     >
       <v-container
         :style="{ paddingTop: `${APP_BAR_HEIGHT}px` }"
-        class="d-flex flex-column h-100 pb-16"
+        class="d-flex flex-column h-100 pb-8 pb-md-16"
       >
         <v-row align="center">
           <v-col class="text-white" cols="12" md="8"
             ><h1
               v-if="value.title"
-              class="text-h3 text-md-h2 font-weight-regular mb-4"
+              class="text-h3 text-md-h2 font-weight-medium mt-8 mb-4"
             >
               {{ value.title }}
             </h1>
 
-            <p v-if="value.paragraph" class="text-body-1 text-md-h5 mb-4">
+            <p
+              v-if="value.paragraph"
+              class="text-h6 text-md-h5 font-weight-regular mb-4"
+            >
               {{ value.paragraph }}
             </p>
 
@@ -41,6 +44,7 @@
       </v-container>
     </v-img>
 
+    <!--
     <v-container class="mt-n16">
       <v-row justify="center">
         <v-col cols="auto">
@@ -69,6 +73,7 @@
         </v-col>
       </v-row>
     </v-container>
+-->
   </div>
 </template>
 

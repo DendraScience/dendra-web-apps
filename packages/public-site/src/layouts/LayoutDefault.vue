@@ -9,20 +9,16 @@
 
       <a class="ml-6 flex-grow-1" href="/">
         <SiteLogotype
-          class="d-none d-md-block"
-          :style="{
-            maxHeight: `${
-              collapse ? APP_BAR_HEIGHT_COLLAPSED - 20 : APP_BAR_HEIGHT - 40
-            }px`
-          }"
+          :height="
+            collapse ? APP_BAR_HEIGHT_COLLAPSED - 20 : APP_BAR_HEIGHT - 40
+          "
+          class="d-none d-sm-block"
         />
         <SiteLogomark
-          class="d-block d-md-none"
-          :style="{
-            maxHeight: `${
-              collapse ? APP_BAR_HEIGHT_COLLAPSED - 20 : APP_BAR_HEIGHT - 40
-            }px`
-          }"
+          :height="
+            collapse ? APP_BAR_HEIGHT_COLLAPSED - 20 : APP_BAR_HEIGHT - 40
+          "
+          class="d-block d-sm-none"
         />
       </a>
 
@@ -128,11 +124,17 @@
       <slot />
     </v-main>
 
-    <v-footer color="black">
+    <v-footer class="text-h6" color="black">
       Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
       tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
       veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
       commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
+      velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
+      cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id
+      est laborum. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed
+      do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+      minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex
+      ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
       velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
       cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id
       est laborum.
@@ -176,7 +178,7 @@ const navItems = reactive([
     color: 'success',
     href: 'https://dendra.science/orgs',
     title: 'View Orgs',
-    visible: 'sm'
+    visible: 'md'
   },
   {
     href: '/learn',

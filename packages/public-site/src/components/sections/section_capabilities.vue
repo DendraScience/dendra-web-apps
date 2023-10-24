@@ -1,7 +1,7 @@
 <template>
   <v-container>
-    <v-row v-if="value.title || value.paragraph" class="mb-8">
-      <v-col cols="12">
+    <v-row v-if="value.title || value.paragraph" class="mb-md-8">
+      <v-col cols="12" xl="8">
         <SectionTitle class="mb-4">
           {{ value.title }}
         </SectionTitle>
@@ -17,14 +17,14 @@
         v-for="({ capabilities_id: capability }, i) of value.capabilities"
         :key="i"
       >
-        <v-col cols="12">
-          <v-card rounded="0" variant="tonal">
+        <v-col cols="12" xl="8">
+          <v-card rounded="0" flat>
             <v-container fluid>
-              <v-row align="center">
-                <v-col align="center" class="pa-10" cols="auto">
+              <v-row align="start">
+                <v-col align="center" cols="auto">
                   <div
                     class="d-flex align-center justify-end"
-                    style="position: relative"
+                    style="position: relative; margin-right: 32px"
                   >
                     <CoverImage
                       v-if="capability.image"
@@ -34,7 +34,7 @@
                       }"
                       :transformation="capability.transformation"
                       class="rounded"
-                      width="300"
+                      width="200"
                     >
                     </CoverImage>
 
@@ -50,8 +50,11 @@
                   </div>
                 </v-col>
 
-                <v-col class="text-body-1 px-10 pb-10 pa-md-10" cols="12" md="">
-                  <h3 v-if="capability.title" class="text-h5 text-md-h4 mb-4">
+                <v-col class="text-body-1" cols="12" md="">
+                  <h3
+                    v-if="capability.title"
+                    class="text-h6 text-md-h5 mb-4 font-weight-medium"
+                  >
                     {{ capability.title }}
                   </h3>
 

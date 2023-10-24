@@ -1,9 +1,11 @@
 <template>
-  <div class="bg-blue-grey py-16">
+  <div
+    class="bg-blue-grey py-8 py-md-16"
+  >
     <v-container>
       <v-row
         v-if="value.title || value.paragraph"
-        class="mb-8"
+        class="mb-md-8"
         justify="center"
       >
         <v-col cols="12">

@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-light-blue-lighten-5 py-16" style="position: relative">
+  <div class="bg-light-blue-lighten-5 py-8 py-md-16" style="position: relative">
     <div
       class="d-none d-md-flex justify-end align-end"
       style="
@@ -12,13 +12,13 @@
         z-index: 0;
       "
     >
-      <SiteLogomark width="720" white />
+      <SiteLogomark width="680" white />
     </div>
 
     <v-container>
       <v-row
         v-if="value.title || value.paragraph"
-        class="mb-8"
+        class="mb-md-8"
         justify="center"
       >
         <v-col cols="12" style="z-index: 1">

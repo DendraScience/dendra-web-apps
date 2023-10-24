@@ -70,6 +70,28 @@ async function onBeforeRender(pageContext) {
                       ]
                     }
                   ],
+                  section_case_studies: [
+                    'title',
+                    'paragraph',
+                    {
+                      case_studies: [
+                        {
+                          case_studies_id: [
+                            'id',
+                            'body',
+                            'summary',
+                            'title',
+                            {
+                              cover_image: IMAGE
+                            },
+                            {
+                              cover_transformation: TRANSFORMATION
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
                   section_differentiators: [
                     'title',
                     'paragraph',
@@ -122,6 +144,17 @@ async function onBeforeRender(pageContext) {
                 if (capability.capabilities_id?.description) {
                   capability.capabilities_id.description = md.render(
                     capability.capabilities_id.description
+                  )
+                }
+              }
+            }
+            break
+          case 'section_case_studies':
+            if (section.item?.case_studies) {
+              for (const caseStudy of section.item.case_studies) {
+                if (caseStudy.case_studies_id?.body) {
+                  caseStudy.case_studies_id.body = md.render(
+                    caseStudy.case_studies_id.body
                   )
                 }
               }
