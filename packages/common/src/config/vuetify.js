@@ -10,6 +10,7 @@ import { dendra } from './themes'
 // https://pictogrammers.github.io/@mdi/font/7.0.96/
 import { aliases, mdi } from 'vuetify/iconsets/mdi-svg'
 import { mso } from '#common/iconsets/mso.js'
+import { social } from '#common/iconsets/social.js'
 import '#common/iconsets/mso.css'
 // NOTE: Temporarily disabled due to build issues
 // import { createVueI18nAdapter } from 'vuetify/locale/adapters/vue-i18n'
@@ -26,7 +27,8 @@ export default createVuetify({
     aliases,
     sets: {
       mdi,
-      mso
+      mso,
+      social
     }
   },
 

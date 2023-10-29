@@ -9,6 +9,8 @@ declare module 'vue' {
   export interface GlobalComponents {
     CoverImage: typeof import('./src/components/CoverImage.vue')['default']
     CtaBtn: typeof import('./src/components/CtaBtn.vue')['default']
+    FooterSection: typeof import('./src/components/FooterSection.vue')['default']
+    GitHubIcon: typeof import('./src/components/GitHubIcon.vue')['default']
     HeroSection: typeof import('./src/components/HeroSection.vue')['default']
     PageSection: typeof import('./src/components/PageSection.vue')['default']
     PageSections: typeof import('./src/components/PageSections.vue')['default']

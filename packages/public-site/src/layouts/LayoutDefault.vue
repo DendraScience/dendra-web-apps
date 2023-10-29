@@ -45,10 +45,10 @@
         v-for="item in navItems"
         :key="item.href"
         :active="item.href === canonicalPaths.relative"
-        :class="`d-none d-${item.visible}-flex`"
+        :class="item.visible ? `d-${item.visible}-flex` : ''"
         :color="item.color || 'white'"
         :href="item.href"
-        class="mr-2"
+        class="mr-2 d-none"
         exact
         variant="flat"
         >{{ item.title }}</v-btn
@@ -71,7 +71,7 @@
             v-for="item in navItems"
             :key="item.href"
             :active="item.href === canonicalPaths.relative"
-            :class="`d-flex d-${item.visible}-none`"
+            :class="item.visible ? `d-flex d-${item.visible}-none` : 'd-none'"
             :href="item.href"
           >
             <v-list-item-title>{{ item.title }}</v-list-item-title>
@@ -89,6 +89,7 @@
       />
     </v-app-bar>
 
+    <!--
     <v-navigation-drawer v-model="drawer" temporary>
       <v-list density="compact" nav>
         <v-list-item
@@ -113,6 +114,7 @@
         ></v-list-item>
       </v-list>
     </v-navigation-drawer>
+ -->
 
     <v-main
       :style="{
@@ -124,21 +126,7 @@
       <slot />
     </v-main>
 
-    <v-footer class="text-h6" color="black">
-      Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-      tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-      veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-      commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-      velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-      cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id
-      est laborum. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed
-      do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-      minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex
-      ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-      velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-      cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id
-      est laborum.
-    </v-footer>
+    <FooterSection :nav-items="navItems" />
   </v-app>
 </template>
 
@@ -147,15 +135,16 @@ import { computed, onMounted, reactive, ref, watch } from 'vue'
 // NOTE: Temporarily disabled due to build issues
 // import { useI18n } from 'vue-i18n'
 import { useDisplay, useTheme } from 'vuetify'
+import { useMounted, useStorage, useToggle } from '@vueuse/core'
 import { usePageContext } from '../renderer/usePageContext'
 import {
   APP_BAR_HEIGHT,
   APP_BAR_HEIGHT_COLLAPSED,
-  HREF_ACCOUNT_APP,
-  HREF_DATA_QUERY_APP,
-  HREF_PUBLIC_SITE
+  // HREF_ACCOUNT_APP,
+  // HREF_DATA_QUERY_APP,
+  HREF_LEGACY_APP
+  // HREF_PUBLIC_SITE
 } from '#root/lib/consts'
-import { useMounted, useStorage, useToggle } from '@vueuse/core'
 
 const { name: breakpointName } = useDisplay()
 const { canonicalPaths } = usePageContext()
@@ -168,21 +157,21 @@ const theme = useTheme()
 const dark = useStorage('dark', theme.global.current.value.dark)
 // NOTE: Temporarily disabled due to build issues
 // const locale = useStorage('locale', i18nLocale.value)
-const drawer = ref(null)
+// const drawer = ref(null)
 const toggleDark = useToggle(dark)
 // const toggleDrawer = useToggle(drawer)
 const top = ref(true)
 const collapse = computed(() => isMounted.value && !top.value)
 const navItems = reactive([
   {
-    color: 'success',
-    href: 'https://dendra.science/orgs',
-    title: 'View Orgs',
-    visible: 'md'
+    // color: 'success',
+    href: `${HREF_LEGACY_APP}orgs`,
+    title: 'Orgs',
+    visible: 'lg'
   },
   {
-    href: '/learn',
-    title: 'Learn',
+    href: '/docs',
+    title: 'Docs',
     visible: 'lg'
   },
   {
@@ -199,6 +188,10 @@ const navItems = reactive([
     href: '/theme',
     title: 'Theme',
     visible: 'lg'
+  },
+  {
+    href: '/privacy',
+    title: 'Privacy'
   }
 ])
 

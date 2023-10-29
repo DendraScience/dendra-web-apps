@@ -1,12 +1,15 @@
 <template>
   <v-container>
     <v-row v-if="value.title || value.paragraph" class="mb-md-8">
-      <v-col cols="12" xl="8">
+      <v-col cols="12" xl="10">
         <SectionTitle class="mb-4">
           {{ value.title }}
         </SectionTitle>
 
-        <p v-if="value.paragraph" class="text-body-1 text-md-h5">
+        <p
+          v-if="value.paragraph"
+          class="text-body-1 text-md-h6 font-weight-regular"
+        >
           {{ value.paragraph }}
         </p>
       </v-col>
@@ -17,7 +20,7 @@
         v-for="({ capabilities_id: capability }, i) of value.capabilities"
         :key="i"
       >
-        <v-col cols="12" xl="8">
+        <v-col cols="12" xl="10">
           <v-card rounded="0" flat>
             <v-container fluid>
               <v-row align="start">

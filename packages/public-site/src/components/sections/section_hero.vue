@@ -6,19 +6,19 @@
       :src="imgResp.src"
       :srcset="imgResp.srcset"
       alt="Background image for the hero section"
+      class="section-hero-img"
       cover
       gradient="to top, rgba(0, 0, 0, .6), rgba(0, 0, 0, .2)"
-      max-height="680"
     >
       <v-container
         :style="{ paddingTop: `${APP_BAR_HEIGHT}px` }"
-        class="d-flex flex-column h-100 pb-8 pb-md-16"
+        class="d-flex flex-column h-100 pb-16"
       >
-        <v-row align="center">
-          <v-col class="text-white" cols="12" md="8"
+        <v-row align="center" justify="center">
+          <v-col class="text-white text-center" cols="12" xl="10"
             ><h1
               v-if="value.title"
-              class="text-h3 text-md-h2 font-weight-medium mt-8 mb-4"
+              class="text-h3 text-md-h2 font-weight-medium mt-4 mb-4"
             >
               {{ value.title }}
             </h1>
@@ -31,7 +31,7 @@
             </p>
 
             <div v-if="value.ctas && value.ctas.length">
-              <cta-btn
+              <CtaBtn
                 v-for="(cta, i) of value.ctas"
                 :key="i"
                 v-bind="cta.ctas_id"
@@ -44,42 +44,87 @@
       </v-container>
     </v-img>
 
-    <!--
     <v-container class="mt-n16">
-      <v-row justify="center">
-        <v-col cols="auto">
-          <v-card class="pa-4" elevation="4" max-width="1000">
-            <v-card-title> What are you looking for? </v-card-title>
+      <v-row>
+        <v-col cols="12">
+          <v-card class="pa-4 mx-auto" elevation="4" max-width="800">
+            <v-card-item>
+              <v-alert
+                v-if="organizations.failed"
+                type="warning"
+                title="Our systems are offline."
+                text="Our apologies. We may be performing system maintenance or
+            experiencing technical difficulties at this time."
+                variant="outlined"
+              ></v-alert>
 
-            <v-card-subtitle>
-              Try our query interface by answering a few questions.
-            </v-card-subtitle>
+              <v-autocomplete
+                v-else
+                v-model="orgSelection"
+                :disabled="!orgItems"
+                :items="orgItems"
+                :loading="organizations.loading"
+                append-inner-icon="corporate_fare"
+                auto-select-first
+                item-title="title"
+                item-value="slug"
+                menu-icon=""
+                placeholder="Select an organization"
+                variant="outlined"
+              ></v-autocomplete>
+            </v-card-item>
 
-            <v-card-text>
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
-              reprehenderit in voluptate velit esse cillum dolore eu fugiat
-              nulla pariatur. Excepteur sint occaecat cupidatat non proident,
-              sunt in culpa qui officia deserunt mollit anim id est laborum.
-            </v-card-text>
+            <v-card-actions v-if="organizations.failed">
+              <v-btn :href="HREF_STATUS_PAGE" color="warning" target="_blank"
+                >System Status Page</v-btn
+              >
+            </v-card-actions>
 
-            <v-card-actions>
-              <v-spacer />
-              <v-btn>Next</v-btn>
+            <v-card-actions v-else>
+              <v-btn
+                :disabled="!orgSelection"
+                :href="
+                  orgSelection
+                    ? `${HREF_LEGACY_APP}orgs/${orgSelection}/datastreams?faceted=true&scheme=dq`
+                    : undefined
+                "
+                >Data Query</v-btn
+              >
+              <v-btn
+                :disabled="!orgSelection"
+                :href="
+                  orgSelection
+                    ? `${HREF_LEGACY_APP}orgs/${orgSelection}/status`
+                    : undefined
+                "
+                >Station Status</v-btn
+              >
+              <v-btn
+                :disabled="!orgSelection"
+                :href="
+                  orgSelection
+                    ? `${HREF_LEGACY_APP}orgs/${orgSelection}`
+                    : undefined
+                "
+                class="d-none d-sm-flex"
+                >Overview</v-btn
+              >
             </v-card-actions>
           </v-card>
         </v-col>
       </v-row>
     </v-container>
--->
   </div>
 </template>
 
 <script setup>
-import { toRef } from 'vue'
-import { APP_BAR_HEIGHT } from '#root/lib/consts'
+import { computed, onMounted, toRef } from 'vue'
+import {
+  APP_BAR_HEIGHT,
+  HREF_LEGACY_APP,
+  HREF_STATUS_PAGE
+} from '#root/lib/consts'
+import { dendraClient } from '#common/lib/dendra'
 import { useImgResponsive } from '#common/lib/img'
 
 const props = defineProps({
@@ -100,4 +145,23 @@ const imgResp = useImgResponsive(
     transformation: 'background_transformation'
   }
 )
+const organizations = toRef({ loading: true })
+const orgItems = computed(() => {
+  return organizations.value.data
+    ? organizations.value.data.map(item => ({
+        title: `${item.name} (${item.slug})`,
+        ...item
+      }))
+    : []
+})
+const orgSelection = toRef(undefined)
+
+onMounted(async () => {
+  organizations.value = await dendraClient.find('organizations', {
+    is_enabled: true,
+    is_hidden: false,
+    $select: ['_id', 'name', 'slug'],
+    $sort: { name: 1, _id: 1 }
+  })
+})
 </script>

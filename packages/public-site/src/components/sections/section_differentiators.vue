@@ -1,19 +1,20 @@
 <template>
-  <div
-    class="bg-blue-grey py-8 py-md-16"
-  >
+  <div class="bg-blue-grey py-8 py-md-16">
     <v-container>
       <v-row
         v-if="value.title || value.paragraph"
         class="mb-md-8"
         justify="center"
       >
-        <v-col cols="12">
+        <v-col cols="12" xl="10">
           <SectionTitle v-if="value.title" class="text-center mb-4">
             {{ value.title }}
           </SectionTitle>
 
-          <p v-if="value.paragraph" class="text-body-1 text-md-h5">
+          <p
+            v-if="value.paragraph"
+            class="text-body-1 text-md-h6 font-weight-regular"
+          >
             {{ value.paragraph }}
           </p>
         </v-col>

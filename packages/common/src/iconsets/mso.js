@@ -1,6 +1,7 @@
 import { VLigatureIcon } from 'vuetify/lib/composables/icons'
 import { h } from 'vue'
 
+// SEE: https://fonts.google.com/icons
 const aliases = {
   collapse: 'expand_less',
   complete: 'done',

@@ -21,12 +21,15 @@
         class="mb-md-8"
         justify="center"
       >
-        <v-col cols="12" style="z-index: 1">
+        <v-col cols="12" xl="10" style="z-index: 1">
           <SectionTitle v-if="value.title" class="text-center mb-4">
             {{ value.title }}
           </SectionTitle>
 
-          <p v-if="value.paragraph" class="text-body-1 text-md-h5">
+          <p
+            v-if="value.paragraph"
+            class="text-body-1 text-md-h6 font-weight-regular"
+          >
             {{ value.paragraph }}
           </p>
         </v-col>
@@ -34,7 +37,7 @@
 
       <template v-if="value.tours && value.tours.length">
         <v-row v-for="({ tours_id: tour }, i) of value.tours" :key="i">
-          <v-col class="pb-10" cols="12" lg="8">
+          <v-col class="pb-10" cols="12" xl="10">
             <v-card variant="text">
               <v-card-item>
                 <h3 v-if="tour.title" class="text-h5 text-md-h4 mb-4">
@@ -49,7 +52,7 @@
                 ></div>
 
                 <div v-if="tour.ctas && tour.ctas.length">
-                  <cta-btn
+                  <CtaBtn
                     v-for="(cta, j) of tour.ctas"
                     :key="j"
                     v-bind="cta.ctas_id"
