@@ -37,9 +37,11 @@
       </div>
  -->
 
-      <div v-if="isDev && isMounted" class="bg-secondary pa-2 mr-2">
-        {{ breakpointName }}
-      </div>
+      <v-lazy>
+        <div v-if="isDev" class="bg-secondary pa-2 mr-2">
+          {{ breakpointName }}
+        </div>
+      </v-lazy>
 
       <v-btn
         v-for="item in navItems"
@@ -54,7 +56,7 @@
         >{{ item.title }}</v-btn
       >
 
-      <v-menu v-if="isMounted">
+      <v-menu>
         <template #activator="{ props }">
           <v-btn
             v-bind="props"
@@ -80,7 +82,6 @@
       </v-menu>
 
       <v-btn
-        v-if="isMounted"
         :icon="dark ? 'dark_mode' : 'light_mode'"
         color="white"
         size="small"
@@ -130,8 +131,22 @@
   </v-app>
 </template>
 
+<script>
+/**
+ * @typedef { import("vue").ShallowReactive<NavItem[]> } NavItemsShallowReactive
+ */
+
+/**
+ * @typedef {object} NavItem
+ * @property {string} href
+ * @property {string} title
+ * @property {string} [visible]
+ * @property {string} [color]
+ */
+</script>
+
 <script setup>
-import { computed, onMounted, reactive, ref, watch } from 'vue'
+import { computed, onMounted, ref, shallowReactive, watch } from 'vue'
 // NOTE: Temporarily disabled due to build issues
 // import { useI18n } from 'vue-i18n'
 import { useDisplay, useTheme } from 'vuetify'
@@ -160,9 +175,12 @@ const dark = useStorage('dark', theme.global.current.value.dark)
 // const drawer = ref(null)
 const toggleDark = useToggle(dark)
 // const toggleDrawer = useToggle(drawer)
+
 const top = ref(true)
 const collapse = computed(() => isMounted.value && !top.value)
-const navItems = reactive([
+
+/** @type {NavItemsShallowReactive}  */
+const navItems = shallowReactive([
   {
     // color: 'success',
     href: `${HREF_LEGACY_APP}orgs`,
@@ -195,11 +213,15 @@ const navItems = reactive([
   }
 ])
 
+/**
+ * @type  {EventListener}
+ */
 function onScroll(e) {
+  if (!(e.target instanceof Document)) return
   top.value = e.target.documentElement.scrollTop < 20
 }
 
-onMounted(async () => {
+onMounted(() => {
   watch(
     dark,
     value => {

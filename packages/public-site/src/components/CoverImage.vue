@@ -8,6 +8,17 @@
   </v-img>
 </template>
 
+<script>
+/**
+ * @typedef { import("#common/lib/img").DirectusImage } DirectusImage
+ * @typedef { import("#common/lib/img").ImageTransformation } ImageTransformation
+ * @typedef { import("#common/lib/img").UseImgResponsiveSizes } UseImgResponsiveSizes
+ * @typedef { import('vue').PropType<DirectusImage> } DirectusImagePropType
+ * @typedef { import('vue').PropType<ImageTransformation | undefined> } ImageTransformationPropType
+ * @typedef { import('vue').PropType<UseImgResponsiveSizes | undefined> } UseImgResponsiveSizesPropType
+ */
+</script>
+
 <script setup>
 import { toRef } from 'vue'
 import { useImgResponsive } from '#common/lib/img'
@@ -19,29 +30,27 @@ const props = defineProps({
   },
   image: {
     required: true,
-    type: Object
-  },
-  keys: {
-    default: undefined,
+    /** @type {DirectusImagePropType} */
     type: Object
   },
   sizes: {
     default: undefined,
+    /** @type {UseImgResponsiveSizesPropType} */
     type: Object
   },
   transformation: {
     default: undefined,
+    /** @type {ImageTransformationPropType} */
     type: Object
   }
 })
 
 const imgResp = useImgResponsive(
-  {
-    aspectRatio: toRef(props, 'aspectRatio'),
-    image: toRef(props, 'image'),
-    transformation: toRef(props, 'transformation')
-  },
-  props.keys,
-  props.sizes
+  toRef(() => ({
+    aspectRatio: props.aspectRatio,
+    image: props.image,
+    sizes: props.sizes,
+    transformation: props.transformation
+  }))
 )
 </script>

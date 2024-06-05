@@ -4,7 +4,7 @@ const routes = [
     name: 'home',
     component: () => import('#root/views/HomePage.vue'),
     meta: {
-      documentProps: {
+      headProps: {
         title: 'Home'
       }
     }
@@ -14,7 +14,7 @@ const routes = [
     name: 'theme',
     component: () => import('#root/views/ThemePage.vue'),
     meta: {
-      documentProps: {
+      headProps: {
         title: 'Theme'
       }
     }

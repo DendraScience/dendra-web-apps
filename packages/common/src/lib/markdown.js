@@ -1,23 +1,24 @@
+// @ts-nocheck
 /**
  * Based on the following:
  *  - https://markdown-it.github.io/markdown-it/
  *  - https://github.com/strapi/strapi/blob/master/packages/strapi-plugin-content-manager/admin/src/components/PreviewWysiwyg/utils/mdRenderer.js
  */
 
-import Markdown from 'markdown-it'
+import markdownit from 'markdown-it'
 // import 'highlight.js/styles/solarized-dark.css';
 import hljs from 'highlight.js'
 import abbr from 'markdown-it-abbr'
 import container from 'markdown-it-container'
 import deflist from 'markdown-it-deflist'
-import emoji from 'markdown-it-emoji'
+import { light as emoji } from 'markdown-it-emoji'
 import footnote from 'markdown-it-footnote'
 import ins from 'markdown-it-ins'
 import mark from 'markdown-it-mark'
 import sub from 'markdown-it-sub'
 import sup from 'markdown-it-sup'
 
-export const md = new Markdown({
+export const md = markdownit({
   html: false, // Enable HTML tags in source
   xhtmlOut: false,
   breaks: false,

@@ -1,6 +1,50 @@
+/**
+ * @typedef { import("vue").ComputedRef<UseImgResponsiveReturn> } UseImgResponsiveReturnComputedRef
+ * @typedef { import("vue").MaybeRefOrGetter<UseImgResponsiveOptions> } UseImgResponsiveOptionsRefOrGetter
+ */
+
+/**
+ * @typedef {object} DirectusImage
+ * @property {number} height
+ * @property {number} width
+ * @property {string} filename_disk
+ * @property {string} storage
+ * @property {string} type
+ */
+
+/**
+ * @typedef {object} ImageTransformation
+ * @property {string} [cloudinary_parameters]
+ */
+
+/**
+ * @typedef {{[name: string]: string}} UseImgResponsiveSizes
+ */
+
+/**
+ * @typedef {object} UseImgResponsiveOptions
+ * @property {number} [aspectRatio]
+ * @property {DirectusImage} [image]
+ * @property {ImageTransformation} [transformation]
+ * @property {UseImgResponsiveSizes} [sizes]
+ */
+
+/**
+ * @typedef {object} UseImgResponsiveReturn
+ * @property {string} [sizes]
+ * @property {string} [src]
+ * @property {string} [srcset]
+ */
+
 import { computed, toValue } from 'vue'
 import { useDisplay } from 'vuetify'
 
+/**
+ * @param  {DirectusImage} image
+ * @param  {ImageTransformation} [transformation]
+ * @param  {{[name: string]: string | number}} [params]
+ * @return {string}
+ */
 function cloudinaryHref(image, transformation, params) {
   const parts = [
     '',
@@ -9,11 +53,11 @@ function cloudinaryHref(image, transformation, params) {
     'upload'
   ]
 
-  if (transformation && transformation.cloudinary_parameters)
+  if (transformation && transformation.cloudinary_parameters && params)
     parts.push(
       transformation.cloudinary_parameters.replace(
         /{([.\w]+)}/g,
-        (_, k) => params[k]
+        (_, k) => params[k] + ''
       )
     )
 
@@ -22,58 +66,66 @@ function cloudinaryHref(image, transformation, params) {
   return new URL(parts.join('/'), import.meta.env.VITE_CLOUDINARY_BASE).href
 }
 
-export function useImgResponsive(data, keys, sizes) {
+/**
+ * Responsive image composable.
+ * @param  {UseImgResponsiveOptionsRefOrGetter} options
+ * @return {UseImgResponsiveReturnComputedRef}
+ */
+export function useImgResponsive(options) {
   const { thresholds } = useDisplay()
 
   return computed(() => {
-    let aspectRatio = toValue(data.aspectRatio)
-    let image = toValue(data.image)
-    let transformation = toValue(data.transformation)
+    let {
+      aspectRatio,
+      image,
+      sizes: sizesOpt,
+      transformation
+    } = toValue(options)
 
-    const value = toValue(data.value)
-    if (value && keys) {
-      if (keys.aspectRatio) aspectRatio = value[keys.aspectRatio] || aspectRatio
-      if (keys.image) image = value[keys.image] || image
-      if (keys.transformation)
-        transformation = value[keys.transformation] || transformation
-    }
-
-    if (!aspectRatio) aspectRatio = 1
+    if (aspectRatio === undefined) aspectRatio = 1
     aspectRatio = +aspectRatio.toFixed(5)
 
-    let resp = {}
+    let resp = {
+      sizes: '',
+      src: '',
+      srcset: ''
+    }
 
     if (
       image &&
       image.filename_disk &&
       image.storage === import.meta.env.VITE_CLOUDINARY_STORAGE
     ) {
-      resp.sizes = []
+      /** @type {string[]} */
+      const sizes = []
+      /** @type {string[]} */
+      const srcset = []
 
-      resp.src = cloudinaryHref(image, transformation, {
+      const src = cloudinaryHref(image, transformation, {
         aspectRatio,
         width: 1280 // Hardcoded default
       })
-      resp.srcset = []
 
       for (const [bp, width] of Object.entries(thresholds.value)) {
         if (bp === 'xs') continue
 
         // If viewport width is equal to ${width}px or greater,
         // then show the image with a width of ${srcSize}
-        const srcSize = sizes?.[bp]
-        if (srcSize) resp.sizes.push(`(min-width: ${width}px) ${srcSize}`)
+        const srcSize = sizesOpt?.[bp]
+        if (srcSize) sizes.push(`(min-width: ${width}px) ${srcSize}`)
 
         const href = cloudinaryHref(image, transformation, {
           aspectRatio,
           width
         })
-        resp.srcset.push(`${href} ${width}w`)
+        srcset.push(`${href} ${width}w`)
       }
 
-      resp.sizes.push(sizes?.xs || '100vw')
-      resp.sizes = resp.sizes.join(',')
-      resp.srcset = resp.srcset.join(',')
+      sizes.push(sizesOpt?.xs || '100vw')
+
+      resp.sizes = sizes.join(',')
+      resp.src = src
+      resp.srcset = srcset.join(',')
     }
 
     return resp

@@ -17,10 +17,18 @@
 
     <template v-if="value.capabilities && value.capabilities.length">
       <v-row
-        v-for="({ capabilities_id: capability }, i) of value.capabilities"
+        v-for="(
+          { capabilities_id: capability }, i
+        ) of /** @type {ItemsSectionCapabilitiesCapabilities[]} **/ (
+          value.capabilities.filter(c => typeof c !== 'number')
+        )"
         :key="i"
       >
-        <v-col cols="12" xl="10">
+        <v-col
+          v-if="capability && typeof capability != 'number'"
+          cols="12"
+          xl="10"
+        >
           <v-card rounded="0" flat>
             <v-container fluid>
               <v-row align="start">
@@ -77,10 +85,19 @@
   </v-container>
 </template>
 
+<script>
+/**
+ * @typedef { import("#common/types/directus").components["schemas"]["ItemsSectionCapabilities"] } ItemsSectionCapabilities
+ * @typedef { import("#common/types/directus").components["schemas"]["ItemsSectionCapabilitiesCapabilities"] } ItemsSectionCapabilitiesCapabilities
+ * @typedef { import('vue').PropType<ItemsSectionCapabilities> } ItemsSectionCapabilitiesPropType
+ */
+</script>
+
 <script setup>
 defineProps({
   value: {
     required: true,
+    /** @type {ItemsSectionCapabilitiesPropType} */
     type: Object
   }
 })

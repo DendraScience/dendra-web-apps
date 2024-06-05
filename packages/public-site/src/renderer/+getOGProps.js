@@ -1,8 +1,11 @@
 export default getOGProps
 
-function getOGProps({ pageContext }) {
+/**
+ * @type GetOGPropsFunction
+ */
+function getOGProps(pageContext) {
   return {
-    title: pageContext.metaInfo?.og_title,
-    description: pageContext.metaInfo?.og_description
+    title: pageContext?.data?.staticPage?.meta_info?.og_title,
+    description: pageContext?.data?.staticPage?.meta_info?.og_description
   }
 }

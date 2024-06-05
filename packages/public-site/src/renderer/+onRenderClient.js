@@ -1,3 +1,7 @@
+/**
+ * @typedef { import("vike/types").OnRenderClientAsync } OnRenderClient
+ */
+
 import '@fontsource-variable/comfortaa'
 import '@fontsource-variable/material-symbols-outlined/fill.css'
 import '@fontsource/roboto/100.css'
@@ -12,6 +16,9 @@ import { createApp } from './app'
 
 export default onRenderClient
 
+/**
+ * @type OnRenderClient
+ */
 async function onRenderClient(pageContext) {
   const app = createApp(pageContext)
   tracker.pageView(pageContext)

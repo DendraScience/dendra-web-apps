@@ -3,7 +3,7 @@
 import 'vuetify/styles'
 import './styles.scss'
 // Vuetify
-import { createVuetify } from 'vuetify/lib/framework'
+import { createVuetify } from 'vuetify'
 import { md2 } from 'vuetify/blueprints'
 import * as directives from 'vuetify/lib/directives/index.mjs'
 import { dendra } from './themes'

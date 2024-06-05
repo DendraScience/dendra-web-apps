@@ -1,3 +1,8 @@
+/**
+ * @typedef { import("vue").App } App
+ * @typedef { import("vike/types").PageContext } PageContext
+ */
+
 import { createSSRApp, h } from 'vue'
 import { setPageContext } from './usePageContext'
 import LayoutDefault from '#root/layouts/LayoutDefault.vue'
@@ -7,8 +12,12 @@ import vuetify from '#branding/config/vuetify'
 
 export { createApp }
 
+/**
+ * @param {PageContext} pageContext
+ * @return {App} app
+ */
 function createApp(pageContext) {
-  const { Page, pageProps } = pageContext
+  const { Page, data } = pageContext
   const PageWithLayout = {
     render() {
       return h(
@@ -16,7 +25,7 @@ function createApp(pageContext) {
         {},
         {
           default() {
-            return h(Page, pageProps ?? {})
+            return h(Page, data ?? {})
           }
         }
       )

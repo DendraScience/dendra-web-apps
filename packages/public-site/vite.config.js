@@ -1,3 +1,4 @@
+import 'dotenv/config'
 import path from 'node:path'
 import process from 'node:process'
 import { defineConfig } from 'vite'
@@ -46,7 +47,7 @@ if (!isPrerender)
 			eslint: {
 				lintCommand: 'eslint "./**/*.{js,ts,tsx,vue}"'
 			},
-			vueTsc: { root: '../../' }
+			vueTsc: { tsconfigPath: 'tsconfig.app.json' }
 		})
 	)
 
@@ -74,7 +75,9 @@ export default defineConfig({
 		}
 	},
 
-	ssr: { noExternal: ['vuetify'] },
+	ssr: {
+		noExternal: ['vuetify']
+	},
 
 	...envConfig
 })

@@ -1,5 +1,5 @@
 export default {
-  documentProps: {
+  headProps: {
     title: 'Theme'
   }
 }

@@ -1,4 +1,8 @@
-import { VLigatureIcon } from 'vuetify/lib/composables/icons'
+/**
+ * @typedef { import("vuetify").IconSet } IconSet
+ */
+
+import { VLigatureIcon } from 'vuetify/components'
 import { h } from 'vue'
 
 // SEE: https://fonts.google.com/icons
@@ -41,6 +45,7 @@ const aliases = {
   calendar: 'event'
 }
 
+/** @type {IconSet} */
 const mso = {
   component: props =>
     h(VLigatureIcon, { ...props, class: 'material-symbols-outlined' })

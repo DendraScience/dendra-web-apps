@@ -65,7 +65,13 @@ async function startServer() {
     if (!httpResponse) {
       res.status(404).send('404: Page not found')
     } else {
-      res.status(httpResponse.statusCode).type(httpResponse.contentType)
+      const { earlyHints, statusCode, headers } = httpResponse
+
+      if (res.writeEarlyHints)
+        res.writeEarlyHints({ link: earlyHints.map(e => e.earlyHintLink) })
+      res.status(statusCode)
+      headers.forEach(([name, value]) => res.setHeader(name, value))
+
       httpResponse.pipe(res)
     }
   })

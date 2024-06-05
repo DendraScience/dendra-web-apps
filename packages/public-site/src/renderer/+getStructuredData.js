@@ -1,12 +1,13 @@
 export default getStructuredData
 
-function getStructuredData({ documentProps, pageContext }) {
-  return (
-    pageContext?.structuredData || {
-      '@context': 'http://schema.org',
-      '@type': 'WebPage',
-      name: documentProps.title,
-      description: documentProps.description
-    }
-  )
+/**
+ * @type GetStructuredDataFunction
+ */
+function getStructuredData(pageContext, headProps) {
+  return {
+    '@context': 'http://schema.org',
+    '@type': 'WebPage',
+    name: headProps.title,
+    description: headProps.description
+  }
 }

@@ -1,5 +1,5 @@
 <template>
-  <v-footer class="py-8 py-md-16" color="black">
+  <v-footer class="py-8 py-md-16" theme="dark">
     <v-container>
       <v-row justify="center">
         <v-col cols="auto">
@@ -41,10 +41,23 @@
   </v-footer>
 </template>
 
+<script>
+/**
+ * @typedef { import("vue").PropType<NavItem[]> } NavItemsPropType
+ */
+
+/**
+ * @typedef {object} NavItem
+ * @property {string} href
+ * @property {string} title
+ */
+</script>
+
 <script setup>
 defineProps({
   navItems: {
     default: undefined,
+    /** @type {NavItemsPropType} */
     type: Array
   }
 })

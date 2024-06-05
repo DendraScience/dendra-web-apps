@@ -1,0 +1,46 @@
+{
+    "compilerOptions":
+    {
+        "allowJs": true,
+        "checkJs": true,
+        "composite": true,
+        "rootDir": "../..",
+        "paths":
+        {
+            "#branding/*":
+            [
+                "../../branding/public-site/*"
+            ],
+            "#common/*":
+            [
+                "../../packages/common/src/*"
+            ],
+            "#root/*":
+            [
+                "./src/*"
+            ]
+        },
+        "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo"
+    },
+    "exclude":
+    [
+        "src/assets/*",
+        "src/config/*",
+        "src/locales/*",
+        "src/server/*",
+        "../../branding/public-site/public/*",
+        "../../packages/common/src/assets/*",
+        "../../packages/common/src/config/*"
+    ],
+    "extends": "@vue/tsconfig/tsconfig.dom.json",
+    "include":
+    [
+        "env.d.ts",
+        "src/**/*",
+        "src/**/*.vue",
+        "../../branding/public-site/**/*",
+        "../../branding/public-site/**/*.vue",
+        "../../packages/common/src/**/*",
+        "../../packages/common/src/**/*.vue"
+    ]
+}

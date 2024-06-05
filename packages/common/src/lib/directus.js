@@ -1,9 +1,13 @@
-import { createDirectus } from '@directus/sdk'
-import { graphql } from '@directus/sdk/graphql'
-import { rest } from '@directus/sdk/rest'
+/**
+ * @typedef { import("#common/types/content").DirectusSchema } DirectusSchema
+ * @typedef { import("@directus/sdk").DirectusClient<DirectusSchema> } DirectusClient
+ * @typedef { import("@directus/sdk").RestClient<DirectusSchema> } RestClient
+ */
+
+import { createDirectus, rest } from '@directus/sdk'
 import { staticToken } from '@directus/sdk'
 
-export const directusClient = createDirectus(import.meta.env.VITE_DIRECTUS_URL)
-  .with(graphql())
+/** @type {DirectusClient & RestClient} */
+export const directusClient = createDirectus(process.env.DIRECTUS_URL + '')
   .with(rest())
-  .with(staticToken(import.meta.env.VITE_DIRECTUS_STATIC_TOKEN))
+  .with(staticToken(process.env.DIRECTUS_STATIC_TOKEN + ''))

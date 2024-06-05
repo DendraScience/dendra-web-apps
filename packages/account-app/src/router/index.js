@@ -22,21 +22,17 @@ router.beforeEach((to, from, next) => {
     relative
   }
 
-  // documentProps
-  const documentProps = Object.assign({}, to.meta?.documentProps)
-  documentProps.title =
-    documentProps.title || import.meta.env.VITE_TITLE || 'Hello'
-  documentProps.titleTemplate =
-    documentProps.titleTemplate || import.meta.env.VITE_TITLE_TEMPLATE || '%s'
-  documentProps.titleFull = documentProps.titleTemplate.replace(
-    '%s',
-    documentProps.title
-  )
+  // headProps
+  const headProps = Object.assign({}, to.meta?.headProps)
+  headProps.title = headProps.title || import.meta.env.VITE_TITLE || 'Hello'
+  headProps.titleTemplate =
+    headProps.titleTemplate || import.meta.env.VITE_TITLE_TEMPLATE || '%s'
+  headProps.titleFull = headProps.titleTemplate.replace('%s', headProps.title)
 
-  document.title = documentProps.titleFull
+  document.title = headProps.titleFull
 
   if (!(to.name === from.name && to.path === from.path))
-    tracker.pageView({ canonicalPaths, documentProps })
+    tracker.pageView({ canonicalPaths, headProps })
 
   next()
 })

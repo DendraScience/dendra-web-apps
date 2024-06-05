@@ -1,3 +1,11 @@
+/**
+ * @typedef { import("vike/types").PageContextServer } PageContext
+ */
+
+/**
+ * @param {PageContext} pageContext
+ * @return {CanonicalPaths}
+ */
 export function getCanonicalPaths(pageContext) {
   const { urlPathname } = pageContext
 
@@ -13,13 +21,19 @@ export function getCanonicalPaths(pageContext) {
   }
 }
 
-export function getDocumentProps(pageContext) {
+/**
+ * @param  {PageContext} pageContext
+ * @return {HeadProps}
+ */
+export function mergeHeadProps(pageContext) {
   const { config } = pageContext
+  /** @type {HeadProps} */
   const props = {}
-  const objProps = config?.documentProps
+  const objProps = config?.headProps
+
   const getProps =
-    typeof config?.getDocumentProps === 'function'
-      ? config.getDocumentProps(pageContext)
+    typeof config?.getHeadProps === 'function'
+      ? config.getHeadProps(pageContext)
       : undefined
 
   // Defaults merge assignment
@@ -29,36 +43,45 @@ export function getDocumentProps(pageContext) {
   props.titleTemplate =
     getProps?.titleTemplate ||
     objProps?.titleTemplate ||
-    import.meta.env.VITE_TITLE_TEMPLATE ||
+    import.meta.env.VITE_TITLE_TEMPLATE + '' ||
     '%s'
   props.titleFull = props.titleTemplate.replace('%s', props.title)
 
   return props
 }
 
-// Build Open Graph properties
-// SEE: https://ogp.me/
-export function getOGProps(data) {
-  const { canonicalPaths, documentProps, pageContext } = data
+/**
+ * Build Open Graph properties https://ogp.me/
+ * @param  {PageContext} pageContext
+ * @param  {HeadProps} headProps
+ * @return {OGProps}
+ */
+export function mergeOGProps(pageContext, headProps) {
+  const { canonicalPaths } = pageContext
   const { config } = pageContext
+  /** @type {OGProps} */
   const props = {}
   const objProps = config?.ogProps
   const getProps =
     typeof config?.getOGProps === 'function'
-      ? config.getOGProps(data)
+      ? config.getOGProps(pageContext, headProps)
       : undefined
 
   // Defaults merge assignment
   props.description =
-    getProps?.description || objProps?.description || documentProps?.description
-  props.title = getProps?.title || objProps?.title || documentProps?.title
+    getProps?.description || objProps?.description || headProps?.description
+  props.title = getProps?.title || objProps?.title || headProps?.title
   props.url = getProps?.url || objProps?.url || canonicalPaths.absolute
 
   return props
 }
 
-export function getStructuredData(data) {
-  const { pageContext } = data
+/**
+ * @param  {PageContext} pageContext
+ * @param  {HeadProps} headProps
+ * @return {StructuredData}
+ */
+export function mergeStructuredData(pageContext, headProps) {
   const { config } = pageContext
 
   // SEE: https://developers.google.com/search/docs/appearance/structured-data
@@ -66,7 +89,7 @@ export function getStructuredData(data) {
     {},
     config?.structuredData,
     typeof config?.getStructuredData === 'function'
-      ? config.getStructuredData(data)
+      ? config.getStructuredData(pageContext, headProps)
       : undefined
   )
 }

@@ -1,11 +1,36 @@
+/**
+ * @typedef { import("vike/types").PageContextClient } PageContext
+ * @typedef { import("pino").Logger } Logger
+ */
+
 import Plausible from 'plausible-tracker'
 import { logger } from './logger'
 
+/**
+ * @typedef {object} TrackerOptions
+ * @property {DataLayer} [dataLayer]
+ * @property {boolean} dev
+ * @property {function} [gtag]
+ * @property {Logger} [logger]
+ * @property {PlausibleReturn} [plausible]
+ */
+
 class Tracker {
-  constructor(options) {
-    Object.assign(this, options)
+  /**
+   * @param {TrackerOptions} [options]
+   */
+  constructor(options = { dev: false }) {
+    this.dataLayer = options.dataLayer
+    this.dev = options.dev
+    this.gtag = options.gtag
+    this.logger = options.logger
+    this.plausible = options.plausible
   }
 
+  /**
+   * @param  {string} event
+   * @param  {{[propName: string]: string | number | boolean}=} props
+   */
   event(event, props = {}) {
     const { dev, gtag, logger, plausible } = this
 
@@ -15,7 +40,10 @@ class Tracker {
     if (gtag) gtag('event', event, props)
   }
 
-  pageView({ canonicalPaths, documentProps }) {
+  /**
+   * @param {PageContext} pageContext
+   */
+  pageView({ canonicalPaths, headProps }) {
     const { dev, gtag, logger, plausible } = this
 
     if (
@@ -23,11 +51,11 @@ class Tracker {
       logger &&
       canonicalPaths &&
       canonicalPaths.relative &&
-      documentProps &&
-      documentProps.title
+      headProps &&
+      headProps.title
     )
       logger.info(
-        { title: documentProps.title, url: canonicalPaths.relative },
+        { title: headProps.title, url: canonicalPaths.relative },
         'Track pagevew'
       )
 
@@ -40,17 +68,19 @@ class Tracker {
       gtag &&
       canonicalPaths &&
       canonicalPaths.absolute &&
-      documentProps &&
-      documentProps.title
+      headProps &&
+      headProps.title
     )
       gtag('event', 'page_view', {
         page_location: canonicalPaths.absolute,
-        page_title: documentProps.title
+        page_title: headProps.title
       })
   }
 }
 
+/** @type {PlausibleReturn | undefined} */
 let plausible
+/** @type {function | undefined} */
 let gtag
 
 // Configure trackers
@@ -78,6 +108,7 @@ export const tracker = !import.meta.env.SSR
   ? new Tracker({
       dataLayer: window.dataLayer,
       dev: import.meta.env.DEV,
+      gtag,
       logger,
       plausible
     })

@@ -1,19 +1,63 @@
-import qs from 'qs'
+/**
+ * @typedef { import("pino").Logger } Logger
+ */
 
+import qs from 'qs'
+import { logger } from './logger'
+import { errToString } from './utils'
+
+/**
+ * @return {{[name: string]: string}} [description]
+ */
 function defaultHeaders() {
   return {
     'Content-Type': 'application/json'
   }
 }
 
+/**
+ * @typedef {object} DendraClientOptions
+ * @property {boolean} dev
+ * @property {string} url
+ * @property {Logger} [logger]
+ */
+
+/**
+ * @typedef {object} DendraClientFetchReturn
+ * @property {boolean} [loading]
+ * @property {boolean} [failed]
+ * @property {number} [status]
+ * @property {string} [error]
+ * @property {object | object[]} [data]
+ */
+
+/**
+ * @typedef {Promise<DendraClientFetchReturn>} DendraClientAsyncFetchReturn
+ */
+
 export class DendraClient {
-  constructor(options) {
-    Object.assign(this, options)
+  /**
+   * @param {DendraClientOptions} [options]
+   */
+  constructor(options = { dev: false, url: '' }) {
+    this.dev = options.dev
+    this.logger = options.logger
+    this.url = options.url
   }
 
+  /**
+   * @param  {string} input
+   * @param  {object} [query]
+   * @return {DendraClientAsyncFetchReturn}
+   */
   async _get(input, query) {
+    const { dev, logger } = this
+
+    if (dev && logger) logger.info({ input, query }, 'DendraClient _get')
+
     const controller = new AbortController()
     const id = setTimeout(() => controller.abort(), 10000)
+    /** @type {RequestInit} */
     const init = {
       cache: 'no-cache',
       headers: defaultHeaders(),
@@ -38,8 +82,10 @@ export class DendraClient {
 
       return await resp.json()
     } catch (err) {
+      if (logger) logger.error(err, 'DendraClient _get error')
+
       return {
-        error: err.message,
+        error: errToString(err),
         failed: true
       }
     } finally {
@@ -47,15 +93,30 @@ export class DendraClient {
     }
   }
 
+  /**
+   * Find one or more resources.
+   * @param  {string} path
+   * @param  {object} [query]
+   * @return {DendraClientAsyncFetchReturn}
+   */
   find(path, query) {
     return this._get(path, query)
   }
 
-  get(path, id) {
+  /**
+   * Get a resource by identifier.
+   * @param  {string} path
+   * @param  {string} id
+   * @param  {object} [query]
+   * @return {DendraClientAsyncFetchReturn}
+   */
+  get(path, id, query) {
     return this._get(`${path}/${id}`, query)
   }
 }
 
 export const dendraClient = new DendraClient({
+  dev: import.meta.env.DEV,
+  logger,
   url: import.meta.env.VITE_DENDRA_API_URL
 })

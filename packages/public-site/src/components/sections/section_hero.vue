@@ -60,6 +60,7 @@
 
               <v-autocomplete
                 v-else
+                id="section_hero_autocomplete_1"
                 v-model="orgSelection"
                 :disabled="!orgItems"
                 :items="orgItems"
@@ -117,6 +118,12 @@
   </div>
 </template>
 
+<script>
+/**
+ * @typedef { import("#common/lib/dendra").DendraClientFetchReturn } DendraClientFetchReturn
+ */
+</script>
+
 <script setup>
 import { computed, onMounted, toRef } from 'vue'
 import {
@@ -136,18 +143,18 @@ const props = defineProps({
 
 const aspectRatio = 16 / 9
 const imgResp = useImgResponsive(
-  {
+  toRef(() => ({
     aspectRatio,
-    value: toRef(props, 'value')
-  },
-  {
-    image: 'background_image',
-    transformation: 'background_transformation'
-  }
+    image: props.value.background_image,
+    transformation: props.value.background_transformation
+  }))
 )
-const organizations = toRef({ loading: true })
+
+const organizations = toRef(
+  /** @type {DendraClientFetchReturn} **/ ({ loading: true })
+)
 const orgItems = computed(() => {
-  return organizations.value.data
+  return organizations.value.data && Array.isArray(organizations.value.data)
     ? organizations.value.data.map(item => ({
         title: `${item.name} (${item.slug})`,
         ...item

@@ -1,35 +1,10 @@
 {
-    "compilerOptions":
-    {
-        "allowJs": true,
-        "esModuleInterop": true,
-        "lib":
-        [
-            "DOM",
-            "DOM.Iterable",
-            "ESNext"
-        ],
-        "module": "ES2020",
-        "moduleResolution": "Node",
-        "skipLibCheck": true,
-        "strict": true,
-        "target": "ES2020",
-        "types":
-        [
-            "vite/client"
-        ]
-    },
-    "exclude":
+    "files":
+    [],
+    "references":
     [
-        "compost/**/*"
-    ],
-    "ts-node":
-    {
-        "compilerOptions":
         {
-            "moduleResolution": "Node16"
-        },
-        "esm": true,
-        "swc": true
-    }
+            "path": "./packages/public-site/tsconfig.json"
+        }
+    ]
 }
