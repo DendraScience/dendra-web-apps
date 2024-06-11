@@ -23,44 +23,55 @@
       <template v-if="value.differentiators && value.differentiators.length">
         <v-row justify="center">
           <v-col
-            v-for="(
-              { differentiators_id: differentiator }, i
-            ) of value.differentiators"
+            v-for="(differentiator, i) of value.differentiators"
             :key="i"
             cols="12"
             sm="6"
             lg="4"
           >
-            <v-card
-              class="fill-height"
-              variant="tonal"
-              style="position: relative"
-            >
-              <v-card-item class="pa-10" style="margin-bottom: 100px">
-                <h3 v-if="differentiator.title" class="text-h5 text-md-h4 mb-4">
-                  {{ differentiator.title }}
-                </h3>
+            <template v-if="typeof differentiator === 'number'" />
 
-                <!-- eslint-disable vue/no-v-html -->
-                <div
-                  v-if="differentiator.description"
-                  class="text-body-1 markdown"
-                  v-html="differentiator.description"
-                ></div>
-              </v-card-item>
-
-              <v-icon
-                :icon="differentiator.icon"
-                size="256"
-                color="white"
-                style="
-                  opacity: 0.1;
-                  position: absolute;
-                  right: 0;
-                  bottom: -100px;
-                "
+            <template v-else>
+              <template
+                v-if="typeof differentiator.differentiators_id === 'number'"
               />
-            </v-card>
+
+              <v-card
+                v-else-if="differentiator.differentiators_id"
+                class="fill-height"
+                variant="tonal"
+                style="position: relative"
+              >
+                <v-card-item class="pa-10" style="margin-bottom: 100px">
+                  <h3
+                    v-if="differentiator.differentiators_id.title"
+                    class="text-h5 text-md-h4 mb-4"
+                  >
+                    {{ differentiator.differentiators_id.title }}
+                  </h3>
+
+                  <!-- eslint-disable vue/no-v-html -->
+                  <div
+                    v-if="differentiator.differentiators_id.description"
+                    class="text-body-1 markdown"
+                    v-html="differentiator.differentiators_id.description"
+                  ></div>
+                </v-card-item>
+
+                <v-icon
+                  v-if="differentiator.differentiators_id.icon"
+                  :icon="differentiator.differentiators_id.icon"
+                  size="256"
+                  color="white"
+                  style="
+                    opacity: 0.1;
+                    position: absolute;
+                    right: 0;
+                    bottom: -100px;
+                  "
+                />
+              </v-card>
+            </template>
           </v-col>
         </v-row>
       </template>
@@ -68,10 +79,18 @@
   </div>
 </template>
 
+<script>
+/**
+ * @typedef { import("#common/types/directus").components["schemas"]["ItemsSectionDifferentiators"] } ItemsSectionDifferentiators"
+ * @typedef { import('vue').PropType<ItemsSectionDifferentiators> } ItemsSectionDifferentiatorsPropType
+ */
+</script>
+
 <script setup>
 defineProps({
   value: {
     required: true,
+    /** @type {ItemsSectionDifferentiatorsPropType} */
     type: Object
   }
 })

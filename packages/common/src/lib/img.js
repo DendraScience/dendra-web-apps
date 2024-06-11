@@ -1,20 +1,8 @@
 /**
+ * @typedef { import("#common/types/directus").components["schemas"]["Files"] } Files
+ * @typedef { import("#common/types/directus").components["schemas"]["ItemsImageTransformations"] } ItemsImageTransformations
  * @typedef { import("vue").ComputedRef<UseImgResponsiveReturn> } UseImgResponsiveReturnComputedRef
  * @typedef { import("vue").MaybeRefOrGetter<UseImgResponsiveOptions> } UseImgResponsiveOptionsRefOrGetter
- */
-
-/**
- * @typedef {object} DirectusImage
- * @property {number} height
- * @property {number} width
- * @property {string} filename_disk
- * @property {string} storage
- * @property {string} type
- */
-
-/**
- * @typedef {object} ImageTransformation
- * @property {string} [cloudinary_parameters]
  */
 
 /**
@@ -24,8 +12,8 @@
 /**
  * @typedef {object} UseImgResponsiveOptions
  * @property {number} [aspectRatio]
- * @property {DirectusImage} [image]
- * @property {ImageTransformation} [transformation]
+ * @property {Files} [image]
+ * @property {ItemsImageTransformations} [transformation]
  * @property {UseImgResponsiveSizes} [sizes]
  */
 
@@ -40,8 +28,8 @@ import { computed, toValue } from 'vue'
 import { useDisplay } from 'vuetify'
 
 /**
- * @param  {DirectusImage} image
- * @param  {ImageTransformation} [transformation]
+ * @param  {Files} image
+ * @param  {ItemsImageTransformations} [transformation]
  * @param  {{[name: string]: string | number}} [params]
  * @return {string}
  */

@@ -16,7 +16,7 @@ const props = defineProps({
   }
 })
 
-const comp = defineAsyncComponent(() =>
-  import(`./sections/${props.collection}.vue`)
+const comp = defineAsyncComponent(
+  () => import(`./sections/${props.collection}.vue`)
 )
 </script>

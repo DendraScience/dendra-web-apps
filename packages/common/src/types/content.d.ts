@@ -22,11 +22,3 @@ export type DirectusSchema = {
   section_tours_tours: components['schemas']['ItemsSectionToursTours'][]
   tours_ctas: components['schemas']['ItemsToursCtas'][]
 }
-
-export interface ContentStaticPage {
-  /** Format: uuid */
-  id?: string
-  meta_info?: components['schemas']['ItemsMetaInfos'] | null
-  name?: string | null
-  sections?: components['schemas']['ItemsStaticPagesSections'][] | null
-}

@@ -10,11 +10,11 @@
 
 <script>
 /**
- * @typedef { import("#common/lib/img").DirectusImage } DirectusImage
- * @typedef { import("#common/lib/img").ImageTransformation } ImageTransformation
+ * @typedef { import("#common/types/directus").components["schemas"]["Files"] } Files
+ * @typedef { import("#common/types/directus").components["schemas"]["ItemsImageTransformations"] } ItemsImageTransformations
  * @typedef { import("#common/lib/img").UseImgResponsiveSizes } UseImgResponsiveSizes
- * @typedef { import('vue').PropType<DirectusImage> } DirectusImagePropType
- * @typedef { import('vue').PropType<ImageTransformation | undefined> } ImageTransformationPropType
+ * @typedef { import('vue').PropType<Files> } FilesPropType
+ * @typedef { import('vue').PropType<ItemsImageTransformations | undefined> } ItemsImageTransformationsPropType
  * @typedef { import('vue').PropType<UseImgResponsiveSizes | undefined> } UseImgResponsiveSizesPropType
  */
 </script>
@@ -30,7 +30,7 @@ const props = defineProps({
   },
   image: {
     required: true,
-    /** @type {DirectusImagePropType} */
+    /** @type {FilesPropType} */
     type: Object
   },
   sizes: {
@@ -40,7 +40,7 @@ const props = defineProps({
   },
   transformation: {
     default: undefined,
-    /** @type {ImageTransformationPropType} */
+    /** @type {ItemsImageTransformationsPropType} */
     type: Object
   }
 })

@@ -1,5 +1,8 @@
 <template>
-  <div class="bg-light-blue-lighten-5 py-8 py-md-16" style="position: relative">
+  <div
+    class="bg-light-blue-lighten-5 py-8 py-md-16 section-border-bottom"
+    style="position: relative"
+  >
     <div
       class="d-none d-md-flex justify-end align-end"
       style="
@@ -36,43 +39,67 @@
       </v-row>
 
       <template v-if="value.tours && value.tours.length">
-        <v-row v-for="({ tours_id: tour }, i) of value.tours" :key="i">
-          <v-col class="pb-10" cols="12" xl="10">
-            <v-card variant="text">
-              <v-card-item>
-                <h3 v-if="tour.title" class="text-h5 text-md-h4 mb-4">
-                  {{ tour.title }}
-                </h3>
+        <v-row v-for="(tour, i) of value.tours" :key="i">
+          <template v-if="typeof tour === 'number'" />
 
-                <!-- eslint-disable vue/no-v-html -->
-                <div
-                  v-if="tour.description"
-                  class="text-body-1 markdown"
-                  v-html="tour.description"
-                ></div>
+          <template v-else>
+            <template v-if="typeof tour.tours_id === 'number'" />
 
-                <div v-if="tour.ctas && tour.ctas.length">
-                  <CtaBtn
-                    v-for="(cta, j) of tour.ctas"
-                    :key="j"
-                    v-bind="cta.ctas_id"
-                    class="mr-4 mt-4"
-                    variant="flat"
-                  />
-                </div>
-              </v-card-item>
-            </v-card>
-          </v-col>
+            <v-col v-else-if="tour.tours_id" class="pb-10" cols="12" xl="10">
+              <v-card variant="text">
+                <v-card-item>
+                  <h3
+                    v-if="tour.tours_id.title"
+                    class="text-h5 text-md-h4 mb-4"
+                  >
+                    {{ tour.tours_id.title }}
+                  </h3>
+
+                  <!-- eslint-disable vue/no-v-html -->
+                  <div
+                    v-if="tour.tours_id.description"
+                    class="text-body-1 markdown"
+                    v-html="tour.tours_id.description"
+                  ></div>
+
+                  <div v-if="tour.tours_id.ctas && tour.tours_id.ctas.length">
+                    <template v-for="(cta, j) of tour.tours_id.ctas" :key="j">
+                      <template v-if="typeof cta === 'number'" />
+
+                      <template v-else>
+                        <template v-if="typeof cta.ctas_id === 'number'" />
+
+                        <CtaBtn
+                          v-else-if="cta.ctas_id"
+                          :value="cta.ctas_id"
+                          class="mr-4 mt-4"
+                          variant="flat"
+                        />
+                      </template>
+                    </template>
+                  </div>
+                </v-card-item>
+              </v-card>
+            </v-col>
+          </template>
         </v-row>
       </template>
     </v-container>
   </div>
 </template>
 
+<script>
+/**
+ * @typedef { import("#common/types/directus").components["schemas"]["ItemsSectionTours"] } ItemsSectionTours
+ * @typedef { import('vue').PropType<ItemsSectionTours> } ItemsSectionToursPropType
+ */
+</script>
+
 <script setup>
 defineProps({
   value: {
     required: true,
+    /** @type {ItemsSectionToursPropType} */
     type: Object
   }
 })

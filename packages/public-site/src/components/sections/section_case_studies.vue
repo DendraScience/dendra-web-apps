@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="my-8 my-md-16">
     <v-container>
       <v-row v-if="value.title || value.paragraph" class="mb-md-8">
         <v-col cols="12" xl="10">
@@ -19,23 +19,33 @@
       <template v-if="value.case_studies && value.case_studies.length">
         <v-row justify="center">
           <v-col
-            v-for="({ case_studies_id: caseStudy }, i) of value.case_studies"
+            v-for="(caseStudy, i) of value.case_studies"
             :key="i"
             cols="12"
             sm="6"
             lg="4"
           >
-            <v-card class="fill-height" color="blue-grey">
-              <v-card-item class="text-body-1 pa-10">
-                {{ caseStudy.summary }}
-              </v-card-item>
+            <template v-if="typeof caseStudy === 'number'" />
 
-              <v-card-actions class="bg-blue-grey-darken-2">
-                <v-btn color="white" size="x-large" variant="text"
-                  >Read More</v-btn
-                >
-              </v-card-actions>
-            </v-card>
+            <template v-else>
+              <template v-if="typeof caseStudy.case_studies_id === 'number'" />
+
+              <v-card
+                v-else-if="caseStudy.case_studies_id"
+                class="fill-height"
+                color="blue-grey"
+              >
+                <v-card-item class="text-body-1 pa-10">
+                  {{ caseStudy.case_studies_id.summary }}
+                </v-card-item>
+
+                <v-card-actions class="bg-blue-grey-darken-2">
+                  <v-btn color="white" size="x-large" variant="text"
+                    >Read More</v-btn
+                  >
+                </v-card-actions>
+              </v-card>
+            </template>
           </v-col>
         </v-row>
       </template>
@@ -43,10 +53,18 @@
   </div>
 </template>
 
+<script>
+/**
+ * @typedef { import("#common/types/directus").components["schemas"]["ItemsSectionCaseStudies"] } ItemsSectionCaseStudies
+ * @typedef { import('vue').PropType<ItemsSectionCaseStudies> } ItemsSectionCaseStudiesPropType
+ */
+</script>
+
 <script setup>
 defineProps({
   value: {
     required: true,
+    /** @type {ItemsSectionCaseStudiesPropType} */
     type: Object
   }
 })

@@ -1,18 +1,15 @@
 <template>
-  <PageSection
-    v-for="(section, i) of sections"
-    :key="section.id"
-    :collection="section.collection"
-    :item="section.item"
-    :class="
-      i > 0 &&
-      i < sections.length - 1 &&
-      FILLED.includes(sections[i + 1].collection + '') &&
-      FILLED.includes(section.collection + '')
-        ? 'section-border-bottom'
-        : 'mb-8 mb-md-16'
-    "
-  />
+  <template v-if="staticPage.sections && staticPage.sections.length">
+    <template v-for="section of staticPage.sections" :key="section.id">
+      <template v-if="typeof section === 'number'" />
+
+      <PageSection
+        v-else-if="section.collection && typeof section.item !== 'string'"
+        :collection="section.collection"
+        :item="/** @type {object} **/ (section.item)"
+      />
+    </template>
+  </template>
 </template>
 
 <script>
@@ -24,24 +21,11 @@
 </script>
 
 <script setup>
-import { computed } from 'vue'
-
-const FILLED = ['section_differentiators', 'section_tours']
-
-const props = defineProps({
+defineProps({
   staticPage: {
     required: true,
     /** @type {StaticPagePropType} */
     type: Object
   }
-})
-
-const sections = computed(() => {
-  if (props.staticPage && props.staticPage.sections) {
-    return /** @type {ItemsStaticPagesSections[]} **/ (
-      props.staticPage.sections.filter(section => typeof section !== 'number')
-    )
-  }
-  return []
 })
 </script>

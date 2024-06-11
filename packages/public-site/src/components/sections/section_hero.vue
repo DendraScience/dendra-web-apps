@@ -31,13 +31,20 @@
             </p>
 
             <div v-if="value.ctas && value.ctas.length">
-              <CtaBtn
-                v-for="(cta, i) of value.ctas"
-                :key="i"
-                v-bind="cta.ctas_id"
-                class="mr-4 mt-4"
-                size="large"
-              />
+              <template v-for="(cta, i) of value.ctas" :key="i">
+                <template v-if="typeof cta === 'number'" />
+
+                <template v-else>
+                  <template v-if="typeof cta.ctas_id === 'number'" />
+
+                  <CtaBtn
+                    v-else-if="cta.ctas_id"
+                    :value="cta.ctas_id"
+                    class="mr-4 mt-4"
+                    size="large"
+                  />
+                </template>
+              </template>
             </div>
           </v-col>
         </v-row>
@@ -121,6 +128,8 @@
 <script>
 /**
  * @typedef { import("#common/lib/dendra").DendraClientFetchReturn } DendraClientFetchReturn
+ * @typedef { import("#common/types/directus").components["schemas"]["ItemsSectionHero"] } ItemsSectionHero
+ * @typedef { import('vue').PropType<ItemsSectionHero> } ItemsSectionHeroPropType
  */
 </script>
 
@@ -137,6 +146,7 @@ import { useImgResponsive } from '#common/lib/img'
 const props = defineProps({
   value: {
     required: true,
+    /** @type {ItemsSectionHeroPropType} */
     type: Object
   }
 })
@@ -145,8 +155,16 @@ const aspectRatio = 16 / 9
 const imgResp = useImgResponsive(
   toRef(() => ({
     aspectRatio,
-    image: props.value.background_image,
-    transformation: props.value.background_transformation
+    image:
+      props.value.background_image &&
+      typeof props.value.background_image !== 'string'
+        ? props.value.background_image
+        : undefined,
+    transformation:
+      props.value.background_transformation &&
+      typeof props.value.background_transformation !== 'number'
+        ? props.value.background_transformation
+        : undefined
   }))
 )
 

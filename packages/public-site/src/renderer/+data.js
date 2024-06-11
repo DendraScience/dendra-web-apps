@@ -1,22 +1,10 @@
 /**
  * @typedef { import("vike/types").DataAsync } Data
- * @typedef { import("#common/types/content").DirectusSchema["static_pages_sections"] } StaticPageSections
- *
+ * @typedef { import("#common/types/directus").components["schemas"]["ItemsStaticPages"] } ItemsStaticPages
  * @typedef { import("#common/types/directus").components["schemas"]["ItemsSectionCapabilities"] } ItemsSectionCapabilities
- * @typedef { import("#common/types/directus").components["schemas"]["ItemsSectionCapabilitiesCapabilities"] } ItemsSectionCapabilitiesCapabilities
- * @typedef { import("#common/types/directus").components["schemas"]["ItemsCapabilities"] } ItemsCapabilities
- *
  * @typedef { import("#common/types/directus").components["schemas"]["ItemsSectionCaseStudies"] } ItemsSectionCaseStudies
- * @typedef { import("#common/types/directus").components["schemas"]["ItemsSectionCaseStudiesCaseStudies"] } ItemsSectionCaseStudiesCaseStudies
- * @typedef { import("#common/types/directus").components["schemas"]["ItemsCaseStudies"] } ItemsCaseStudies
- *
  * @typedef { import("#common/types/directus").components["schemas"]["ItemsSectionDifferentiators"] } ItemsSectionDifferentiators
- * @typedef { import("#common/types/directus").components["schemas"]["ItemsSectionDifferentiatorsDifferentiators"] } ItemsSectionDifferentiatorsDifferentiators
- * @typedef { import("#common/types/directus").components["schemas"]["ItemsDifferentiators"] } ItemsDifferentiators
- *
  * @typedef { import("#common/types/directus").components["schemas"]["ItemsSectionTours"] } ItemsSectionTours
- * @typedef { import("#common/types/directus").components["schemas"]["ItemsSectionToursTours"] } ItemsSectionToursTours
- * @typedef { import("#common/types/directus").components["schemas"]["ItemsTours"] } ItemsTours
  */
 
 // import { getCanonicalPaths } from './helpers'
@@ -37,6 +25,7 @@ async function data(pageContext) {
     return {}
   }
 
+  /** @type {ItemsStaticPages} **/
   const staticPage = await directusClient.request(
     readItem('static_pages', pageContext.config.staticPageID, {
       fields: [
@@ -159,20 +148,19 @@ async function data(pageContext) {
   // Replace markdown blocks with rendered HTML
   //
 
-  if (staticPage.sections) {
-    for (const section of /** @type {StaticPageSections} */ (
-      staticPage.sections
-    )) {
+  if (staticPage && staticPage.sections) {
+    for (const section of staticPage.sections) {
+      if (typeof section === 'number') continue
+
       switch (section.collection) {
         case 'section_capabilities':
           if (section.item && typeof section.item !== 'string') {
             // BUG: OpenAPI spec is wrong -- M2A item is object, not array
             const item = /** @type {ItemsSectionCapabilities} **/ (section.item)
             if (item.capabilities && typeof item.capabilities !== 'number') {
-              for (const capability of /** @type {ItemsSectionCapabilitiesCapabilities[]} */ (
-                item.capabilities
-              )) {
+              for (const capability of item.capabilities) {
                 if (
+                  typeof capability !== 'number' &&
                   capability.capabilities_id &&
                   typeof capability.capabilities_id !== 'number'
                 ) {
@@ -191,10 +179,9 @@ async function data(pageContext) {
             // BUG: OpenAPI spec is wrong -- M2A item is object, not array
             const item = /** @type {ItemsSectionCaseStudies} **/ (section.item)
             if (item.case_studies && typeof item.case_studies !== 'number') {
-              for (const caseStudy of /** @type {ItemsSectionCaseStudiesCaseStudies[]} */ (
-                item.case_studies
-              )) {
+              for (const caseStudy of item.case_studies) {
                 if (
+                  typeof caseStudy !== 'number' &&
                   caseStudy.case_studies_id &&
                   typeof caseStudy.case_studies_id !== 'number'
                 ) {
@@ -218,10 +205,9 @@ async function data(pageContext) {
               item.differentiators &&
               typeof item.differentiators !== 'number'
             ) {
-              for (const differentiator of /** @type {ItemsSectionDifferentiatorsDifferentiators[]} */ (
-                item.differentiators
-              )) {
+              for (const differentiator of item.differentiators) {
                 if (
+                  typeof differentiator !== 'number' &&
                   differentiator.differentiators_id &&
                   typeof differentiator.differentiators_id !== 'number'
                 ) {
@@ -240,10 +226,12 @@ async function data(pageContext) {
             // BUG: OpenAPI spec is wrong -- M2A item is object, not array
             const item = /** @type {ItemsSectionTours} **/ (section.item)
             if (item.tours && typeof item.tours !== 'number') {
-              for (const tour of /** @type {ItemsSectionToursTours[]} */ (
-                item.tours
-              )) {
-                if (tour.tours_id && typeof tour.tours_id !== 'number') {
+              for (const tour of item.tours) {
+                if (
+                  typeof tour !== 'number' &&
+                  tour.tours_id &&
+                  typeof tour.tours_id !== 'number'
+                ) {
                   const obj = tour.tours_id
                   if (obj.description) {
                     obj.description = md.render(obj.description)
