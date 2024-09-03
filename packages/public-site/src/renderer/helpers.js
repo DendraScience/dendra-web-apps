@@ -3,7 +3,7 @@
  */
 
 /**
- * @param {PageContext} pageContext
+ * @param  {PageContext} pageContext
  * @return {CanonicalPaths}
  */
 export function getCanonicalPaths(pageContext) {

@@ -13,7 +13,7 @@ import vuetify from '#branding/config/vuetify'
 export { createApp }
 
 /**
- * @param {PageContext} pageContext
+ * @param  {PageContext} pageContext
  * @return {App} app
  */
 function createApp(pageContext) {

@@ -89,6 +89,13 @@
 <script setup>
 import { useTheme } from 'vuetify'
 
+/**
+ * @typedef {NonNullable<"flat" | "text" | "elevated" | "tonal" | "outlined" | "plain">} BtnVariant
+ */
+
+/**
+ * @type {{block: boolean, color: string, variant?: BtnVariant}[]}
+ */
 const BUTTONS = [
   {
     block: true,
@@ -106,6 +113,15 @@ const BUTTONS = [
   {
     block: true,
     color: 'secondary',
+    variant: 'outlined'
+  },
+  {
+    block: true,
+    color: 'tertiary'
+  },
+  {
+    block: true,
+    color: 'tertiary',
     variant: 'outlined'
   },
   {
@@ -142,7 +158,7 @@ const BUTTONS = [
   {
     block: true,
     color: 'success',
-    variant: 'outlined'
+    variant: 'flat'
   }
 ]
 const GIT_COMMIT_SHA = import.meta.env.GIT_COMMIT_SHA

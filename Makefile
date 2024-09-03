@@ -2,9 +2,8 @@ PROJECT_BASE := $(shell pwd)
 PROJECT_OUTPUT := $(PROJECT_BASE)/output
 PKG_ACCOUNT_APP := packages/account-app
 PKG_COMMON := packages/common
-PKG_DATA_QUERY_APP := packages/data-query-app
 PKG_PUBLIC_SITE := packages/public-site
-PKGS := account-app-pkg data-query-app-pkg public-site-pkg
+PKGS := account-app-pkg public-site-pkg
 SETUP_TASKS=${PKGS:-pkg=-setup}
 BRAND_TASKS=${PKGS:-pkg=-brand}
 BUILD_TASKS=${PKGS:-pkg=-build}
@@ -19,7 +18,6 @@ print-vars:
 	@echo PROJECT_OUTPUT=$(PROJECT_OUTPUT)
 	@echo PKG_ACCOUNT_APP=$(PKG_ACCOUNT_APP)
 	@echo PKG_COMMON=$(PKG_COMMON)
-	@echo PKG_DATA_QUERY_APP=$(PKG_DATA_QUERY_APP)
 	@echo PKG_PUBLIC_SITE=$(PKG_PUBLIC_SITE)
 	@echo PKGS=$(PKGS)
 
@@ -110,8 +108,7 @@ $(BUILD_TASKS):
 dev: brand
 	@echo "Starting dev servers..."
 	@bash -c "trap 'echo Bye!; exit 0' SIGINT; \
-		PORT=3000 npm run --prefix $(PKG_PUBLIC_SITE) dev & \
-		PORT=3002 npm run --prefix $(PKG_DATA_QUERY_APP) dev & \
+		PORT=3002 npm run --prefix $(PKG_PUBLIC_SITE) dev & \
 		PORT=3004 npm run --prefix $(PKG_ACCOUNT_APP) dev & \
 		wait $(jobs -p)"
 	@printf "\e[32mSuccess!\e[39m\n"
@@ -131,7 +128,6 @@ $(DEV_TASKS):
 serve:
 	@echo "Starting production servers..."
 	@bash -c "trap 'echo Bye!; exit 0' SIGINT; \
-		PORT=3000 npm run --prefix $(PKG_PUBLIC_SITE) server:prod & \
-		serve -c serve.json -p 3002 & \
+		serve -c serve.json -p 3000 & \
 		wait $(jobs -p)"
 	@printf "\e[32mSuccess!\e[39m\n"

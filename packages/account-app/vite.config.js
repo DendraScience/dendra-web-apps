@@ -1,3 +1,4 @@
+import 'dotenv/config'
 import path from 'node:path'
 import process from 'node:process'
 import { defineConfig } from 'vite'
@@ -15,6 +16,7 @@ import vuetify from 'vite-plugin-vuetify'
 import { pkgName } from './build-utils.js'
 
 const envConfig = process.env.NODE_ENV === 'production' ? {} : {}
+const host = process.env.HOST || 'localhost'
 const port = process.env.PORT || 3000
 
 const plugins = [
@@ -27,13 +29,19 @@ const plugins = [
 		// styles: { configFile: 'src/settings.scss' }
 	}),
 	Components({
+		dirs: [
+			'../../packages/common/src/components',
+			'src/components',
+			'src/layouts',
+			'src/views'
+		],
 		resolvers: [Vuetify3Resolver()]
 	}),
 	checker({
 		eslint: {
 			lintCommand: 'eslint "./**/*.{js,ts,tsx,vue}"'
-		},
-		vueTsc: { root: '../../' }
+		}
+		// vueTsc: { tsconfigPath: 'tsconfig.app.json' }
 	})
 ]
 
@@ -68,6 +76,7 @@ export default defineConfig({
 		hmr: {
 			port: +port + 10
 		},
+		host: host === 'true' ? true : host,
 		port
 	},
 

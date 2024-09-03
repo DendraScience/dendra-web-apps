@@ -30,7 +30,11 @@ const plugins = [
 		// styles: { configFile: 'src/settings.scss' }
 	}),
 	Components({
-		dirs: ['../../packages/common/src/components', 'src/components'],
+		dirs: [
+			'../../packages/common/src/components',
+			'src/components',
+			'src/layouts'
+		],
 		resolvers: [Vuetify3Resolver()]
 	}),
 	ssr({
@@ -46,8 +50,8 @@ if (!isPrerender)
 		checker({
 			eslint: {
 				lintCommand: 'eslint "./**/*.{js,ts,tsx,vue}"'
-			},
-			vueTsc: { tsconfigPath: 'tsconfig.app.json' }
+			}
+			// vueTsc: { tsconfigPath: 'tsconfig.app.json' }
 		})
 	)
 

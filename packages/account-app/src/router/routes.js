@@ -5,7 +5,7 @@ const routes = [
     component: () => import('#root/views/HomePage.vue'),
     meta: {
       headProps: {
-        title: 'Home'
+        title: 'Account Home'
       }
     }
   },

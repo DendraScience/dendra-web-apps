@@ -15,8 +15,8 @@ export function usePageContext() {
 }
 
 /**
- * @param {App} app
- * @param {PageContext} pageContext
+ * @param  {App} app
+ * @param  {PageContext} pageContext
  */
 export function setPageContext(app, pageContext) {
   app.provide(key, pageContext)

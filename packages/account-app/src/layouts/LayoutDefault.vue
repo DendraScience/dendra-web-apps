@@ -1,16 +1,12 @@
 <template>
-  <v-layout>
-    <v-system-bar>
-      <v-spacer></v-spacer>
-      <v-icon :icon="mdiSquare" />
-      <v-icon :icon="mdiCircle" />
-      <v-icon :icon="mdiTriangle" />
-    </v-system-bar>
-
+  <v-app v-scroll="onScroll">
     <v-app-bar>
       <v-app-bar-nav-icon @click="toggleDrawer()"></v-app-bar-nav-icon>
-      <v-toolbar-title>{{ APP_NAME }}</v-toolbar-title>
-      <v-spacer></v-spacer>
+      <v-app-bar-title>{{ APP_NAME }}</v-app-bar-title>
+
+      <v-spacer />
+
+      <!--
       <div class="h-100 mr-2 pt-3" style="width: 100px">
         <v-select
           v-model="locale"
@@ -20,12 +16,24 @@
           variant="solo"
         ></v-select>
       </div>
+ -->
+
+      <v-lazy>
+        <div v-if="isDev" class="bg-secondary pa-2 mr-2">
+          {{ breakpointName }}
+        </div>
+      </v-lazy>
+
       <v-btn
-        :icon="dark ? mdiWeatherNight : mdiWeatherSunny"
+        :icon="dark ? 'dark_mode' : 'light_mode'"
+        color="white"
+        size="small"
+        variant="flat"
         @click="toggleDark()"
       />
     </v-app-bar>
 
+    <!--
     <v-navigation-drawer v-model="drawer" temporary>
       <v-list density="compact" nav>
         <v-list-item
@@ -50,49 +58,42 @@
         ></v-list-item>
       </v-list>
     </v-navigation-drawer>
-
+ -->
     <v-main>
       <slot />
     </v-main>
-
-    <v-footer absolute app>
-      Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-      tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-      veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-      commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-      velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-      cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id
-      est laborum.
-    </v-footer>
-  </v-layout>
+  </v-app>
 </template>
 
 <script setup>
 import { onMounted, ref, watch } from 'vue'
-import { useI18n } from 'vue-i18n'
-import { useTheme } from 'vuetify'
+// NOTE: Temporarily disabled due to build issues
+// import { useI18n } from 'vue-i18n'
+import { useDisplay, useTheme } from 'vuetify'
 import { useStorage, useToggle } from '@vueuse/core'
-import {
-  mdiCircle,
-  mdiFormatPaint,
-  mdiHome,
-  mdiSquare,
-  mdiTriangle,
-  mdiWeatherNight,
-  mdiWeatherSunny
-} from '@mdi/js'
 
 const APP_NAME = import.meta.env.VITE_APP_NAME
-const HREF_DATA_QUERY_APP = import.meta.env.VITE_HREF_DATA_QUERY_APP
-const HREF_PUBLIC_SITE = import.meta.env.VITE_HREF_PUBLIC_SITE
 
+const { name: breakpointName } = useDisplay()
+const isDev = import.meta.env.DEV
 const theme = useTheme()
-const { locale: i18nLocale } = useI18n()
+// NOTE: Temporarily disabled due to build issues
+// const { locale: i18nLocale } = useI18n()
 const dark = useStorage('dark', theme.global.current.value.dark)
-const locale = useStorage('locale', i18nLocale.value)
+// NOTE: Temporarily disabled due to build issues
+// const locale = useStorage('locale', i18nLocale.value)
 const drawer = ref(null)
 const toggleDark = useToggle(dark)
 const toggleDrawer = useToggle(drawer)
+const top = ref(true)
+
+/**
+ * @type  {EventListener}
+ */
+function onScroll(e) {
+  if (!(e.target instanceof Document)) return
+  top.value = e.target.documentElement.scrollTop < 20
+}
 
 onMounted(async () => {
   watch(
@@ -102,12 +103,13 @@ onMounted(async () => {
     },
     { immediate: true }
   )
-  watch(
-    locale,
-    value => {
-      i18nLocale.value = value
-    },
-    { immediate: true }
-  )
+  // NOTE: Temporarily disabled due to build issues
+  // watch(
+  //   locale,
+  //   value => {
+  //     i18nLocale.value = value
+  //   },
+  //   { immediate: true }
+  // )
 })
 </script>

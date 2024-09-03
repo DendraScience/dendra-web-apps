@@ -1,5 +1,6 @@
 /**
  * @typedef { import("vuetify").IconSet } IconSet
+ * @typedef { import("vuetify").IconProps } IconProps
  */
 
 import { defineAsyncComponent, h } from 'vue'
@@ -7,7 +8,7 @@ import { defineAsyncComponent, h } from 'vue'
 // SEE: https://simpleicons.org/
 /** @type {IconSet} */
 const social = {
-  component: props => {
+  component: (/** @type IconProps */ props) => {
     const { icon, ...rest } = props
     return h(props.tag, rest, [
       h(

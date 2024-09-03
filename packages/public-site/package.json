@@ -7,7 +7,7 @@
     "dev": "npm run server",
     "prod": "npm run build && npm run server:prod",
     "build": "npm run type-check && vite build && node prerender.js",
-    "build-server": "",
+    "build-server": "echo \"Skipping server build\"",
     "type-check": "vue-tsc --build --force",
     "server": "node src/server/index.js",
     "server:prod": "cross-env NODE_ENV=production node ../../output/public-site/server"

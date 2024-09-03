@@ -1,5 +1,6 @@
 /**
  * @typedef { import("vuetify").IconSet } IconSet
+ * @typedef { import("vuetify").IconProps } IconProps
  */
 
 import { VLigatureIcon } from 'vuetify/components'
@@ -47,7 +48,7 @@ const aliases = {
 
 /** @type {IconSet} */
 const mso = {
-  component: props =>
+  component: (/** @type IconProps */ props) =>
     h(VLigatureIcon, { ...props, class: 'material-symbols-outlined' })
 }
 

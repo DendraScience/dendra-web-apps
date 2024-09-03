@@ -11,22 +11,35 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  // canonicalPaths
   const base = `https://${import.meta.env.VITE_DOMAIN}`
   const url = new URL(to.path.replace(/\/$/, ''), base)
   const absolute = url.href
   const relative = url.pathname
+  /** @type {CanonicalPaths} */
   const canonicalPaths = {
     base,
     absolute,
     relative
   }
 
-  // headProps
-  const headProps = Object.assign({}, to.meta?.headProps)
+  /** @type {HeadProps} */
+  const headProps = {}
+
+  if (typeof to.meta.headProps === 'object' && to.meta.headProps !== null) {
+    const props = to.meta.headProps
+
+    if ('description' in props && typeof props.description === 'string')
+      headProps.description = props.description
+    if ('title' in props && typeof props.title === 'string')
+      headProps.title = props.title
+    if ('titleTemplate' in props && typeof props.titleTemplate === 'string')
+      headProps.titleTemplate = props.titleTemplate
+  }
+
+  headProps.description = headProps.description || ''
   headProps.title = headProps.title || import.meta.env.VITE_TITLE || 'Hello'
   headProps.titleTemplate =
-    headProps.titleTemplate || import.meta.env.VITE_TITLE_TEMPLATE || '%s'
+    headProps.titleTemplate || import.meta.env.VITE_TITLE_TEMPLATE + '' || '%s'
   headProps.titleFull = headProps.titleTemplate.replace('%s', headProps.title)
 
   document.title = headProps.titleFull

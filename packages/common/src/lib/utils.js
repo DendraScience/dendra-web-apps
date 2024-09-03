@@ -1,6 +1,6 @@
 /**
  * Normalize an unknown error to string
- * @param {unknown} err
+ * @param  {unknown} err
  * @return {string}
  */
 export function errToString(err) {

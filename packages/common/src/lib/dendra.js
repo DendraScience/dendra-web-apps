@@ -37,7 +37,7 @@ function defaultHeaders() {
 
 export class DendraClient {
   /**
-   * @param {DendraClientOptions} [options]
+   * @param  {DendraClientOptions} [options]
    */
   constructor(options = { dev: false, url: '' }) {
     this.dev = options.dev

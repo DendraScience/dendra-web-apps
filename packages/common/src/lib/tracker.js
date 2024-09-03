@@ -17,7 +17,7 @@ import { logger } from './logger'
 
 class Tracker {
   /**
-   * @param {TrackerOptions} [options]
+   * @param  {TrackerOptions} [options]
    */
   constructor(options = { dev: false }) {
     this.dataLayer = options.dataLayer
@@ -41,7 +41,7 @@ class Tracker {
   }
 
   /**
-   * @param {PageContext} pageContext
+   * @param  {PageContext | {canonicalPaths: CanonicalPaths, headProps: HeadProps}} pageContext
    */
   pageView({ canonicalPaths, headProps }) {
     const { dev, gtag, logger, plausible } = this

@@ -5,9 +5,9 @@
   "author": "J. Scott Smith",
   "scripts": {
     "dev": "vite",
-    "prod": "npm run build && npm run server:prod",
-    "build": "vite build --base=/account-app/dist/",
+    "build": "npm run type-check && vite build --base=/account-a[[/dist/",
     "build-server": "echo \"Skipping server build\"",
+    "type-check": "vue-tsc --build --force",
     "server": "vite preview"
   },
   "type": "module"

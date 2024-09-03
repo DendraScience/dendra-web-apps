@@ -2,9 +2,8 @@
   <v-container>
     <v-row class="my-6">
       <v-col cols="12">
-        <h1 class="text-h2 mb-4">
-          {{ $t('message.hello', { name: 'Dendra' }) }}
-        </h1>
+        <h1 class="text-h2 mb-4">Log in</h1>
+        <h2 class="text-h5 mb-4">or create a Dendra.Science account</h2>
         <p class="text-body-1">
           Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
           eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
@@ -15,18 +14,40 @@
           culpa qui officia deserunt mollit anim id est laborum.
         </p>
       </v-col>
-    </v-row>
+      <!--
+      <v-col cols="12">
+        <pre v-if="isAuthenticated">
+          <code>{{ user }}</code>
+        </pre>
+      </v-col>
+ -->
+      <v-col cols="12">
+        <!-- <v-btn v-if="isAuthenticated" @click="logout">Log out</v-btn> -->
+        <!-- <v-btn v-else @click="login">Log in</v-btn> -->
 
-    <v-row class="mb-6">
-      <template v-for="n in 4" :key="n">
-        <v-col class="mt-2" cols="12">
-          <h2 class="text-h4">Group {{ n }}</h2>
-        </v-col>
-
-        <v-col v-for="j in 6" :key="`${n}${j}`" cols="6" md="2">
-          <v-sheet color="grey" height="150"></v-sheet>
-        </v-col>
-      </template>
+        <v-btn class="mr-2" href="http://localhost:8080/login">Log in</v-btn>
+        <v-btn href="http://localhost:8080/logout">Log out</v-btn>
+      </v-col>
     </v-row>
   </v-container>
 </template>
+
+<script setup>
+// import { useAuth0 } from '@auth0/auth0-vue'
+
+// const auth0 = useAuth0()
+
+// const { isAuthenticated, user } = auth0
+
+// function login() {
+//   auth0.loginWithRedirect()
+// }
+
+// function logout() {
+//   auth0.logout({
+//     logoutParams: {
+//       returnTo: window.location.origin
+//     }
+//   })
+// }
+</script>

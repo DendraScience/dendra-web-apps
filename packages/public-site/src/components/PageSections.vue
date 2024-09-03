@@ -1,6 +1,6 @@
 <template>
   <template v-if="staticPage.sections && staticPage.sections.length">
-    <template v-for="section of staticPage.sections" :key="section.id">
+    <template v-for="(section, i) of staticPage.sections" :key="i">
       <template v-if="typeof section === 'number'" />
 
       <PageSection

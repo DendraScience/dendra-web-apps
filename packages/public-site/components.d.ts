@@ -10,6 +10,7 @@ declare module 'vue' {
     CoverImage: typeof import('./src/components/CoverImage.vue')['default']
     CtaBtn: typeof import('./src/components/CtaBtn.vue')['default']
     FooterSection: typeof import('./src/components/FooterSection.vue')['default']
+    LayoutDefault: typeof import('./src/layouts/LayoutDefault.vue')['default']
     PageSection: typeof import('./src/components/PageSection.vue')['default']
     PageSections: typeof import('./src/components/PageSections.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
