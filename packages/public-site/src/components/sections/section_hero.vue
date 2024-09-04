@@ -127,7 +127,7 @@
 
 <script>
 /**
- * @typedef { import("#common/lib/dendra").DendraClientFetchReturn } DendraClientFetchReturn
+ * @typedef { import("#common/lib/dendra").DendraV2ClientFetchReturn } DendraV2ClientFetchReturn
  * @typedef { import("#common/types/directus").components["schemas"]["ItemsSectionHero"] } ItemsSectionHero
  * @typedef { import('vue').PropType<ItemsSectionHero> } ItemsSectionHeroPropType
  */
@@ -140,7 +140,7 @@ import {
   HREF_LEGACY_APP,
   HREF_STATUS_PAGE
 } from '#root/lib/consts'
-import { dendraClient } from '#common/lib/dendra'
+import { dendraV2Client } from '#common/lib/dendra-v2'
 import { useImgResponsive } from '#common/lib/img'
 
 const props = defineProps({
@@ -169,7 +169,7 @@ const imgResp = useImgResponsive(
 )
 
 const organizations = toRef(
-  /** @type {DendraClientFetchReturn} **/ ({ loading: true })
+  /** @type {DendraV2ClientFetchReturn} **/ ({ loading: true })
 )
 const orgItems = computed(() => {
   return organizations.value.data && Array.isArray(organizations.value.data)
@@ -182,7 +182,7 @@ const orgItems = computed(() => {
 const orgSelection = toRef(undefined)
 
 onMounted(async () => {
-  organizations.value = await dendraClient.find('organizations', {
+  organizations.value = await dendraV2Client.find('organizations', {
     is_enabled: true,
     is_hidden: false,
     $select: ['_id', 'name', 'slug'],

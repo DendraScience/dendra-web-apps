@@ -2,8 +2,7 @@
   <v-container>
     <v-row class="my-6">
       <v-col cols="12">
-        <h1 class="text-h2 mb-4">Log in</h1>
-        <h2 class="text-h5 mb-4">or create a Dendra.Science account</h2>
+        <h1 class="text-h2 mb-4">Auth Test</h1>
         <p class="text-body-1">
           Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
           eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
@@ -14,40 +13,25 @@
           culpa qui officia deserunt mollit anim id est laborum.
         </p>
       </v-col>
-      <!--
-      <v-col cols="12">
-        <pre v-if="isAuthenticated">
-          <code>{{ user }}</code>
-        </pre>
-      </v-col>
- -->
-      <v-col cols="12">
-        <!-- <v-btn v-if="isAuthenticated" @click="logout">Log out</v-btn> -->
-        <!-- <v-btn v-else @click="login">Log in</v-btn> -->
 
+      <v-col cols="12">
         <v-btn class="mr-2" href="http://localhost:8080/login">Log in</v-btn>
-        <v-btn href="http://localhost:8080/logout">Log out</v-btn>
+        <v-btn class="mr-2" href="http://localhost:8080/logout">Log out</v-btn>
+        <v-btn @click="getV2Token">Get V2 Token</v-btn>
       </v-col>
     </v-row>
   </v-container>
 </template>
 
 <script setup>
-// import { useAuth0 } from '@auth0/auth0-vue'
+import { tokenServiceClient } from '#common/lib/dendra-v3'
+import { AcquireV2TokenRequest } from '@buf/dendrascience_api.bufbuild_es/dendra/api/auth/v3alpha1/request_response_pb'
 
-// const auth0 = useAuth0()
+async function getV2Token() {
+  const req = new AcquireV2TokenRequest()
+  const resp = await tokenServiceClient.acquireV2Token(req)
 
-// const { isAuthenticated, user } = auth0
-
-// function login() {
-//   auth0.loginWithRedirect()
-// }
-
-// function logout() {
-//   auth0.logout({
-//     logoutParams: {
-//       returnTo: window.location.origin
-//     }
-//   })
-// }
+  /* eslint-disable-next-line no-console */
+  console.log('V2 Token:', resp.token)
+}
 </script>

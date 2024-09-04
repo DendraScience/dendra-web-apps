@@ -8,7 +8,8 @@
   },
   "type": "module",
   "dependencies": {
-    "@auth0/auth0-vue": "^2.3.3",
+    "@buf/dendrascience_api.connectrpc_es": "^1.4.0-20240903172645-8c08db6aa47a.3",
+    "@connectrpc/connect-web": "^1.4.0",
     "@directus/sdk": "^17.0.0",
     "@fontsource-variable/comfortaa": "^5.0.21",
     "@fontsource-variable/material-symbols-outlined": "^5.0.40",

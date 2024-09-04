@@ -16,14 +16,14 @@ function defaultHeaders() {
 }
 
 /**
- * @typedef {object} DendraClientOptions
+ * @typedef {object} DendraV2ClientOptions
  * @property {boolean} dev
  * @property {string} url
  * @property {Logger} [logger]
  */
 
 /**
- * @typedef {object} DendraClientFetchReturn
+ * @typedef {object} DendraV2ClientFetchReturn
  * @property {boolean} [loading]
  * @property {boolean} [failed]
  * @property {number} [status]
@@ -32,12 +32,12 @@ function defaultHeaders() {
  */
 
 /**
- * @typedef {Promise<DendraClientFetchReturn>} DendraClientAsyncFetchReturn
+ * @typedef {Promise<DendraV2ClientFetchReturn>} DendraV2ClientAsyncFetchReturn
  */
 
-export class DendraClient {
+export class DendraV2Client {
   /**
-   * @param  {DendraClientOptions} [options]
+   * @param  {DendraV2ClientOptions} [options]
    */
   constructor(options = { dev: false, url: '' }) {
     this.dev = options.dev
@@ -48,12 +48,12 @@ export class DendraClient {
   /**
    * @param  {string} input
    * @param  {object} [query]
-   * @return {DendraClientAsyncFetchReturn}
+   * @return {DendraV2ClientAsyncFetchReturn}
    */
   async _get(input, query) {
     const { dev, logger } = this
 
-    if (dev && logger) logger.info({ input, query }, 'DendraClient _get')
+    if (dev && logger) logger.info({ input, query }, 'DendraV2Client _get')
 
     const controller = new AbortController()
     const id = setTimeout(() => controller.abort(), 10000)
@@ -82,7 +82,7 @@ export class DendraClient {
 
       return await resp.json()
     } catch (err) {
-      if (logger) logger.error(err, 'DendraClient _get error')
+      if (logger) logger.error(err, 'DendraV2Client _get error')
 
       return {
         error: errToString(err),
@@ -97,7 +97,7 @@ export class DendraClient {
    * Find one or more resources.
    * @param  {string} path
    * @param  {object} [query]
-   * @return {DendraClientAsyncFetchReturn}
+   * @return {DendraV2ClientAsyncFetchReturn}
    */
   find(path, query) {
     return this._get(path, query)
@@ -108,14 +108,14 @@ export class DendraClient {
    * @param  {string} path
    * @param  {string} id
    * @param  {object} [query]
-   * @return {DendraClientAsyncFetchReturn}
+   * @return {DendraV2ClientAsyncFetchReturn}
    */
   get(path, id, query) {
     return this._get(`${path}/${id}`, query)
   }
 }
 
-export const dendraClient = new DendraClient({
+export const dendraV2Client = new DendraV2Client({
   dev: import.meta.env.DEV,
   logger,
   url: import.meta.env.VITE_DENDRA_API_URL
