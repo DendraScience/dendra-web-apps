@@ -41,9 +41,9 @@
   </v-footer>
 </template>
 
-<script>
+<script setup>
 /**
- * @typedef { import("vue").PropType<NavItem[]> } NavItemsPropType
+ * @import { PropType } from 'vue'
  */
 
 /**
@@ -51,13 +51,14 @@
  * @property {string} href
  * @property {string} title
  */
-</script>
 
-<script setup>
+// HACK: To work around https://github.com/vuejs/language-tools/issues/4899
+import { defineProps } from 'vue'
+
 defineProps({
   navItems: {
     default: undefined,
-    /** @type {NavItemsPropType} */
+    /** @type {PropType<NavItem[]>} */
     type: Array
   }
 })

@@ -88,18 +88,19 @@
   </div>
 </template>
 
-<script>
-/**
- * @typedef { import("#common/types/directus").components["schemas"]["ItemsSectionTours"] } ItemsSectionTours
- * @typedef { import('vue').PropType<ItemsSectionTours> } ItemsSectionToursPropType
- */
-</script>
-
 <script setup>
+/**
+ * @import { PropType } from 'vue'
+ * @import { components } from '#common/types/directus'
+ */
+
+// HACK: To work around https://github.com/vuejs/language-tools/issues/4899
+import { defineProps } from 'vue'
+
 defineProps({
   value: {
     required: true,
-    /** @type {ItemsSectionToursPropType} */
+    /** @type {PropType<components["schemas"]["ItemsSectionTours"]>} */
     type: Object
   }
 })

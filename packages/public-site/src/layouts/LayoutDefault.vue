@@ -131,9 +131,9 @@
   </v-app>
 </template>
 
-<script>
+<script setup>
 /**
- * @typedef { import("vue").ShallowReactive<NavItem[]> } NavItemsShallowReactive
+ * @import { ShallowReactive } from 'vue'
  */
 
 /**
@@ -143,9 +143,7 @@
  * @property {string} [visible]
  * @property {string} [color]
  */
-</script>
 
-<script setup>
 import { computed, onMounted, ref, shallowReactive, watch } from 'vue'
 // NOTE: Temporarily disabled due to build issues
 // import { useI18n } from 'vue-i18n'
@@ -179,7 +177,7 @@ const toggleDark = useToggle(dark)
 const top = ref(true)
 const collapse = computed(() => isMounted.value && !top.value)
 
-/** @type {NavItemsShallowReactive}  */
+/** @type {ShallowReactive<NavItem[]>}  */
 const navItems = shallowReactive([
   {
     // color: 'success',

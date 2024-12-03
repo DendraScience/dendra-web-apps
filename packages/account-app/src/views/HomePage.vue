@@ -15,23 +15,32 @@
       </v-col>
 
       <v-col cols="12">
-        <v-btn class="mr-2" href="http://localhost:8080/login">Log in</v-btn>
-        <v-btn class="mr-2" href="http://localhost:8080/logout">Log out</v-btn>
-        <v-btn @click="getV2Token">Get V2 Token</v-btn>
+        <v-btn class="mr-2" href="http://localhost:8080/auth/login"
+          >Log in</v-btn
+        >
+        <v-btn class="mr-2" href="http://localhost:8080/auth/logout"
+          >Log out</v-btn
+        >
+        <v-btn @click="getCurrentSession">Get Current Session</v-btn>
       </v-col>
     </v-row>
   </v-container>
 </template>
 
 <script setup>
-import { tokenServiceClient } from '#common/lib/dendra-v3'
-import { AcquireV2TokenRequest } from '@buf/dendrascience_api.bufbuild_es/dendra/api/auth/v3alpha1/request_response_pb'
+// import { create } from '@bufbuild/protobuf'
+import { createClient } from '@connectrpc/connect'
+import { transport } from '#common/lib/dendra-v3'
+import { SessionService } from '@buf/dendrascience_api.bufbuild_es/dendra/api/auth/v3alpha1/service_pb'
+// import { GetCurrentSessionRequestSchema } from '@buf/dendrascience_api.bufbuild_es/dendra/api/auth/v3alpha1/request_response_pb'
 
-async function getV2Token() {
-  const req = new AcquireV2TokenRequest()
-  const resp = await tokenServiceClient.acquireV2Token(req)
+const sessionServiceClient = createClient(SessionService, transport)
+
+async function getCurrentSession() {
+  // const req = create(GetCurrentSessionRequestSchema, {})
+  const resp = await sessionServiceClient.getCurrentSession({})
 
   /* eslint-disable-next-line no-console */
-  console.log('V2 Token:', resp.token)
+  console.log('Session:', resp)
 }
 </script>

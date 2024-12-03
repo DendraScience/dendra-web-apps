@@ -14,6 +14,10 @@
         {
             "destination": "/account-app/dist/index.html",
             "source": "account/**"
+        },
+        {
+            "destination": "/management-app/dist/index.html",
+            "source": "manage/**"
         }
     ]
 }

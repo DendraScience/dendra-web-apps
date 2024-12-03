@@ -85,18 +85,19 @@
   </v-container>
 </template>
 
-<script>
-/**
- * @typedef { import("#common/types/directus").components["schemas"]["ItemsSectionCapabilities"] } ItemsSectionCapabilities
- * @typedef { import('vue').PropType<ItemsSectionCapabilities> } ItemsSectionCapabilitiesPropType
- */
-</script>
-
 <script setup>
+/**
+ * @import { PropType } from 'vue'
+ * @import { components } from '#common/types/directus'
+ */
+
+// HACK: To work around https://github.com/vuejs/language-tools/issues/4899
+import { defineProps } from 'vue'
+
 defineProps({
   value: {
     required: true,
-    /** @type {ItemsSectionCapabilitiesPropType} */
+    /** @type {PropType<components["schemas"]["ItemsSectionCapabilities"]>} */
     type: Object
   }
 })

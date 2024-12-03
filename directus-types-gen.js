@@ -1,7 +1,7 @@
 import 'dotenv/config'
 import { writeFile } from 'node:fs/promises'
 import Pino from 'pino'
-import openapiTS from 'openapi-typescript'
+import openapiTS, { astToString } from 'openapi-typescript'
 
 const logger = Pino({
   level: 'info'
@@ -24,7 +24,8 @@ async function generate() {
   }
   const spec = await resp.json()
 
-  let source = await openapiTS(spec)
+  const ast = await openapiTS(spec)
+  const source = astToString(ast)
 
   //
   // NOTE: OpenAPI types only -- manually define DirectusSchema

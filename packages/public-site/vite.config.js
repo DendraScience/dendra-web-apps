@@ -50,8 +50,8 @@ if (!isPrerender)
 		checker({
 			eslint: {
 				lintCommand: 'eslint "./**/*.{js,ts,tsx,vue}"'
-			}
-			// vueTsc: { tsconfigPath: 'tsconfig.app.json' }
+			},
+			vueTsc: { tsconfigPath: 'tsconfig.app.json' }
 		})
 	)
 
@@ -61,6 +61,14 @@ export default defineConfig({
 		assetsInlineLimit: 256,
 		emptyOutDir: true,
 		outDir: `../../output/${pkgName}/dist`
+	},
+
+	css: {
+		preprocessorOptions: {
+			scss: {
+				api: 'modern-compiler'
+			}
+		}
 	},
 
 	define: {

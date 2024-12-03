@@ -37,6 +37,7 @@
     [
         "components.d.ts",
         "env.d.ts",
+        "router.d.ts",
         "src/**/*",
         "src/**/*.vue",
         "../../branding/account-app/**/*",

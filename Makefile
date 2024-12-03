@@ -2,8 +2,9 @@ PROJECT_BASE := $(shell pwd)
 PROJECT_OUTPUT := $(PROJECT_BASE)/output
 PKG_ACCOUNT_APP := packages/account-app
 PKG_COMMON := packages/common
+PKG_MANAGEMENT_APP := packages/management-app
 PKG_PUBLIC_SITE := packages/public-site
-PKGS := account-app-pkg public-site-pkg
+PKGS := account-app-pkg management-app-pkg public-site-pkg
 SETUP_TASKS=${PKGS:-pkg=-setup}
 BRAND_TASKS=${PKGS:-pkg=-brand}
 BUILD_TASKS=${PKGS:-pkg=-build}
@@ -18,6 +19,7 @@ print-vars:
 	@echo PROJECT_OUTPUT=$(PROJECT_OUTPUT)
 	@echo PKG_ACCOUNT_APP=$(PKG_ACCOUNT_APP)
 	@echo PKG_COMMON=$(PKG_COMMON)
+	@echo PKG_MANAGEMENT_APP=$(PKG_MANAGEMENT_APP)
 	@echo PKG_PUBLIC_SITE=$(PKG_PUBLIC_SITE)
 	@echo PKGS=$(PKGS)
 
@@ -110,6 +112,7 @@ dev: brand
 	@bash -c "trap 'echo Bye!; exit 0' SIGINT; \
 		PORT=3002 npm run --prefix $(PKG_PUBLIC_SITE) dev & \
 		PORT=3004 npm run --prefix $(PKG_ACCOUNT_APP) dev & \
+		PORT=3006 npm run --prefix $(PKG_MANAGEMENT_APP) dev & \
 		wait $(jobs -p)"
 	@printf "\e[32mSuccess!\e[39m\n"
 

@@ -1,6 +1,11 @@
+import { Code, ConnectError, createClient } from '@connectrpc/connect'
+import { transport } from '#common/lib/dendra-v3'
+import { SessionService } from '@buf/dendrascience_api.bufbuild_es/dendra/api/auth/v3alpha1/service_pb'
 import { createRouter, createWebHistory } from 'vue-router'
 import routes from './routes'
 import { tracker } from '#common/lib/tracker'
+
+const sessionServiceClient = createClient(SessionService, transport)
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.VITE_ROUTER_BASE),
@@ -10,7 +15,7 @@ const router = createRouter({
   }
 })
 
-router.beforeEach((to, from, next) => {
+router.beforeEach((to, from) => {
   const base = `https://${import.meta.env.VITE_DOMAIN}`
   const url = new URL(to.path.replace(/\/$/, ''), base)
   const absolute = url.href
@@ -25,7 +30,7 @@ router.beforeEach((to, from, next) => {
   /** @type {HeadProps} */
   const headProps = {}
 
-  if (typeof to.meta.headProps === 'object' && to.meta.headProps !== null) {
+  if (to.meta.headProps && typeof to.meta.headProps === 'object') {
     const props = to.meta.headProps
 
     if ('description' in props && typeof props.description === 'string')
@@ -36,7 +41,6 @@ router.beforeEach((to, from, next) => {
       headProps.titleTemplate = props.titleTemplate
   }
 
-  headProps.description = headProps.description || ''
   headProps.title = headProps.title || import.meta.env.VITE_TITLE || 'Hello'
   headProps.titleTemplate =
     headProps.titleTemplate || import.meta.env.VITE_TITLE_TEMPLATE + '' || '%s'
@@ -46,8 +50,24 @@ router.beforeEach((to, from, next) => {
 
   if (!(to.name === from.name && to.path === from.path))
     tracker.pageView({ canonicalPaths, headProps })
+})
 
-  next()
+router.beforeEach(async to => {
+  if (!to.meta.requiresAuth) return
+
+  try {
+    await sessionServiceClient.getCurrentSession({})
+    // TODO: store session info somewhere
+  } catch (err) {
+    if (err instanceof ConnectError) {
+      if (err.code === Code.PermissionDenied) {
+        window.location.href = 'http://localhost:8080/auth/login'
+        return new Promise(() => {})
+      }
+
+      throw err
+    }
+  }
 })
 
 export default router

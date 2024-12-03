@@ -1,5 +1,6 @@
 /**
- * @typedef { import("vike/types").OnRenderHtmlAsync } OnRenderHtml
+ * @import { OnRenderHtmlAsync, PageContextServer } from "vike/types" }
+ * @typedef { ReturnType<OnRenderHtmlAsync> } OnRenderHtmlAsyncReturn
  */
 
 import { renderToNodeStream } from '@vue/server-renderer'
@@ -10,9 +11,9 @@ import { logger } from '#common/lib/logger'
 
 export default onRenderHtml
 
-const appName = import.meta.env.VITE_APP_NAME + '' || ''
-const maskIconColor = import.meta.env.VITE_MASK_ICON_COLOR + '' || '#4caf50'
-const msTileColor = import.meta.env.VITE_MS_TILE_COLOR + '' || '#00a300'
+const appName = import.meta.env.VITE_APP_NAME || ''
+const maskIconColor = import.meta.env.VITE_MASK_ICON_COLOR || '#4caf50'
+const msTileColor = import.meta.env.VITE_MS_TILE_COLOR || '#00a300'
 
 // SEE: https://developers.google.com/analytics/devguides/collection/gtagjs
 const gaTrackingId = import.meta.env.VITE_GA_TRACKING_ID
@@ -24,7 +25,8 @@ const gaScriptTag = gaTrackingId
 const sitemapExclusions = []
 
 /**
- * @type {OnRenderHtml}
+ * @param {PageContextServer} pageContext
+ * @return {OnRenderHtmlAsyncReturn}
  */
 async function onRenderHtml(pageContext) {
   const { sitemap } = pageContext

@@ -6,18 +6,19 @@
   >
 </template>
 
-<script>
-/**
- * @typedef { import("#common/types/directus").components["schemas"]["ItemsCtas"] } ItemsCtas
- * @typedef { import('vue').PropType<ItemsCtas> } ItemsCtasPropType
- */
-</script>
-
 <script setup>
+/**
+ * @import { PropType } from 'vue'
+ * @import { components } from '#common/types/directus'
+ */
+
+// HACK: To work around https://github.com/vuejs/language-tools/issues/4899
+import { defineProps } from 'vue'
+
 defineProps({
   value: {
     required: true,
-    /** @type {ItemsCtasPropType} */
+    /** @type {PropType<components["schemas"]["ItemsCtas"]>} */
     type: Object
   }
 })

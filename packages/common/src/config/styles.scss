@@ -1,4 +1,5 @@
 @use './settings';
+@use 'sass:map';
 
 .markdown p,
 .markdown li {
@@ -13,11 +14,11 @@
 }
 
 .section-border-bottom {
-  border-bottom: 28px solid #{map-get(settings.$blue, 'base')};
+  border-bottom: 28px solid #{map.get(settings.$blue, 'base')};
 }
 
 .section-hero-img {
-  @media #{map-get(settings.$display-breakpoints, 'md-and-up')} {
+  @media #{map.get(settings.$display-breakpoints, 'md-and-up')} {
     max-height: 680px;
   }
 }

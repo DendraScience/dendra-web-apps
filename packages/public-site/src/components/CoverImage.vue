@@ -8,18 +8,13 @@
   </v-img>
 </template>
 
-<script>
+<script setup lang="js">
 /**
- * @typedef { import("#common/types/directus").components["schemas"]["Files"] } Files
- * @typedef { import("#common/types/directus").components["schemas"]["ItemsImageTransformations"] } ItemsImageTransformations
- * @typedef { import("#common/lib/img").UseImgResponsiveSizes } UseImgResponsiveSizes
- * @typedef { import('vue').PropType<Files> } FilesPropType
- * @typedef { import('vue').PropType<ItemsImageTransformations | undefined> } ItemsImageTransformationsPropType
- * @typedef { import('vue').PropType<UseImgResponsiveSizes | undefined> } UseImgResponsiveSizesPropType
+ * @import { PropType } from 'vue'
+ * @import { components } from '#common/types/directus'
+ * @import { UseImgResponsiveSizes } from '#common/lib/img'
  */
-</script>
 
-<script setup>
 import { toRef } from 'vue'
 import { useImgResponsive } from '#common/lib/img'
 
@@ -30,17 +25,17 @@ const props = defineProps({
   },
   image: {
     required: true,
-    /** @type {FilesPropType} */
+    /** @type {PropType<components["schemas"]["Files"]>} */
     type: Object
   },
   sizes: {
     default: undefined,
-    /** @type {UseImgResponsiveSizesPropType} */
+    /** @type {PropType<UseImgResponsiveSizes | undefined>} */
     type: Object
   },
   transformation: {
     default: undefined,
-    /** @type {ItemsImageTransformationsPropType} */
+    /** @type {PropType<components["schemas"]["ItemsImageTransformations"] | undefined>} */
     type: Object
   }
 })

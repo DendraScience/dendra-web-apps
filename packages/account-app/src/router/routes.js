@@ -1,3 +1,8 @@
+/**
+ * @import { RouteRecordRaw } from 'vue-router'
+ */
+
+/** @type {RouteRecordRaw[]} */
 const routes = [
   {
     path: '/',
@@ -6,7 +11,8 @@ const routes = [
     meta: {
       headProps: {
         title: 'Account Home'
-      }
+      },
+      requiresAuth: true
     }
   },
   {

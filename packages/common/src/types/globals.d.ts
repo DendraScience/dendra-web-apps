@@ -7,13 +7,13 @@ declare global {
     relative: string
   }
   interface HeadProps {
-    description: string
+    description?: string
     title: string
     titleFull?: string
     titleTemplate?: string
   }
   interface OGProps {
-    description: string
+    description?: string
     title: string
     url?: string
   }
@@ -29,7 +29,7 @@ declare global {
     '@context': string
     '@type': string
     name: string
-    description: string
+    description?: string
     // TBD
   }
 

@@ -1,5 +1,5 @@
 /**
- * @typedef { import("vike/types").OnRenderClientAsync } OnRenderClient
+ * @import { OnRenderClientAsync } from "vike/types")
  */
 
 import '@fontsource-variable/comfortaa'
@@ -17,7 +17,7 @@ import { createApp } from './app'
 export default onRenderClient
 
 /**
- * @type OnRenderClient
+ * @type OnRenderClientAsync
  */
 async function onRenderClient(pageContext) {
   const app = createApp(pageContext)

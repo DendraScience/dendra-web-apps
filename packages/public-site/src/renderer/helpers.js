@@ -43,9 +43,10 @@ export function mergeHeadProps(pageContext) {
   props.titleTemplate =
     getProps?.titleTemplate ||
     objProps?.titleTemplate ||
-    import.meta.env.VITE_TITLE_TEMPLATE + '' ||
+    import.meta.env.VITE_TITLE_TEMPLATE ||
     '%s'
-  props.titleFull = props.titleTemplate.replace('%s', props.title)
+  if (props.titleTemplate)
+    props.titleFull = props.titleTemplate.replace('%s', props.title)
 
   return props
 }

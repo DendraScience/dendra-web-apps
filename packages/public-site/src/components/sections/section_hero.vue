@@ -125,15 +125,13 @@
   </div>
 </template>
 
-<script>
-/**
- * @typedef { import("#common/lib/dendra").DendraV2ClientFetchReturn } DendraV2ClientFetchReturn
- * @typedef { import("#common/types/directus").components["schemas"]["ItemsSectionHero"] } ItemsSectionHero
- * @typedef { import('vue').PropType<ItemsSectionHero> } ItemsSectionHeroPropType
- */
-</script>
-
 <script setup>
+/**
+ * @import { PropType } from 'vue'
+ * @import { components } from '#common/types/directus'
+ * @import { DendraV2ClientFetchReturn } from '#common/lib/dendra-v2'
+ */
+
 import { computed, onMounted, toRef } from 'vue'
 import {
   APP_BAR_HEIGHT,
@@ -146,7 +144,7 @@ import { useImgResponsive } from '#common/lib/img'
 const props = defineProps({
   value: {
     required: true,
-    /** @type {ItemsSectionHeroPropType} */
+    /** @type {PropType<components["schemas"]["ItemsSectionHero"]>} */
     type: Object
   }
 })
