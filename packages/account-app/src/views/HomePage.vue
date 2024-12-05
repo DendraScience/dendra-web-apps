@@ -15,13 +15,16 @@
       </v-col>
 
       <v-col cols="12">
-        <v-btn class="mr-2" href="http://localhost:8080/auth/login"
-          >Log in</v-btn
-        >
-        <v-btn class="mr-2" href="http://localhost:8080/auth/logout"
-          >Log out</v-btn
-        >
+        <v-btn :href="VITE_CANOPY_LOGIN_URL" class="mr-2">Log in</v-btn>
+        <v-btn :href="VITE_CANOPY_LOGOUT_URL" class="mr-2">Log out</v-btn>
         <v-btn @click="getCurrentSession">Get Current Session</v-btn>
+      </v-col>
+
+      <v-col cols="12">
+        <p>Name: {{ session?.profile?.name }}</p>
+        <p>Nickname: {{ session?.profile?.nickname }}</p>
+        <p>Subject: {{ session?.profile?.subject }}</p>
+        <p>Email: {{ session?.profile?.email }}</p>
       </v-col>
     </v-row>
   </v-container>
@@ -33,8 +36,14 @@ import { createClient } from '@connectrpc/connect'
 import { transport } from '#common/lib/dendra-v3'
 import { SessionService } from '@buf/dendrascience_api.bufbuild_es/dendra/api/auth/v3alpha1/service_pb'
 // import { GetCurrentSessionRequestSchema } from '@buf/dendrascience_api.bufbuild_es/dendra/api/auth/v3alpha1/request_response_pb'
+import { useGlobalState } from '#common/composables/useGlobalState'
+
+const VITE_CANOPY_LOGIN_URL = import.meta.env.VITE_CANOPY_LOGIN_URL
+const VITE_CANOPY_LOGOUT_URL = import.meta.env.VITE_CANOPY_LOGOUT_URL
 
 const sessionServiceClient = createClient(SessionService, transport)
+
+const { session } = useGlobalState()
 
 async function getCurrentSession() {
   // const req = create(GetCurrentSessionRequestSchema, {})

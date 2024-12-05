@@ -118,5 +118,5 @@ export class DendraV2Client {
 export const dendraV2Client = new DendraV2Client({
   dev: import.meta.env.DEV,
   logger,
-  url: import.meta.env.VITE_DENDRA_API_URL
+  url: import.meta.env.VITE_DENDRA_WEB_API_V2_URL
 })

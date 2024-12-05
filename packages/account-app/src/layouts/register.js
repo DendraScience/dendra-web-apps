@@ -6,7 +6,7 @@
  * @param  {App} app
  */
 export function registerLayouts(app) {
-  /** @type { Record<string, App> } */
+  /** @type {Record<string, App>} */
   const layouts = import.meta.glob('./*.vue', {
     eager: true,
     import: 'default'

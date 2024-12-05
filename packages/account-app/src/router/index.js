@@ -4,6 +4,7 @@ import { SessionService } from '@buf/dendrascience_api.bufbuild_es/dendra/api/au
 import { createRouter, createWebHistory } from 'vue-router'
 import routes from './routes'
 import { tracker } from '#common/lib/tracker'
+import { useGlobalState } from '#common/composables/useGlobalState'
 
 const sessionServiceClient = createClient(SessionService, transport)
 
@@ -55,12 +56,16 @@ router.beforeEach((to, from) => {
 router.beforeEach(async to => {
   if (!to.meta.requiresAuth) return
 
+  // await new Promise(resolve => setTimeout(resolve, 5000))
+
   try {
-    await sessionServiceClient.getCurrentSession({})
-    // TODO: store session info somewhere
+    const resp = await sessionServiceClient.getCurrentSession({})
+    const { setSession } = useGlobalState()
+    setSession(resp.session)
   } catch (err) {
     if (err instanceof ConnectError) {
       if (err.code === Code.PermissionDenied) {
+        // TODO: User to.fullPath to return to page after login
         window.location.href = 'http://localhost:8080/auth/login'
         return new Promise(() => {})
       }

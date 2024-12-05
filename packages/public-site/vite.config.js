@@ -63,13 +63,13 @@ export default defineConfig({
 		outDir: `../../output/${pkgName}/dist`
 	},
 
-	css: {
-		preprocessorOptions: {
-			scss: {
-				api: 'modern-compiler'
-			}
-		}
-	},
+	// css: {
+	// 	preprocessorOptions: {
+	// 		scss: {
+	// 			api: 'modern-compiler'
+	// 		}
+	// 	}
+	// },
 
 	define: {
 		'import.meta.env.GIT_COMMIT_SHA': JSON.stringify(process.env.GIT_COMMIT_SHA)
