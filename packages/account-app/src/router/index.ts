@@ -1,12 +1,18 @@
-import { Code, ConnectError, createClient } from '@connectrpc/connect'
-import { transport } from '#common/lib/dendra-v3'
-import { SessionService } from '@buf/dendrascience_api.bufbuild_es/dendra/api/auth/v3alpha1/service_pb'
 import { createRouter, createWebHistory } from 'vue-router'
 import routes from './routes'
 import { tracker } from '#common/lib/tracker'
-import { useGlobalState } from '#common/composables/useGlobalState'
+import { useNotify } from '#common/composables/useNotify'
+import { useSharedSession } from '#common/composables/useSession'
+import { Code, ConnectError } from '@connectrpc/connect'
 
-const sessionServiceClient = createClient(SessionService, transport)
+// TODO: Handle router errors
+// TODO: Handle loading spinner
+// TODO: Handle rety for auth
+// TODO: Cleanup dark/light
+// TODO: Resolve i18n
+// TODO: Utilize to.fullPath to return to page after login
+
+const { notify } = useNotify()
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.VITE_ROUTER_BASE),
@@ -21,15 +27,13 @@ router.beforeEach((to, from) => {
   const url = new URL(to.path.replace(/\/$/, ''), base)
   const absolute = url.href
   const relative = url.pathname
-  /** @type {CanonicalPaths} */
-  const canonicalPaths = {
+  const canonicalPaths: CanonicalPaths = {
     base,
     absolute,
     relative
   }
 
-  /** @type {HeadProps} */
-  const headProps = {}
+  const headProps: HeadProps = { title: '' }
 
   if (to.meta.headProps && typeof to.meta.headProps === 'object') {
     const props = to.meta.headProps
@@ -44,8 +48,10 @@ router.beforeEach((to, from) => {
 
   headProps.title = headProps.title || import.meta.env.VITE_TITLE || 'Hello'
   headProps.titleTemplate =
-    headProps.titleTemplate || import.meta.env.VITE_TITLE_TEMPLATE + '' || '%s'
-  headProps.titleFull = headProps.titleTemplate.replace('%s', headProps.title)
+    headProps.titleTemplate || import.meta.env.VITE_TITLE_TEMPLATE || '%s'
+  headProps.titleFull = headProps.titleTemplate
+    ? headProps.titleTemplate.replace('%s', headProps.title)
+    : headProps.title
 
   document.title = headProps.titleFull
 
@@ -56,23 +62,23 @@ router.beforeEach((to, from) => {
 router.beforeEach(async to => {
   if (!to.meta.requiresAuth) return
 
-  // await new Promise(resolve => setTimeout(resolve, 5000))
-
   try {
-    const resp = await sessionServiceClient.getCurrentSession({})
-    const { setSession } = useGlobalState()
-    setSession(resp.session)
+    const { refetch } = useSharedSession()
+    await refetch({ throwOnError: true, cancelRefetch: false })
   } catch (err) {
     if (err instanceof ConnectError) {
       if (err.code === Code.PermissionDenied) {
-        // TODO: User to.fullPath to return to page after login
-        window.location.href = 'http://localhost:8080/auth/login'
+        window.location.href = import.meta.env.VITE_CANOPY_LOGIN_URL
         return new Promise(() => {})
       }
 
       throw err
     }
   }
+})
+
+router.onError(error => {
+  notify(error)
 })
 
 export default router

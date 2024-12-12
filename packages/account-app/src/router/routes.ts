@@ -1,9 +1,6 @@
-/**
- * @import { RouteRecordRaw } from 'vue-router'
- */
+import type { RouteRecordRaw } from 'vue-router'
 
-/** @type {RouteRecordRaw[]} */
-const routes = [
+const routes: RouteRecordRaw[] = [
   {
     path: '/',
     name: 'home',

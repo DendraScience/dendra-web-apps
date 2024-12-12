@@ -65,12 +65,14 @@
   </v-app>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { onMounted, ref, watch } from 'vue'
 // NOTE: Temporarily disabled due to build issues
 // import { useI18n } from 'vue-i18n'
 import { useDisplay, useTheme } from 'vuetify'
 import { useStorage, useToggle } from '@vueuse/core'
+import { useNotify } from '#common/composables/useNotify'
+import { ConnectError } from '@connectrpc/connect'
 
 const APP_NAME = import.meta.env.VITE_APP_NAME
 
@@ -87,10 +89,21 @@ const toggleDark = useToggle(dark)
 const toggleDrawer = useToggle(drawer)
 const top = ref(true)
 
-/**
- * @type  {EventListener}
- */
-function onScroll(e) {
+const { notifyBus } = useNotify()
+
+notifyBus.on(n => {
+  if (n instanceof Error) {
+    if (n instanceof ConnectError) {
+      console.log('>>>', n.message)
+      console.log('>>>', n.code)
+      console.log('>>>', n.cause)
+    }
+    console.log('>>>', n.message)
+    console.log('>>>', n.name)
+  }
+})
+
+const onScroll: EventListener = e => {
   if (!(e.target instanceof Document)) return
   top.value = e.target.documentElement.scrollTop < 20
 }

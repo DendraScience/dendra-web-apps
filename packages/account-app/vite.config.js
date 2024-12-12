@@ -2,16 +2,12 @@ import 'dotenv/config'
 import path from 'node:path'
 import process from 'node:process'
 import { defineConfig } from 'vite'
-// https://vite-plugin-checker.netlify.app
 import checker from 'vite-plugin-checker'
-// https://lightningcss.dev/docs.html#with-vite
 import lightningcss from 'vite-plugin-lightningcss'
-// https://github.com/vitejs/vite/tree/main/packages/plugin-vue#readme
 import vue from '@vitejs/plugin-vue'
-// https://github.com/antfu/unplugin-vue-components
+import vueDevTools from 'vite-plugin-vue-devtools'
 import Components from 'unplugin-vue-components/vite'
 import { Vuetify3Resolver } from 'unplugin-vue-components/resolvers'
-// https://github.com/vuetifyjs/vuetify-loader/tree/master/packages/vite-plugin
 import vuetify from 'vite-plugin-vuetify'
 import { pkgName } from './build-utils.js'
 
@@ -24,6 +20,7 @@ const plugins = [
 		browserslist: '>= 0.25%'
 	}),
 	vue(),
+	vueDevTools(),
 	vuetify({
 		autoImport: true
 		// styles: { configFile: 'src/settings.scss' }
@@ -39,7 +36,8 @@ const plugins = [
 	}),
 	checker({
 		eslint: {
-			lintCommand: 'eslint "./**/*.{js,ts,tsx,vue}"'
+			lintCommand: 'eslint "./**/*.{js,ts,tsx,vue}"',
+			useFlatConfig: true
 		},
 		vueTsc: { tsconfigPath: 'tsconfig.app.json' }
 	})

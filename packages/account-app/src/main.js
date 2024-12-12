@@ -9,12 +9,13 @@ import '@fontsource-variable/material-symbols-outlined'
 import { createApp } from 'vue'
 import App from './App.vue'
 import i18n from '#common/lib/i18n'
-import vuetify from '#branding/config/vuetify'
 import router from '#root/router'
+import vuetify from '#branding/config/vuetify'
 import { registerLayouts } from '#root/layouts/register'
+import { VueQueryPlugin } from '@tanstack/vue-query'
 
 const app = createApp(App)
 
 registerLayouts(app)
 
-app.use(router).use(i18n).use(vuetify).mount('#app')
+app.use(VueQueryPlugin).use(router).use(i18n).use(vuetify).mount('#app')

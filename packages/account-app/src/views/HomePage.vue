@@ -36,20 +36,20 @@ import { createClient } from '@connectrpc/connect'
 import { transport } from '#common/lib/dendra-v3'
 import { SessionService } from '@buf/dendrascience_api.bufbuild_es/dendra/api/auth/v3alpha1/service_pb'
 // import { GetCurrentSessionRequestSchema } from '@buf/dendrascience_api.bufbuild_es/dendra/api/auth/v3alpha1/request_response_pb'
-import { useGlobalState } from '#common/composables/useGlobalState'
+import { useSharedSession } from '#common/composables/useSession'
+// import { useGlobalState } from '#common/composables/useGlobalState'
 
 const VITE_CANOPY_LOGIN_URL = import.meta.env.VITE_CANOPY_LOGIN_URL
 const VITE_CANOPY_LOGOUT_URL = import.meta.env.VITE_CANOPY_LOGOUT_URL
 
 const sessionServiceClient = createClient(SessionService, transport)
 
-const { session } = useGlobalState()
+const { data: session } = useSharedSession()
 
 async function getCurrentSession() {
   // const req = create(GetCurrentSessionRequestSchema, {})
   const resp = await sessionServiceClient.getCurrentSession({})
 
-  /* eslint-disable-next-line no-console */
   console.log('Session:', resp)
 }
 </script>

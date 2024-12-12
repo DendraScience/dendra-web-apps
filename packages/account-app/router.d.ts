@@ -10,6 +10,7 @@ export {}
 declare module 'vue-router' {
   interface RouteMeta {
     headProps?: HeadProps
+    layout?: string
     requiresAuth?: boolean
   }
 }
