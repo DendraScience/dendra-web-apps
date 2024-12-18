@@ -4,7 +4,6 @@
         "allowJs": true,
         "checkJs": true,
         "composite": true,
-        "rootDir": "../..",
         "paths":
         {
             "#branding/*":
@@ -20,6 +19,8 @@
                 "./src/*"
             ]
         },
+        "resolveJsonModule": true,
+        "rootDir": "../..",
         "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo"
     },
     "exclude":
@@ -38,6 +39,7 @@
         "components.d.ts",
         "env.d.ts",
         "router.d.ts",
+        "vite-env.d.ts",
         "src/**/*",
         "src/**/*.vue",
         "../../branding/account-app/**/*",

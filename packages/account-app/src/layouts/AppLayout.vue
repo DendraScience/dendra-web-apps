@@ -1,9 +1,21 @@
 <template>
   <component :is="layout">
     <router-view v-slot="{ Component }">
-      <v-fade-transition leave-absolute>
-        <component :is="Component" />
-      </v-fade-transition>
+      <template v-if="Component">
+        <v-fade-transition leave-absolute>
+          <Suspense>
+            <component :is="Component" :key="route.path" />
+
+            <template #fallback>
+              <LoadingProgress />
+            </template>
+          </Suspense>
+        </v-fade-transition>
+      </template>
+
+      <template v-else>
+        <LoadingProgress />
+      </template>
     </router-view>
   </component>
 </template>

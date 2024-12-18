@@ -2,7 +2,7 @@
   <v-container fluid>
     <v-row class="mb-6">
       <v-col cols="12">
-        <h1 class="text-h3 mb-4">Auth Test</h1>
+        <h1 class="text-h3 mb-4">First Page</h1>
         <p class="text-body-1">
           Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
           eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
@@ -24,18 +24,7 @@
 </template>
 
 <script setup>
-// import { create } from '@bufbuild/protobuf'
-// import { createClient } from '@connectrpc/connect'
-// import { transport } from '#common/lib/dendra-v3'
-// import { SessionService } from '@buf/dendrascience_api.bufbuild_es/dendra/api/auth/v3alpha1/service_pb'
-// import { GetCurrentSessionRequestSchema } from '@buf/dendrascience_api.bufbuild_es/dendra/api/auth/v3alpha1/request_response_pb'
-
-// const sessionServiceClient = createClient(SessionService, transport)
-
-// async function getCurrentSession() {
-//   // const req = create(GetCurrentSessionRequestSchema, {})
-//   const resp = await sessionServiceClient.getCurrentSession({})
-
-//   console.log('Session:', resp)
-// }
+console.log('before suspense1...')
+await new Promise(resolve => setTimeout(resolve, 2000))
+console.log('after suspense1...')
 </script>

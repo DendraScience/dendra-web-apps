@@ -1,0 +1,23 @@
+{
+    "aria_labels":
+    {
+        "account_button": "Account",
+        "help_button": "Help",
+        "toggle_dark_button": "Toggle Dark"
+    },
+    "menu_item_titles":
+    {
+        "documentation": "Documentation",
+        "feedback": "Share feedback",
+        "logout": "Logout",
+        "support": "Support center",
+        "system_status": "System status",
+        "user_settings": "User settings"
+    },
+    "tooltips":
+    {
+        "account_button": "Account",
+        "help_button": "Help",
+        "toggle_dark_button": "Toggle Dark"
+    }
+}

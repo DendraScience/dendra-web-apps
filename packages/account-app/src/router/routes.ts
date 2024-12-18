@@ -8,6 +8,27 @@ const routes: RouteRecordRaw[] = [
     meta: {
       headProps: {
         title: 'Account Home'
+      }
+    }
+  },
+  {
+    path: '/first',
+    name: 'first',
+    component: () => import('#root/views/FirstPage.vue'),
+    meta: {
+      headProps: {
+        title: 'First'
+      },
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/second',
+    name: 'second',
+    component: () => import('#root/views/SecondPage.vue'),
+    meta: {
+      headProps: {
+        title: 'Second'
       },
       requiresAuth: true
     }

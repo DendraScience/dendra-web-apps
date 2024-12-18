@@ -12,10 +12,9 @@ import { aliases, mdi } from 'vuetify/iconsets/mdi-svg'
 import { mso } from '#common/iconsets/mso.js'
 import { social } from '#common/iconsets/social.js'
 import '#common/iconsets/mso.css'
-// NOTE: Temporarily disabled due to build issues
-// import { createVueI18nAdapter } from 'vuetify/locale/adapters/vue-i18n'
-// import { useI18n } from 'vue-i18n'
-// import i18n from '#common/lib/i18n'
+import { createVueI18nAdapter } from 'vuetify/locale/adapters/vue-i18n'
+import { useI18n } from 'vue-i18n'
+import i18n from '#branding/config/i18n'
 
 export default createVuetify({
   blueprint: md2,
@@ -23,7 +22,7 @@ export default createVuetify({
   directives,
 
   icons: {
-    defaultSet: 'mso',
+    defaultSet: 'mdi',
     aliases,
     sets: {
       mdi,
@@ -32,10 +31,9 @@ export default createVuetify({
     }
   },
 
-  // NOTE: Temporarily disabled due to build issues
-  // locale: {
-  //   adapter: createVueI18nAdapter({ i18n, useI18n })
-  // },
+  locale: {
+    adapter: createVueI18nAdapter({ i18n, useI18n })
+  },
 
   theme: dendra
 })

@@ -2,17 +2,8 @@ import { createRouter, createWebHistory } from 'vue-router'
 import routes from './routes'
 import { tracker } from '#common/lib/tracker'
 import { useNotify } from '#common/composables/useNotify'
-import { useSharedSession } from '#common/composables/useSession'
+import { useGlobalState } from '#common/composables/useGlobalState'
 import { Code, ConnectError } from '@connectrpc/connect'
-
-// TODO: Handle router errors
-// TODO: Handle loading spinner
-// TODO: Handle rety for auth
-// TODO: Cleanup dark/light
-// TODO: Resolve i18n
-// TODO: Utilize to.fullPath to return to page after login
-
-const { notify } = useNotify()
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.VITE_ROUTER_BASE),
@@ -38,8 +29,6 @@ router.beforeEach((to, from) => {
   if (to.meta.headProps && typeof to.meta.headProps === 'object') {
     const props = to.meta.headProps
 
-    if ('description' in props && typeof props.description === 'string')
-      headProps.description = props.description
     if ('title' in props && typeof props.title === 'string')
       headProps.title = props.title
     if ('titleTemplate' in props && typeof props.titleTemplate === 'string')
@@ -60,14 +49,16 @@ router.beforeEach((to, from) => {
 })
 
 router.beforeEach(async to => {
-  if (!to.meta.requiresAuth) return
+  const { fetchSession } = useGlobalState()
 
   try {
-    const { refetch } = useSharedSession()
-    await refetch({ throwOnError: true, cancelRefetch: false })
+    await fetchSession()
   } catch (err) {
     if (err instanceof ConnectError) {
       if (err.code === Code.PermissionDenied) {
+        if (!to.meta.requiresAuth) return
+
+        // TODO: Utilize to.fullPath to return to page after login
         window.location.href = import.meta.env.VITE_CANOPY_LOGIN_URL
         return new Promise(() => {})
       }
@@ -78,6 +69,7 @@ router.beforeEach(async to => {
 })
 
 router.onError(error => {
+  const { notify } = useNotify()
   notify(error)
 })
 

@@ -1,18 +1,27 @@
 import type { EventBusKey } from '@vueuse/core'
 import { useEventBus } from '@vueuse/core'
 
-interface Notification {
+export interface Notification {
+  error?: Error
   message: string
   type: 'success' | 'info' | 'warning' | 'error'
 }
 
-export const notifyKey: EventBusKey<Error | Notification> = Symbol('notify-key')
+export const notifyKey: EventBusKey<Notification> = Symbol('notify-key')
 
 export function useNotify() {
   const notifyBus = useEventBus(notifyKey)
 
   function notify(n: Error | Notification) {
-    notifyBus.emit(n)
+    if (n instanceof Error) {
+      notifyBus.emit({
+        error: n,
+        message: n.message,
+        type: 'error'
+      })
+    } else {
+      notifyBus.emit(n)
+    }
   }
 
   return {
