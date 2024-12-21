@@ -1,8 +1,8 @@
 <template>
   <v-container fluid>
-    <v-row class="mb-6">
+    <v-row>
       <v-col cols="12">
-        <h1 class="text-h3 mb-4">Second Page</h1>
+        <h1 class="text-h3 mb-4">{{ route.meta?.headProps?.title }} Page</h1>
         <p class="text-body-1">
           Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
           eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
@@ -13,18 +13,12 @@
           culpa qui officia deserunt mollit anim id est laborum.
         </p>
       </v-col>
-
-      <v-col cols="12">
-        <router-link :to="{ name: 'home' }"> Home page </router-link> |
-        <router-link :to="{ name: 'first' }"> First page </router-link> |
-        <router-link :to="{ name: 'second' }"> Second page </router-link>
-      </v-col>
     </v-row>
   </v-container>
 </template>
 
-<script setup lang="ts">
-console.log('before suspense2...')
-await new Promise(resolve => setTimeout(resolve, 2000))
-console.log('after suspense2...')
+<script setup>
+import { useRoute } from 'vue-router'
+
+const route = useRoute()
 </script>

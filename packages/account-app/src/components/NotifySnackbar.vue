@@ -2,8 +2,8 @@
   <v-snackbar
     v-model="snackbar"
     :color="data?.type"
+    :text="data?.message"
     :timeout="data?.type === 'error' ? 10000 : 3000"
-    text="data?.message"
     location="top"
     multi-line
   />

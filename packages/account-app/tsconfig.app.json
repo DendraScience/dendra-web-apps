@@ -39,7 +39,6 @@
         "components.d.ts",
         "env.d.ts",
         "router.d.ts",
-        "vite-env.d.ts",
         "src/**/*",
         "src/**/*.vue",
         "../../branding/account-app/**/*",

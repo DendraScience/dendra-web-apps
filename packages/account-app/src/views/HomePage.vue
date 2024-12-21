@@ -1,8 +1,8 @@
 <template>
   <v-container fluid>
-    <v-row class="mb-6">
+    <v-row>
       <v-col cols="12">
-        <h1 class="text-h3 mb-4">Auth Test</h1>
+        <h1 class="text-h3 mb-4">Getting Started</h1>
         <p class="text-body-1">
           Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
           eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
@@ -15,9 +15,9 @@
       </v-col>
 
       <v-col cols="12">
-        <router-link :to="{ name: 'home' }"> Home page </router-link> |
-        <router-link :to="{ name: 'first' }"> First page </router-link> |
-        <router-link :to="{ name: 'second' }"> Second page </router-link>
+        <router-link :to="{ name: 'query' }">Query</router-link> |
+        <router-link :to="{ name: 'manage-places' }">Manage</router-link> |
+        Documentation | Help
       </v-col>
     </v-row>
   </v-container>

@@ -1,6 +1,12 @@
 <template>
   <v-app>
-    <v-app-bar :title="APP_NAME" flat>
+    <ManagementDrawer v-model="drawer" />
+
+    <v-app-bar flat>
+      <template #prepend>
+        <v-app-bar-nav-icon @click="toggleDrawer()" />
+      </template>
+
       <template #append>
         <div class="d-flex ga-2 align-center">
           <BreakpointName />
@@ -22,5 +28,9 @@
 </template>
 
 <script setup lang="ts">
-const APP_NAME = import.meta.env.VITE_APP_NAME
+import { ref } from 'vue'
+import { useToggle } from '@vueuse/core'
+
+const drawer = ref(null)
+const toggleDrawer = useToggle(drawer)
 </script>
