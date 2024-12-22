@@ -1,25 +1,22 @@
 PROJECT_BASE := $(shell pwd)
 PROJECT_OUTPUT := $(PROJECT_BASE)/output
-PKG_ACCOUNT_APP := packages/account-app
 PKG_COMMON := packages/common
-PKG_MANAGEMENT_APP := packages/management-app
+PKG_MAIN_APP := packages/main-app
 PKG_PUBLIC_SITE := packages/public-site
-PKGS := account-app-pkg management-app-pkg public-site-pkg
+PKGS := main-app-pkg public-site-pkg
 SETUP_TASKS=${PKGS:-pkg=-setup}
-BRAND_TASKS=${PKGS:-pkg=-brand}
 BUILD_TASKS=${PKGS:-pkg=-build}
 DEV_TASKS=${PKGS:-pkg=-dev}
 SERVE_TASKS=${PKGS:-pkg=-serve}
 
-main: print-vars brand build
+main: print-vars build
 
 print-vars:
 	@echo "Make vars..."
 	@echo PROJECT_BASE=$(PROJECT_BASE)
 	@echo PROJECT_OUTPUT=$(PROJECT_OUTPUT)
-	@echo PKG_ACCOUNT_APP=$(PKG_ACCOUNT_APP)
 	@echo PKG_COMMON=$(PKG_COMMON)
-	@echo PKG_MANAGEMENT_APP=$(PKG_MANAGEMENT_APP)
+	@echo PKG_MAIN_APP=$(PKG_MAIN_APP)
 	@echo PKG_PUBLIC_SITE=$(PKG_PUBLIC_SITE)
 	@echo PKGS=$(PKGS)
 
@@ -41,45 +38,6 @@ setup-project:
 $(SETUP_TASKS):
 	@echo "Installing packages..."
 	npm install --prefix packages/${@:-setup=}
-	@printf "\e[32mSuccess!\e[39m\n"
-
-
-##
-# branding
-##
-
-.PHONY: clean-branding
-clean-branding:
-	rm -rf branding
-
-.PHONY: brand
-brand: $(BRAND_TASKS)
-
-.PHONY: $(BRAND_TASKS)
-$(BRAND_TASKS):
-	@echo "Copying files to branding..."
-	@mkdir -p branding/${@:-brand=}
-	@rsync -av --ignore-existing --include-from=branding-files.txt --exclude '*' \
-		${PKG_COMMON}/public/ \
-		branding/${@:-brand=}/public/
-	@rsync -av --ignore-existing --include-from=branding-files.txt --exclude '*' \
-		packages/${@:-brand=}/public/ \
-		branding/${@:-brand=}/public/
-	@rsync -av --ignore-existing --include-from=branding-files.txt --exclude '*' \
-		${PKG_COMMON}/src/assets/ \
-		branding/${@:-brand=}/assets/
-	@rsync -av --ignore-existing --include-from=branding-files.txt --exclude '*' \
-		packages/${@:-brand=}/src/assets/ \
-		branding/${@:-brand=}/assets/
-	@rsync -av --ignore-existing --include-from=branding-files.txt --exclude '*' \
-		${PKG_COMMON}/src/config/ \
-		branding/${@:-brand=}/config/
-	@rsync -av --ignore-existing --include-from=branding-files.txt --exclude '*' \
-		packages/${@:-brand=}/src/config/ \
-		branding/${@:-brand=}/config/
-	@rsync -av --ignore-existing --include-from=branding-files.txt --exclude '*' \
-		packages/${@:-brand=}/src/locales/ \
-		branding/${@:-brand=}/locales/
 	@printf "\e[32mSuccess!\e[39m\n"
 
 
@@ -107,12 +65,11 @@ $(BUILD_TASKS):
 ##
 
 .PHONY: dev
-dev: brand
+dev:
 	@echo "Starting dev servers..."
 	@bash -c "trap 'echo Bye!; exit 0' SIGINT; \
 		PORT=3002 npm run --prefix $(PKG_PUBLIC_SITE) dev & \
-		PORT=3004 npm run --prefix $(PKG_ACCOUNT_APP) dev & \
-		PORT=3006 npm run --prefix $(PKG_MANAGEMENT_APP) dev & \
+		PORT=3004 npm run --prefix $(PKG_MAIN_APP) dev & \
 		wait $(jobs -p)"
 	@printf "\e[32mSuccess!\e[39m\n"
 

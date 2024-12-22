@@ -8,17 +8,19 @@
       <!-- <v-app-bar-nav-icon @click="toggleDrawer()"></v-app-bar-nav-icon> -->
 
       <a class="ml-6 flex-grow-1" href="/">
-        <SiteLogotype
+        <SiteLogoCombined
           :height="
             collapse ? APP_BAR_HEIGHT_COLLAPSED - 20 : APP_BAR_HEIGHT - 40
           "
           class="d-none d-sm-block"
+          white
         />
         <SiteLogomark
           :height="
             collapse ? APP_BAR_HEIGHT_COLLAPSED - 20 : APP_BAR_HEIGHT - 40
           "
           class="d-block d-sm-none"
+          white
         />
       </a>
 

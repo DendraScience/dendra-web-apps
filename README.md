@@ -9,10 +9,8 @@ This is a multi-app monorepo.
 ```
 .
 └── packages            # Source for all apps organized by purpose
-    ├── account-app     # User account signup and settings (SPA)
     ├── common          # Source shared across all apps
-    ├── data-query-app  # Data query interface (SPA)
-    ├── management-app  # Management interface (SPA)
+    ├── main-app        # Data query and management interfaces (SPA)
     ├── metadata-site   # Matadata browsing (SSR)
     └── public-site     # Public facing web site (SSG)
 ```

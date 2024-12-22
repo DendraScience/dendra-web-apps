@@ -11,9 +11,7 @@ import { logger } from '#common/lib/logger'
 
 export default onRenderHtml
 
-const appName = import.meta.env.VITE_APP_NAME || ''
-const maskIconColor = import.meta.env.VITE_MASK_ICON_COLOR || '#4caf50'
-const msTileColor = import.meta.env.VITE_MS_TILE_COLOR || '#00a300'
+const appName = import.meta.env.VITE_APP_NAME
 
 // SEE: https://developers.google.com/analytics/devguides/collection/gtagjs
 const gaTrackingId = import.meta.env.VITE_GA_TRACKING_ID
@@ -75,17 +73,15 @@ async function onRenderHtml(pageContext) {
       <head>
         ${gaScriptTag}
         <link rel="canonical" href="${canonicalPaths.absolute}" />
-        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=3" />
-        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=3" />
-        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=3" />
-        <link rel="manifest" href="/site.webmanifest?v=3" />
-        <link rel="mask-icon" href="/safari-pinned-tab.svg?v=3" color="${maskIconColor}" />
-        <link rel="shortcut icon" href="/favicon.ico?v=3" />
         <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta name="application-name" content="${appName}" />
-        <meta name="msapplication-TileColor" content="${msTileColor}" />
-        <meta name="theme-color" content="#ffffff" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <link rel="shortcut icon" href="/favicon.ico" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+        <meta name="apple-mobile-web-app-title" content="${appName}" />
+        <link rel="manifest" href="/site.webmanifest" />
         <title>${headProps.titleFull || ''}</title>
         ${descriptionTag}
         ${ogTags}

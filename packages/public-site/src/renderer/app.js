@@ -8,7 +8,7 @@ import { setPageContext } from './usePageContext'
 import LayoutDefault from '#root/layouts/LayoutDefault.vue'
 // NOTE: Temporarily disabled due to build issues
 // import i18n from '#common/lib/i18n'
-import vuetify from '#branding/config/vuetify'
+import vuetify from '#root/config/vuetify'
 
 export { createApp }
 

@@ -1,0 +1,14 @@
+{
+  "name": "main-app",
+  "version": "0.0.1",
+  "description": "Dendra main app.",
+  "author": "J. Scott Smith",
+  "scripts": {
+    "dev": "vite",
+    "build": "npm run type-check && vite build --base=/main-app/dist/",
+    "build-server": "echo \"Skipping server build\"",
+    "type-check": "vue-tsc --build --force",
+    "server": "vite preview"
+  },
+  "type": "module"
+}
