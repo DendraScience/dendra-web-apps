@@ -42,10 +42,10 @@
         target="_blank"
       />
       <v-list-item
-        v-if="HREF_FEEDBACK"
+        v-if="HREF_CONTACT"
         :append-icon="mdiOpenInNew"
-        :href="HREF_FEEDBACK"
-        :title="t('menu_item_titles.feedback')"
+        :href="HREF_CONTACT"
+        :title="t('menu_item_titles.contact')"
         link
         target="_blank"
       />
@@ -58,8 +58,8 @@ import { mergeProps } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { mdiHelpCircleOutline, mdiOpenInNew } from '@mdi/js'
 
+const HREF_CONTACT = import.meta.env.VITE_HREF_CONTACT
 const HREF_DOCUMENTATION = import.meta.env.VITE_HREF_DOCUMENTATION
-const HREF_FEEDBACK = import.meta.env.VITE_HREF_FEEDBACK
 const HREF_SUPPORT = import.meta.env.VITE_HREF_SUPPORT
 const HREF_SYSTEM_STATUS = import.meta.env.VITE_HREF_SYSTEM_STATUS
 

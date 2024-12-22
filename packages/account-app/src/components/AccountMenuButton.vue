@@ -48,8 +48,8 @@
 <script setup lang="ts">
 import { mergeProps } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { mdiAccount, mdiCogOutline, mdiLogout } from '@mdi/js'
 import { useGlobalState } from '#common/composables/useGlobalState'
+import { mdiAccount, mdiCogOutline, mdiLogout } from '@mdi/js'
 
 const LOGOUT_URL = import.meta.env.VITE_CANOPY_LOGOUT_URL
 

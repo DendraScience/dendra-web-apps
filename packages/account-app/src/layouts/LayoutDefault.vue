@@ -18,6 +18,8 @@
         <slot />
       </div>
     </v-main>
+
+    <FooterSection />
   </v-app>
 </template>
 

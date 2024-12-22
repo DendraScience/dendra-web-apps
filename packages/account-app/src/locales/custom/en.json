@@ -5,6 +5,29 @@
         "help_button": "Help",
         "toggle_dark_button": "Toggle Dark"
     },
+    "footer_links":
+    {
+        "contact": "Contact",
+        "privacy": "Privacy",
+        "public_site": "Main Site",
+        "terms": "Terms"
+    },
+    "home_card_paragraphs":
+    {
+        "documentation": "Explore our documentation and instructional videos to learn how to configure Dendra for loading and querying data.",
+        "login": "You are currently not logged in. Click here to sign in or create an account to utilize Dendra to the fullest.",
+        "manage_no_session": "Click here to manage stations, datastreams and perform other system activities, such as setting up data ingestion sources. You will be prompted to log in or create an account in order to use the management pages.",
+        "manage_session": "Click here to manage stations, datastreams and perfrom other system activities, such as setting up data ingestion sources.",
+        "query_no_session": "Click here to explore station dashboards and query public data. You will need to log in or create an account in order to download data.",
+        "query_session": "Click here to explore station dashboards, and to query and download data."
+    },
+    "home_card_titles":
+    {
+        "documentation": "Documentation and Getting Help",
+        "login": "Log in or Create an Account",
+        "manage": "Manage Metadata and Data Sources",
+        "query": "Explore, Query and Download Data"
+    },
     "management_subheaders":
     {
         "data_cleaning": "Data Cleaning",
@@ -23,7 +46,7 @@
         "equipment": "Equipment",
         "file_upload": "File upload",
         "groups": "Groups",
-        "home": "Dendra Main Site",
+        "home": "Start Page",
         "login": "Log in to manage Dendra",
         "memberships": "Memberships",
         "monitoring": "Monitoring",
@@ -31,15 +54,14 @@
         "persons": "People",
         "places": "Places",
         "query": "Query & Download Data",
-        "start": "Getting Started",
         "stations": "Stations",
         "vocabulary": "Vocabulary",
         "webhooks": "Webhooks"
     },
     "menu_item_titles":
     {
+        "contact": "Contact us",
         "documentation": "Documentation",
-        "feedback": "Share feedback",
         "logout": "Logout",
         "support": "Support center",
         "system_status": "System status",
@@ -69,6 +91,14 @@
         "query": "Query Data",
         "status": "Station Status",
         "theme": "Theme"
+    },
+    "query_links":
+    {
+        "download": "Download",
+        "home": "Start Page",
+        "login": "Log In",
+        "query": "Query Data",
+        "status": "Status"
     },
     "tooltips":
     {

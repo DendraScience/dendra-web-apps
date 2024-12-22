@@ -13,6 +13,7 @@ declare module 'vue' {
     BreakpointName: typeof import('./src/components/BreakpointName.vue')['default']
     ErrorPage: typeof import('./src/views/ErrorPage.vue')['default']
     FirstPage: typeof import('./src/views/FirstPage.vue')['default']
+    FooterSection: typeof import('./src/components/FooterSection.vue')['default']
     HelpMenu: typeof import('./src/components/HelpMenu.vue')['default']
     HelpMenuButton: typeof import('./src/components/HelpMenuButton.vue')['default']
     HomePage: typeof import('./src/views/HomePage.vue')['default']
@@ -34,8 +35,10 @@ declare module 'vue' {
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SecondPage: typeof import('./src/views/SecondPage.vue')['default']
+    ShortDivider: typeof import('./src/components/ShortDivider.vue')['default']
     SiteLogomark: typeof import('./src/components/SiteLogomark.vue')['default']
     SiteLogotype: typeof import('./src/components/SiteLogotype.vue')['default']
+    StartCard: typeof import('./src/components/StartCard.vue')['default']
     ThemePage: typeof import('./src/views/ThemePage.vue')['default']
     ToggleDarkButton: typeof import('./src/components/ToggleDarkButton.vue')['default']
   }

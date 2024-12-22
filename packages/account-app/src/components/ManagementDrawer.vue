@@ -1,7 +1,7 @@
 <template>
-  <v-navigation-drawer theme="dark">
+  <v-navigation-drawer color="brand-surface">
     <template #prepend>
-      <v-sheet class="pa-4">
+      <v-sheet class="pa-4" color="brand-surface">
         <router-link :to="{ name: 'home' }">
           <v-avatar :image="logoColor" size="42"
         /></router-link>
@@ -160,28 +160,17 @@
     <template #append>
       <v-list nav slim variant="tonal">
         <v-list-item
-          :prepend-icon="mdiRocketLaunch"
-          :title="t('management_titles.start')"
-          :to="{ name: 'home' }"
-          link
-          nav
-        />
-        <v-list-item
           :prepend-icon="mdiChartMultiple"
           :title="t('management_titles.query')"
           href="/query"
           link
-          nav
           target="_blank"
         />
         <v-list-item
-          v-if="HREF_HOME"
-          :href="HREF_HOME"
-          :prepend-icon="mdiHome"
+          :prepend-icon="mdiRocketLaunch"
           :title="t('management_titles.home')"
+          :to="{ name: 'home' }"
           link
-          nav
-          target="_blank"
         />
       </v-list>
     </template>
@@ -190,6 +179,7 @@
 
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
+import { useGlobalState } from '#common/composables/useGlobalState'
 import {
   mdiCalculatorVariant,
   mdiChartMultiple,
@@ -198,7 +188,6 @@ import {
   mdiCircleSmall,
   mdiFileTree,
   mdiHexagonSlice6,
-  mdiHome,
   mdiImport,
   mdiLogin,
   mdiMapMarker,
@@ -209,9 +198,7 @@ import {
   mdiTag
 } from '@mdi/js'
 import logoColor from '#branding/assets/site-logomark-color.svg'
-import { useGlobalState } from '#common/composables/useGlobalState'
 
-const HREF_HOME = import.meta.env.VITE_HREF_HOME
 const LOGIN_URL = import.meta.env.VITE_CANOPY_LOGIN_URL
 
 const { t } = useI18n()

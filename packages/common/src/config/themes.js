@@ -24,7 +24,8 @@ export const dendra = {
         info: colors.lightBlue.lighten5,
         warning: colors.amber.darken3,
         error: colors.deepOrange.darken3,
-        success: colors.green.darken2
+        success: colors.green.darken2,
+        'brand-surface': '#1D3148'
       }
     },
 
@@ -38,7 +39,8 @@ export const dendra = {
         info: colors.lightBlue.lighten3,
         warning: colors.amber.darken3,
         error: colors.deepOrange.darken3,
-        success: colors.green.darken3
+        success: colors.green.darken3,
+        'brand-surface': '#1D3148'
       }
     }
   }

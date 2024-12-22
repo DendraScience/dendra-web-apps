@@ -2,7 +2,7 @@
   <v-app>
     <ManagementDrawer v-model="drawer" />
 
-    <v-app-bar flat>
+    <v-app-bar title="Dendra Management" border="b" flat>
       <template #prepend>
         <v-app-bar-nav-icon @click="toggleDrawer()" />
       </template>
@@ -24,6 +24,8 @@
         <slot />
       </div>
     </v-main>
+
+    <FooterSection />
   </v-app>
 </template>
 
