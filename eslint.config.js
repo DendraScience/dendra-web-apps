@@ -29,6 +29,12 @@ export default typescriptEslint.config(
         {
           ignores: ['+Page']
         }
+      ],
+      'vue/valid-v-slot': [
+        'error',
+        {
+          allowModifiers: true
+        }
       ]
     }
   },

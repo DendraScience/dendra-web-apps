@@ -20,7 +20,7 @@
     <NotifySnackbar />
 
     <v-main>
-      <div class="fill-height py-2 px-md-4">
+      <div class="qq-py-2 qq-px-md-4 h-100 w-100">
         <slot />
       </div>
     </v-main>

@@ -51,9 +51,11 @@ declare module 'vue' {
     VCardText: typeof import('vuetify/components')['VCardText']
     VCol: typeof import('vuetify/components')['VCol']
     VContainer: typeof import('vuetify/components')['VContainer']
+    VDataTable: typeof import('vuetify/components')['VDataTable']
     VDivider: typeof import('vuetify/components')['VDivider']
     VFadeTransition: typeof import('vuetify/components')['VFadeTransition']
     VFooter: typeof import('vuetify/components')['VFooter']
+    VIcon: typeof import('vuetify/components')['VIcon']
     VLazy: typeof import('vuetify/components')['VLazy']
     VList: typeof import('vuetify/components')['VList']
     VListGroup: typeof import('vuetify/components')['VListGroup']
@@ -67,6 +69,8 @@ declare module 'vue' {
     VSheet: typeof import('vuetify/components')['VSheet']
     VSnackbar: typeof import('vuetify/components')['VSnackbar']
     VSpacer: typeof import('vuetify/components')['VSpacer']
+    VTable: typeof import('vuetify/components')['VTable']
+    VTextField: typeof import('vuetify/components')['VTextField']
     VTooltip: typeof import('vuetify/components')['VTooltip']
   }
 }

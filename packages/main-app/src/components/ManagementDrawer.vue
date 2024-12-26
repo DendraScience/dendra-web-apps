@@ -164,7 +164,7 @@
     </v-list>
 
     <template #append>
-      <v-list nav slim variant="tonal">
+      <v-list nav slim variant="flat">
         <v-list-item
           :prepend-icon="mdiChartMultiple"
           :title="t('management_titles.query')"
