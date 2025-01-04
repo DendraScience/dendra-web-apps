@@ -1,89 +1,118 @@
 <template>
   <v-container fluid>
-    <!-- <v-row align="center" dense> -->
-    <!-- </v-row> -->
-
     <v-row>
       <v-col cols="12">
-        <div class="sticky-table-wrapper">
-          <v-card class="pa-4" flat style="left: 0; position: sticky">
-            <v-row align="center">
-              <v-col>
-                <h1 class="text-h5 text-sm-h4">Organizations</h1>
+        <v-card
+          border="thin"
+          class="d-block overflow-auto w-100 border-thin"
+          rounded="0"
+          style="max-height: calc(100vh - 148px)"
+          variant="flat"
+        >
+          <v-card style="left: 0; position: sticky" variant="flat">
+            <v-card-text>
+              <v-row align="center" dense>
+                <v-col>
+                  <h1 class="text-h5 text-sm-h4">Organizations</h1>
 
-                <v-btn @click="() => (testHeader = 'Hello')">Do It</v-btn>
-              </v-col>
+                  <div class="d-flex align-center mt-1">
+                    <p class="text-body-2">
+                      <span class="text-medium-emphasis text-uppercase"
+                        >Filtered By:</span
+                      >
+                      <span class="mx-1">Not Hidden</span>|<span class="mx-1"
+                        >Is Enabled</span
+                      >|<span class="mx-1">Place: California Reserve</span>
+                    </p>
 
-              <v-col cols="auto">
-                <v-btn
-                  :prepend-icon="mdiPlus"
-                  class="text-none ma-1"
-                  rounded="lg"
-                  slim
-                  size="small"
-                  variant="flat"
-                  >New organization</v-btn
-                >
-              </v-col>
-            </v-row>
+                    <v-btn
+                      :icon="mdiCloseCircle"
+                      class="text-medium-emphasis"
+                      color="on-surface"
+                      density="compact"
+                      variant="text"
+                    />
+                  </div>
+                </v-col>
 
-            <v-row>
-              <v-col cols="12" xl="6">
-                <v-text-field
-                  v-model="search"
-                  :prepend-inner-icon="mdiMagnify"
-                  density="comfortable"
-                  hide-details
-                  placeholder="Search"
-                  rounded
-                  variant="outlined"
-                />
-              </v-col>
-            </v-row>
+                <v-col cols="auto">
+                  <v-btn
+                    :icon="mdiFilterCog"
+                    class="ma-1"
+                    color="secondary"
+                    density="comfortable"
+                    rounded="lg"
+                    slim
+                    variant="flat"
+                  />
+
+                  <v-btn
+                    :icon="mdiFormatColumns"
+                    class="ma-1"
+                    color="secondary"
+                    density="comfortable"
+                    rounded="lg"
+                    slim
+                    variant="flat"
+                  />
+
+                  <v-btn
+                    :prepend-icon="mdiPlus"
+                    class="text-none ma-1"
+                    rounded="lg"
+                    slim
+                    variant="flat"
+                    >New</v-btn
+                  >
+                </v-col>
+              </v-row>
+
+              <v-row dense>
+                <v-col cols="12" lg="6">
+                  <v-text-field
+                    v-model="searchText"
+                    :prepend-inner-icon="mdiMagnify"
+                    clearable
+                    density="compact"
+                    hide-details
+                    placeholder="Search"
+                    rounded
+                    variant="outlined"
+                  />
+                </v-col>
+              </v-row>
+            </v-card-text>
           </v-card>
 
-          <table class="sticky-table">
+          <table class="w-100" style="border-spacing: 0">
             <thead>
               <tr
                 v-for="headerGroup in table.getHeaderGroups()"
                 :key="headerGroup.id"
+                class="bg-surface position-sticky top-0"
+                style="z-index: 1"
               >
                 <th
                   v-for="header in headerGroup.headers"
                   :key="header.id"
                   :colSpan="header.colSpan"
-                  class="text-left sticky-th"
+                  class="text-subtitle-2 text-uppercase text-left pa-2 border-b-sm"
                 >
                   <FlexRender
                     v-if="!header.isPlaceholder"
                     :render="header.column.columnDef.header"
                     :props="header.getContext()"
-                  />
+                  />&nbsp;<v-icon color="surface-light" icon="mso:sort" />
                 </th>
               </tr>
             </thead>
-            <!--
-            <thead>
-              <tr>
-                <th class="text-left sticky-th">Name</th>
-                <th class="text-left sticky-th">Description</th>
-                <th class="text-left sticky-th">Enabled</th>
-                <th class="text-left sticky-th">Hidden</th>
-                <th class="text-left sticky-th">Slug</th>
-                <th class="text-left sticky-th">Member Access</th>
-                <th class="text-left sticky-th">Public Access</th>
-                <th class="text-left sticky-th">Time Zone</th>
-                <th class="text-left sticky-th">Created By</th>
-              </tr>
-            </thead>
- -->
 
             <tbody>
               <tr v-for="row in table.getRowModel().rows" :key="row.id">
                 <td
                   v-for="cell in row.getVisibleCells()"
                   :key="cell.id"
-                  class="sticky-td px-2"
+                  class="text-body-2 pa-2 sticky-td border-b-sm"
                 >
                   <FlexRender
                     :render="cell.column.columnDef.cell"
@@ -93,6 +122,45 @@
               </tr>
             </tbody>
           </table>
+        </v-card>
+      </v-col>
+    </v-row>
+
+    <v-row dense>
+      <v-col cols="12" align="center" justify="end">
+        <div class="d-flex justify-end align-center ga-2">
+          <div class="d-none d-sm-block text-body-2">Items per page:</div>
+          <v-select
+            :items="itemsPerPage"
+            :value="100"
+            class="mr-2"
+            density="compact"
+            hide-details
+            style="max-width: 120px"
+            variant="outlined"
+          ></v-select>
+
+          <v-btn
+            :icon="mdiPageFirst"
+            color="on-surface"
+            density="comfortable"
+            slim
+            variant="text"
+          />
+          <v-btn
+            class="text-none"
+            color="on-surface"
+            slim
+            text="Previous"
+            variant="text"
+          />
+          <v-btn
+            class="text-none"
+            color="on-surface"
+            slim
+            text="Next"
+            variant="text"
+          />
         </div>
       </v-col>
     </v-row>
@@ -101,24 +169,87 @@
 
 <script setup lang="ts">
 import type { Organization } from '@buf/dendrascience_api.bufbuild_es/dendra/api/metadata/v3alpha1/organization_pb'
+import { ListOrganizationsRequest_OrderField } from '@buf/dendrascience_api.bufbuild_es/dendra/api/metadata/v3alpha1/organization_request_response_pb'
+// import { BooleanFilter } from '@buf/dendrascience_api.bufbuild_es/dendra/api/metadata/v3alpha1/types_pb'
 // import type { CellContext } from '@tanstack/vue-table'
 // import type { VNode } from 'vue'
-import { ref } from 'vue'
+import { ref, shallowRef, watchEffect } from 'vue'
+import { refDebounced } from '@vueuse/core'
 // import { VIcon } from 'vuetify/components'
+import { useQuery } from '@tanstack/vue-query'
+import { useNotify } from '#common/composables/useNotify'
 import {
   FlexRender,
   getCoreRowModel,
   useVueTable,
   createColumnHelper
 } from '@tanstack/vue-table'
-import { mdiMagnify, mdiPlus } from '@mdi/js'
+import {
+  mdiCloseCircle,
+  mdiFilterCog,
+  mdiFormatColumns,
+  mdiMagnify,
+  mdiPageFirst,
+  mdiPlus
+} from '@mdi/js'
+import { createClient } from '@connectrpc/connect'
+import { OrganizationService } from '@buf/dendrascience_api.bufbuild_es/dendra/api/metadata/v3alpha1/organization_service_pb'
+import { transport } from '#common/lib/dendra-v3'
 import { toJson } from '@bufbuild/protobuf'
 // import { DurationSchema, TimestampSchema } from '@bufbuild/protobuf/wkt'
 import { TimestampSchema } from '@bufbuild/protobuf/wkt'
 import { createCellFormatters } from '#common/lib/table'
-import { generateOrganization } from '#root/lib/fake'
+// import { generateOrganization } from '#root/lib/fake'
 
-const search = ref('')
+const { notify } = useNotify()
+
+const client = createClient(OrganizationService, transport)
+
+const pageToken = ref('')
+const searchText = ref('')
+const searchTextDebounced = refDebounced(searchText, 600)
+
+const itemsPerPage = ref([10, 50, 100, 1000])
+
+async function listOrganizations(search: string) {
+  return client.listOrganizations({
+    filter: {
+      // isEnabled: BooleanFilter.TRUE,
+      // isHidden: BooleanFilter.FALSE,
+      searchText: search
+    },
+    orderBy: {
+      field: ListOrganizationsRequest_OrderField.SLUG
+    },
+    pageSize: 500,
+    pageToken: pageToken.value
+  })
+}
+
+const { data, error, isError, isPending, suspense } = useQuery({
+  queryKey: ['organizations', searchTextDebounced],
+  queryFn: () => {
+    return listOrganizations(searchTextDebounced.value)
+  }
+})
+
+const tableData = shallowRef<Organization[]>([])
+
+function rerenderTable() {
+  tableData.value = data.value?.organizations || []
+}
+
+watchEffect(() => {
+  if (!isPending.value) {
+    if (isError.value) {
+      if (error.value) notify(error.value)
+    } else if (data.value) {
+      rerenderTable()
+    }
+  }
+})
+
+await suspense()
 
 function truncateText(text: string) {
   text = text.trim()
@@ -137,8 +268,6 @@ const cellFormatters = createCellFormatters<Organization>()
 //     : h(VIcon, { color: 'surface-light', icon: 'mso:toggle_off' })
 // }
 
-const testHeader = ref('Hidden')
-
 const columns = [
   columnHelper.accessor('name', {
     header: 'Name'
@@ -146,7 +275,7 @@ const columns = [
   }),
   columnHelper.accessor('description', {
     header: 'Description',
-    cell: props => truncateText(props.getValue()) + testHeader.value
+    cell: props => truncateText(props.getValue())
   }),
   columnHelper.accessor('isEnabled', {
     header: 'Enabled',
@@ -212,80 +341,21 @@ const columns = [
   // })
 ]
 
-// const headers = [
-//   { title: 'Name', key: 'name' },
-//   { title: 'Description', key: 'description', sortable: false },
-//   { title: 'Enabled', key: 'isEnabled' },
-//   { title: 'Hidden', key: 'isHidden' },
-//   { title: 'Slug', key: 'slug' },
-//   { title: 'Member Access', key: 'accessLevels.memberLevel' },
-//   { title: 'Member Access', key: 'accessLevels.memberLevel' },
-//   { title: 'Default Timezone', key: 'operationalSettings.defaultTimeZone' },
-//   { title: 'Created by', key: 'modification.createdBy' }
-// ]
+// const defaultData = Array(1000)
+//   .fill(0)
+//   .map(() => generateOrganization())
 
-const defaultData = Array(1000)
-  .fill(0)
-  .map(() => generateOrganization())
-
-const dataRef = ref(defaultData)
+// const dataRef = ref(defaultData)
 
 // const rerender = () => {
 //   data.value = defaultData
 // }
 
 const table = useVueTable({
-  data: dataRef,
+  get data() {
+    return tableData.value
+  },
   columns,
   getCoreRowModel: getCoreRowModel()
 })
-
-// if (items[0].modification?.createdAt) {
-//   console.log('>>>', toJson(TimestampSchema, items[0].modification?.createdAt))
-// }
-
-// if (items[0].operationalSettings?.sampleInterval) {
-//   console.log(
-//     '>>>',
-//     toJson(DurationSchema, items[0].operationalSettings?.sampleInterval)
-//   )
-// }
 </script>
-
-<style>
-.sticky-table-wrapper {
-  width: 100%;
-  max-height: calc(100vh - 200px);
-  overflow: auto;
-  display: block;
-  /*  overflow-y: auto;*/
-}
-
-.sticky-table {
-  /*  display: block;*/
-  /*  table-layout: fixed;*/
-  /*  width: 100%;*/
-  /*  background: green;*/
-
-  width: 100%;
-  /*  overflow-x: auto;*/
-  /*  overflow-y: hidden;*/
-  /*  display: block;*/
-  /*  height: 2000px;*/
-  /*  overflow: auto;*/
-}
-
-.sticky-th {
-  position: -webkit-sticky;
-  position: sticky;
-  /*  top: 64px;*/
-  top: 0;
-  /*  width: 200px;*/
-  background: blue;
-}
-
-.sticky-td {
-  /*  text-wrap: nowrap;*/
-  /*  width: 200px;*/
-}
-</style>

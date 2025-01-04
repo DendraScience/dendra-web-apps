@@ -29,9 +29,11 @@ export function generateOrganization() {
 
     modification: {
       createdAt: timestampFromDate(faker.date.past()),
-      createdBy: 'auth0|' + faker.string.uuid(),
+      createdByName: faker.person.fullName(),
+      createdBySubject: 'auth0|' + faker.string.uuid(),
       updatedAt: timestampFromDate(faker.date.recent()),
-      updatedBy: 'auth0|' + faker.string.uuid()
+      updatedByName: faker.person.fullName(),
+      updatedBySubject: 'auth0|' + faker.string.uuid()
     },
 
     address: {

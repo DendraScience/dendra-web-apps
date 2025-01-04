@@ -76,7 +76,7 @@
                       {{ item.operationalSettings?.defaultTimeZone }}
                     </td>
                     <td>
-                      {{ item.modification?.createdBy }}
+                      {{ item.modification?.createdBySubject }}
                     </td>
                   </tr>
                 </tbody>

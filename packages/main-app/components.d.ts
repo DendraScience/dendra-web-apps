@@ -66,6 +66,7 @@ declare module 'vue' {
     VNavigationDrawer: typeof import('vuetify/components')['VNavigationDrawer']
     VProgressCircular: typeof import('vuetify/components')['VProgressCircular']
     VRow: typeof import('vuetify/components')['VRow']
+    VSelect: typeof import('vuetify/components')['VSelect']
     VSheet: typeof import('vuetify/components')['VSheet']
     VSnackbar: typeof import('vuetify/components')['VSnackbar']
     VSpacer: typeof import('vuetify/components')['VSpacer']
