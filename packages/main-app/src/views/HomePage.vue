@@ -72,7 +72,7 @@
 
 <script setup>
 import { useI18n } from 'vue-i18n'
-import { useGlobalState } from '#common/composables/useGlobalState'
+import { useGlobalState } from '#common/composables/global'
 
 const HREF_DOCUMENTATION = import.meta.env.VITE_HREF_DOCUMENTATION
 const LOGIN_URL = import.meta.env.VITE_CANOPY_LOGIN_URL

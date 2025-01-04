@@ -175,7 +175,7 @@ const routes: RouteRecordRaw[] = [
       headProps: {
         title: t('page_titles.manage_organizations')
       },
-      layout: 'Manage',
+      layout: 'ManageCompact',
       requiresAuth: true
     }
   },

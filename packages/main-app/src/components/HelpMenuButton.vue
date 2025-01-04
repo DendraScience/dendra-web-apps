@@ -8,9 +8,9 @@
       >
         <template #activator="{ props: tooltip }">
           <v-btn
+            v-bind="mergeProps(menu, tooltip)"
             :aria-label="t('aria_labels.help_button')"
             :icon="mdiHelpCircleOutline"
-            v-bind="mergeProps(menu, tooltip)"
           />
         </template>
       </v-tooltip>

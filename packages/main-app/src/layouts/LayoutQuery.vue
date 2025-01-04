@@ -51,7 +51,7 @@
 import { computed, ref } from 'vue'
 import { useToggle } from '@vueuse/core'
 import { useI18n } from 'vue-i18n'
-import { useGlobalState } from '#common/composables/useGlobalState'
+import { useGlobalState } from '#common/composables/global'
 import logoColor from '#common/assets/site-logomark-color.svg'
 
 const LOGIN_URL = import.meta.env.VITE_CANOPY_LOGIN_URL

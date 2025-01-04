@@ -79,9 +79,9 @@
       <v-list-group fluid>
         <template #activator="{ props: activatorProps }">
           <v-list-item
+            v-bind="activatorProps"
             :prepend-icon="mdiImport"
             :title="t('management_titles.data_ingestion')"
-            v-bind="activatorProps"
           />
         </template>
 
@@ -108,9 +108,9 @@
       <v-list-group fluid>
         <template #activator="{ props: activatorProps }">
           <v-list-item
+            v-bind="activatorProps"
             :prepend-icon="mdiFileTree"
             :title="t('management_titles.community')"
-            v-bind="activatorProps"
           />
         </template>
 
@@ -185,7 +185,7 @@
 
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
-import { useGlobalState } from '#common/composables/useGlobalState'
+import { useGlobalState } from '#common/composables/global'
 import {
   mdiCalculatorVariant,
   mdiChartMultiple,

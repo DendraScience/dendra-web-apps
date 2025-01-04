@@ -8,9 +8,9 @@
       >
         <template #activator="{ props: tooltip }">
           <v-btn
+            v-bind="mergeProps(menu, tooltip)"
             :aria-label="t('aria_labels.account_button')"
             :icon="mdiAccount"
-            v-bind="mergeProps(menu, tooltip)"
           />
         </template>
       </v-tooltip>
@@ -48,7 +48,7 @@
 <script setup lang="ts">
 import { mergeProps } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useGlobalState } from '#common/composables/useGlobalState'
+import { useGlobalState } from '#common/composables/global'
 import { mdiAccount, mdiCogOutline, mdiLogout } from '@mdi/js'
 
 const LOGOUT_URL = import.meta.env.VITE_CANOPY_LOGOUT_URL

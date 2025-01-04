@@ -1,8 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import routes from './routes'
 import { tracker } from '#common/lib/tracker'
-import { useNotify } from '#common/composables/useNotify'
-import { useGlobalState } from '#common/composables/useGlobalState'
+import { useNotify } from '#common/composables/notify'
+import { useGlobalState } from '#common/composables/global'
 import { Code, ConnectError } from '@connectrpc/connect'
 
 const router = createRouter({

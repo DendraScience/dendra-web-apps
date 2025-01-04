@@ -1,12 +1,21 @@
 <template>
-  <v-container fluid>
+  <v-container fluid style="position: relative">
+    <v-progress-linear
+      :active="isFetching"
+      absolute
+      color="info"
+      indeterminate
+      location="top"
+      tile
+    />
+
     <v-row>
       <v-col cols="12">
         <v-card
           border="thin"
           class="d-block overflow-auto w-100 border-thin"
           rounded="0"
-          style="max-height: calc(100vh - 148px)"
+          style="max-height: calc(100vh - 150px)"
           variant="flat"
         >
           <v-card style="left: 0; position: sticky" variant="flat">
@@ -20,9 +29,9 @@
                       <span class="text-medium-emphasis text-uppercase"
                         >Filtered By:</span
                       >
-                      <span class="mx-1">Not Hidden</span>|<span class="mx-1"
+                      <span class="mx-1">Not Hidden</span>&<span class="mx-1"
                         >Is Enabled</span
-                      >|<span class="mx-1">Place: California Reserve</span>
+                      >&<span class="mx-1">Place: California Reserve</span>
                     </p>
 
                     <v-btn
@@ -36,34 +45,29 @@
                 </v-col>
 
                 <v-col cols="auto">
-                  <v-btn
-                    :icon="mdiFilterCog"
-                    class="ma-1"
-                    color="secondary"
-                    density="comfortable"
-                    rounded="lg"
-                    slim
-                    variant="flat"
-                  />
+                  <FiltersMenuButton>
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit,
+                    sed do eiusmod tempor incididunt ut labore et dolore magna
+                    aliqua. Ut enim ad minim veniam, quis nostrud exercitation
+                    ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                    Duis aute irure dolor in reprehenderit in voluptate velit
+                    esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
+                    occaecat cupidatat non proident, sunt in culpa qui officia
+                    deserunt mollit anim id est laborum.
+                  </FiltersMenuButton>
 
-                  <v-btn
-                    :icon="mdiFormatColumns"
-                    class="ma-1"
-                    color="secondary"
-                    density="comfortable"
-                    rounded="lg"
-                    slim
-                    variant="flat"
-                  />
+                  <ColumnsMenuButton>
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit,
+                    sed do eiusmod tempor incididunt ut labore et dolore magna
+                    aliqua. Ut enim ad minim veniam, quis nostrud exercitation
+                    ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                    Duis aute irure dolor in reprehenderit in voluptate velit
+                    esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
+                    occaecat cupidatat non proident, sunt in culpa qui officia
+                    deserunt mollit anim id est laborum.
+                  </ColumnsMenuButton>
 
-                  <v-btn
-                    :prepend-icon="mdiPlus"
-                    class="text-none ma-1"
-                    rounded="lg"
-                    slim
-                    variant="flat"
-                    >New</v-btn
-                  >
+                  <NewButton />
                 </v-col>
               </v-row>
 
@@ -128,40 +132,12 @@
 
     <v-row dense>
       <v-col cols="12" align="center" justify="end">
-        <div class="d-flex justify-end align-center ga-2">
-          <div class="d-none d-sm-block text-body-2">Items per page:</div>
-          <v-select
-            :items="itemsPerPage"
-            :value="100"
-            class="mr-2"
-            density="compact"
-            hide-details
-            style="max-width: 120px"
-            variant="outlined"
-          ></v-select>
-
-          <v-btn
-            :icon="mdiPageFirst"
-            color="on-surface"
-            density="comfortable"
-            slim
-            variant="text"
-          />
-          <v-btn
-            class="text-none"
-            color="on-surface"
-            slim
-            text="Previous"
-            variant="text"
-          />
-          <v-btn
-            class="text-none"
-            color="on-surface"
-            slim
-            text="Next"
-            variant="text"
-          />
-        </div>
+        <TablePagination
+          v-model="pageSize"
+          :is-next-disabled="isNextDisabled"
+          :is-previous-disabled="isPreviousDisabled"
+          :step-to-page="stepToPage"
+        />
       </v-col>
     </v-row>
   </v-container>
@@ -170,67 +146,59 @@
 <script setup lang="ts">
 import type { Organization } from '@buf/dendrascience_api.bufbuild_es/dendra/api/metadata/v3alpha1/organization_pb'
 import { ListOrganizationsRequest_OrderField } from '@buf/dendrascience_api.bufbuild_es/dendra/api/metadata/v3alpha1/organization_request_response_pb'
-// import { BooleanFilter } from '@buf/dendrascience_api.bufbuild_es/dendra/api/metadata/v3alpha1/types_pb'
 // import type { CellContext } from '@tanstack/vue-table'
 // import type { VNode } from 'vue'
-import { ref, shallowRef, watchEffect } from 'vue'
-import { refDebounced } from '@vueuse/core'
-// import { VIcon } from 'vuetify/components'
+import { shallowRef, watchEffect } from 'vue'
 import { useQuery } from '@tanstack/vue-query'
-import { useNotify } from '#common/composables/useNotify'
+import { useFilters } from '#common/composables/filter'
+import { usePager, usePageState } from '#common/composables/pagination'
+import { useNotify } from '#common/composables/notify'
 import {
   FlexRender,
   getCoreRowModel,
   useVueTable,
   createColumnHelper
 } from '@tanstack/vue-table'
-import {
-  mdiCloseCircle,
-  mdiFilterCog,
-  mdiFormatColumns,
-  mdiMagnify,
-  mdiPageFirst,
-  mdiPlus
-} from '@mdi/js'
+import { mdiCloseCircle, mdiMagnify } from '@mdi/js'
 import { createClient } from '@connectrpc/connect'
 import { OrganizationService } from '@buf/dendrascience_api.bufbuild_es/dendra/api/metadata/v3alpha1/organization_service_pb'
 import { transport } from '#common/lib/dendra-v3'
 import { toJson } from '@bufbuild/protobuf'
-// import { DurationSchema, TimestampSchema } from '@bufbuild/protobuf/wkt'
 import { TimestampSchema } from '@bufbuild/protobuf/wkt'
 import { createCellFormatters } from '#common/lib/table'
-// import { generateOrganization } from '#root/lib/fake'
 
+const { pageSize, pageToken } = usePageState()
+const { isEnabledFilter, isHiddenFilter, searchText, searchTextDebounced } =
+  useFilters()
 const { notify } = useNotify()
 
 const client = createClient(OrganizationService, transport)
 
-const pageToken = ref('')
-const searchText = ref('')
-const searchTextDebounced = refDebounced(searchText, 600)
-
-const itemsPerPage = ref([10, 50, 100, 1000])
-
-async function listOrganizations(search: string) {
+async function listOrganizations() {
   return client.listOrganizations({
     filter: {
-      // isEnabled: BooleanFilter.TRUE,
-      // isHidden: BooleanFilter.FALSE,
-      searchText: search
+      isEnabled: isEnabledFilter.value,
+      isHidden: isHiddenFilter.value,
+      searchText: searchTextDebounced.value
     },
     orderBy: {
       field: ListOrganizationsRequest_OrderField.SLUG
     },
-    pageSize: 500,
+    pageSize: pageSize.value,
     pageToken: pageToken.value
   })
 }
 
-const { data, error, isError, isPending, suspense } = useQuery({
-  queryKey: ['organizations', searchTextDebounced],
-  queryFn: () => {
-    return listOrganizations(searchTextDebounced.value)
-  }
+const { data, error, isError, isFetching, isPending, suspense } = useQuery({
+  queryKey: ['organizations', { pageSize, pageToken, searchTextDebounced }],
+  queryFn: () => listOrganizations()
+})
+
+const { isNextDisabled, isPreviousDisabled, stepToPage } = usePager({
+  data,
+  isError,
+  isPending,
+  pageToken
 })
 
 const tableData = shallowRef<Organization[]>([])
@@ -340,16 +308,6 @@ const columns = [
   //   ]
   // })
 ]
-
-// const defaultData = Array(1000)
-//   .fill(0)
-//   .map(() => generateOrganization())
-
-// const dataRef = ref(defaultData)
-
-// const rerender = () => {
-//   data.value = defaultData
-// }
 
 const table = useVueTable({
   get data() {

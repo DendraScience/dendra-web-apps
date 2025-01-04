@@ -10,9 +10,9 @@
 </template>
 
 <script setup lang="ts">
-import type { Notification } from '#common/composables/useNotify'
+import type { Notification } from '#common/composables/notify'
 import { ref } from 'vue'
-import { useNotify } from '#common/composables/useNotify'
+import { useNotify } from '#common/composables/notify'
 
 const data = ref<Notification | undefined>()
 const snackbar = ref(false)

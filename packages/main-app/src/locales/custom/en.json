@@ -2,8 +2,14 @@
     "aria_labels":
     {
         "account_button": "Account",
+        "columns_button": "Columns",
+        "filters_button": "Filters",
         "help_button": "Help",
         "toggle_dark_button": "Toggle Dark"
+    },
+    "button_text":
+    {
+        "new_item": "New"
     },
     "footer_links":
     {
@@ -103,9 +109,17 @@
         "query": "Query Data",
         "status": "Status"
     },
+    "table":
+    {
+        "items_per_page": "Items per page:",
+        "next_text": "Next",
+        "previous_text": "Previous"
+    },
     "tooltips":
     {
         "account_button": "Account",
+        "columns_button": "Columns",
+        "filters_button": "Filters",
         "help_button": "Help",
         "toggle_dark_button": "Toggle Dark"
     }

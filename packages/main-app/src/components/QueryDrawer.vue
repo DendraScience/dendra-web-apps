@@ -43,7 +43,7 @@
 
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
-import { useGlobalState } from '#common/composables/useGlobalState'
+import { useGlobalState } from '#common/composables/global'
 import {
   mdiChartMultiple,
   mdiCheckCircle,

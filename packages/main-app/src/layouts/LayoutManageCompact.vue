@@ -20,12 +20,10 @@
     <NotifySnackbar />
 
     <v-main>
-      <div class="h-100 py-2 px-md-4">
+      <div class="h-100">
         <slot />
       </div>
     </v-main>
-
-    <FooterSection />
   </v-app>
 </template>
 
