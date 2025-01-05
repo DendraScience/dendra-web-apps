@@ -2,14 +2,16 @@
     "aria_labels":
     {
         "account_button": "Account",
-        "columns_button": "Columns",
-        "filters_button": "Filters",
         "help_button": "Help",
         "toggle_dark_button": "Toggle Dark"
     },
     "button_text":
     {
-        "new_item": "New"
+        "columns": "Columns",
+        "filters": "Filters",
+        "new_item": "New",
+        "next_page": "Next",
+        "previous_page": "Previous"
     },
     "footer_links":
     {
@@ -111,15 +113,11 @@
     },
     "table":
     {
-        "items_per_page": "Items per page:",
-        "next_text": "Next",
-        "previous_text": "Previous"
+        "items_per_page": "Items per page:"
     },
     "tooltips":
     {
         "account_button": "Account",
-        "columns_button": "Columns",
-        "filters_button": "Filters",
         "help_button": "Help",
         "toggle_dark_button": "Toggle Dark"
     }

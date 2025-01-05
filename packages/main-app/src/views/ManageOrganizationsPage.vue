@@ -14,17 +14,18 @@
         <v-card
           border="thin"
           class="d-block overflow-auto w-100 border-thin"
+          color="background"
           rounded="0"
           style="max-height: calc(100vh - 150px)"
           variant="flat"
         >
-          <v-card style="left: 0; position: sticky" variant="flat">
+          <v-card rounded="0" style="left: 0; position: sticky" variant="flat">
             <v-card-text>
               <v-row align="center" dense>
                 <v-col>
                   <h1 class="text-h5 text-sm-h4">Organizations</h1>
 
-                  <div class="d-flex align-center mt-1">
+                  <div class="d-flex align-center mt-2">
                     <p class="text-body-2">
                       <span class="text-medium-emphasis text-uppercase"
                         >Filtered By:</span
@@ -57,14 +58,21 @@
                   </FiltersMenuButton>
 
                   <ColumnsMenuButton>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-                    sed do eiusmod tempor incididunt ut labore et dolore magna
-                    aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-                    ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                    Duis aute irure dolor in reprehenderit in voluptate velit
-                    esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
-                    occaecat cupidatat non proident, sunt in culpa qui officia
-                    deserunt mollit anim id est laborum.
+                    <v-list-item
+                      v-for="column in table.getAllLeafColumns()"
+                      :key="column.id"
+                      :title="column.columnDef.header?.toString()"
+                      @click="toggleColumnVisibility(column)"
+                    >
+                      <template #prepend>
+                        <v-list-item-action start>
+                          <v-checkbox-btn
+                            :model-value="column.getIsVisible()"
+                            density="compact"
+                          ></v-checkbox-btn>
+                        </v-list-item-action>
+                      </template>
+                    </v-list-item>
                   </ColumnsMenuButton>
 
                   <NewButton />
@@ -88,25 +96,25 @@
             </v-card-text>
           </v-card>
 
-          <table class="w-100" style="border-spacing: 0">
+          <table class="tan-table tan-table-hover w-100">
             <thead>
               <tr
                 v-for="headerGroup in table.getHeaderGroups()"
                 :key="headerGroup.id"
-                class="bg-surface position-sticky top-0"
+                class="bg-surface-light position-sticky top-0"
                 style="z-index: 1"
               >
                 <th
                   v-for="header in headerGroup.headers"
                   :key="header.id"
                   :colSpan="header.colSpan"
-                  class="text-subtitle-2 text-uppercase text-left pa-2 border-b-sm"
+                  class="text-subtitle-2 text-uppercase text-left pa-3 border-b-sm"
                 >
                   <FlexRender
                     v-if="!header.isPlaceholder"
                     :render="header.column.columnDef.header"
                     :props="header.getContext()"
-                  />&nbsp;<v-icon color="surface-light" icon="mso:sort" />
+                  />&nbsp;<v-icon color="disabled" icon="mso:sort" />
                 </th>
               </tr>
             </thead>
@@ -116,7 +124,8 @@
                 <td
                   v-for="cell in row.getVisibleCells()"
                   :key="cell.id"
-                  class="text-body-2 pa-2 sticky-td border-b-sm"
+                  class="text-body-2 pa-3 sticky-td border-b-sm"
+                  style="word-break: break-all"
                 >
                   <FlexRender
                     :render="cell.column.columnDef.cell"
@@ -146,14 +155,14 @@
 <script setup lang="ts">
 import type { Organization } from '@buf/dendrascience_api.bufbuild_es/dendra/api/metadata/v3alpha1/organization_pb'
 import { ListOrganizationsRequest_OrderField } from '@buf/dendrascience_api.bufbuild_es/dendra/api/metadata/v3alpha1/organization_request_response_pb'
-// import type { CellContext } from '@tanstack/vue-table'
-// import type { VNode } from 'vue'
-import { shallowRef, watchEffect } from 'vue'
+import { ref, shallowRef, watchEffect } from 'vue'
 import { useQuery } from '@tanstack/vue-query'
 import { useFilters } from '#common/composables/filter'
 import { usePager, usePageState } from '#common/composables/pagination'
 import { useNotify } from '#common/composables/notify'
 import {
+  type Column,
+  type VisibilityState,
   FlexRender,
   getCoreRowModel,
   useVueTable,
@@ -163,14 +172,20 @@ import { mdiCloseCircle, mdiMagnify } from '@mdi/js'
 import { createClient } from '@connectrpc/connect'
 import { OrganizationService } from '@buf/dendrascience_api.bufbuild_es/dendra/api/metadata/v3alpha1/organization_service_pb'
 import { transport } from '#common/lib/dendra-v3'
-import { toJson } from '@bufbuild/protobuf'
-import { TimestampSchema } from '@bufbuild/protobuf/wkt'
-import { createCellFormatters } from '#common/lib/table'
+import {
+  createCellFormatters,
+  createCreatedAtAccessor,
+  createUpdatedAtAccessor
+} from '#common/lib/table'
 
+const { notify } = useNotify()
 const { pageSize, pageToken } = usePageState()
 const { isEnabledFilter, isHiddenFilter, searchText, searchTextDebounced } =
   useFilters()
-const { notify } = useNotify()
+
+//
+// Configure query
+//
 
 const client = createClient(OrganizationService, transport)
 
@@ -193,6 +208,10 @@ const { data, error, isError, isFetching, isPending, suspense } = useQuery({
   queryKey: ['organizations', { pageSize, pageToken, searchTextDebounced }],
   queryFn: () => listOrganizations()
 })
+
+//
+// Configure table
+//
 
 const { isNextDisabled, isPreviousDisabled, stepToPage } = usePager({
   data,
@@ -219,31 +238,37 @@ watchEffect(() => {
 
 await suspense()
 
-function truncateText(text: string) {
-  text = text.trim()
-  const words = text.split(' ')
-
-  return words.length > 10 ? words.slice(0, 10).join(' ') + '...' : text
-}
-
 const columnHelper = createColumnHelper<Organization>()
+const columnVisibility = ref<VisibilityState>({
+  id: false,
+  fullName: false,
+  slug: false,
+  email: false,
+  url: false,
+  createdAt: false,
+  createdByName: false,
+  createdBySubject: false,
+  updatedAt: false,
+  updatedByName: false,
+  updatedBySubject: false
+})
 const cellFormatters = createCellFormatters<Organization>()
-
-// ColumnDefTemplate<CellContext<TData, TValue>>;
-// function cellBoolean<TData>(props: CellContext<TData, boolean>): VNode {
-//   return props.getValue()
-//     ? h(VIcon, { color: 'surface-variant', icon: 'mso:toggle_on' })
-//     : h(VIcon, { color: 'surface-light', icon: 'mso:toggle_off' })
-// }
+const createdAtAccessor = createCreatedAtAccessor()
+const updatedAtAccessor = createUpdatedAtAccessor()
 
 const columns = [
+  columnHelper.accessor('id', {
+    header: 'ID'
+  }),
   columnHelper.accessor('name', {
     header: 'Name'
-    // cell: info => info.getValue(),
+  }),
+  columnHelper.accessor('fullName', {
+    header: 'Full Name'
   }),
   columnHelper.accessor('description', {
     header: 'Description',
-    cell: props => truncateText(props.getValue())
+    cell: cellFormatters.wordTruncate
   }),
   columnHelper.accessor('isEnabled', {
     header: 'Enabled',
@@ -253,60 +278,41 @@ const columns = [
     header: 'Hidden',
     cell: cellFormatters.boolean
   }),
-  columnHelper.accessor(
-    row => {
-      return row.modification?.createdAt
-        ? new Date(toJson(TimestampSchema, row.modification.createdAt))
-        : undefined
-    },
-    {
-      header: 'Created At',
-      cell: cellFormatters.isoDate
-    }
-  )
-  // columnHelper.group({
-  //   header: 'Name',
-  //   footer: props => props.column.id,
-  //   columns: [
-  //     columnHelper.accessor('firstName', {
-  //       cell: info => info.getValue(),
-  //       footer: props => props.column.id
-  //     }),
-  //     columnHelper.accessor(row => row.lastName, {
-  //       id: 'lastName',
-  //       cell: info => info.getValue(),
-  //       header: () => 'Last Name',
-  //       footer: props => props.column.id
-  //     })
-  //   ]
-  // }),
-  // columnHelper.group({
-  //   header: 'Info',
-  //   footer: props => props.column.id,
-  //   columns: [
-  //     columnHelper.accessor('age', {
-  //       header: () => 'Age',
-  //       footer: props => props.column.id
-  //     }),
-  //     columnHelper.group({
-  //       header: 'More Info',
-  //       columns: [
-  //         columnHelper.accessor('visits', {
-  //           header: () => 'Visits',
-  //           footer: props => props.column.id
-  //         }),
-  //         columnHelper.accessor('status', {
-  //           header: 'Status',
-  //           footer: props => props.column.id
-  //         }),
-  //         columnHelper.accessor('progress', {
-  //           header: 'Profile Progress',
-  //           footer: props => props.column.id
-  //         })
-  //       ]
-  //     })
-  //   ]
-  // })
+  columnHelper.accessor('slug', {
+    header: 'Slug'
+  }),
+  columnHelper.accessor('email', {
+    header: 'Email'
+  }),
+  columnHelper.accessor('url', {
+    header: 'URL'
+  }),
+  columnHelper.accessor(row => createdAtAccessor(row), {
+    id: 'createdAt',
+    header: 'Created At',
+    cell: cellFormatters.isoDate
+  }),
+  columnHelper.accessor('modification.createdByName', {
+    id: 'createdByName',
+    header: 'Created By Name'
+  }),
+  columnHelper.accessor('modification.createdBySubject', {
+    id: 'createdBySubject',
+    header: 'Created By Subject'
+  }),
+  columnHelper.accessor(row => updatedAtAccessor(row), {
+    id: 'updatedAt',
+    header: 'Updated At',
+    cell: cellFormatters.isoDate
+  }),
+  columnHelper.accessor('modification.updatedByName', {
+    id: 'updatedByName',
+    header: 'Updated By Name'
+  }),
+  columnHelper.accessor('modification.updatedBySubject', {
+    id: 'updatedBySubject',
+    header: 'Updated By Subject'
+  })
 ]
 
 const table = useVueTable({
@@ -314,6 +320,18 @@ const table = useVueTable({
     return tableData.value
   },
   columns,
+  state: {
+    get columnVisibility() {
+      return columnVisibility.value
+    }
+  },
   getCoreRowModel: getCoreRowModel()
 })
+
+function toggleColumnVisibility(column: Column<Organization, unknown>) {
+  columnVisibility.value = {
+    ...columnVisibility.value,
+    [column.id]: !column.getIsVisible()
+  }
+}
 </script>

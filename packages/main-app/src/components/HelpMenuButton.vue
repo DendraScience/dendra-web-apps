@@ -16,7 +16,7 @@
       </v-tooltip>
     </template>
 
-    <v-list density="compact" nav>
+    <v-list density="compact" bg-color="surface-light" nav>
       <v-list-item
         v-if="HREF_DOCUMENTATION"
         :append-icon="mdiOpenInNew"

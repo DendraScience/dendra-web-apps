@@ -1,2 +1,10 @@
 @use './settings';
 @use 'sass:map';
+
+table.tan-table {
+	border-spacing: 0;
+}
+
+table.tan-table-hover > tbody > tr:hover {
+	background-color: settings.$table-hover-color;
+}

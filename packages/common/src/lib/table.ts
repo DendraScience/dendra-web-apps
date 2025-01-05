@@ -1,18 +1,37 @@
 import type { CellContext, RowData } from '@tanstack/vue-table'
+import type { ModificationDetails } from '@buf/dendrascience_api.bufbuild_es/dendra/api/metadata/v3alpha1/types_pb'
 import { h } from 'vue'
 import { VIcon } from 'vuetify/components'
-// import { toJson } from '@bufbuild/protobuf'
-// import { TimestampSchema } from '@bufbuild/protobuf/wkt'
+import { toJson } from '@bufbuild/protobuf'
+import { TimestampSchema } from '@bufbuild/protobuf/wkt'
 
-//AccessorFn<TData>
 //
-// export function createCreatedAtAccessor<TData extends RowData>() {
-//   return (originalRow: TData, index: number) => {
-//     return originalRow.modification?.createdAt
-//       ? new Date(toJson(TimestampSchema, originalRow.modification.createdAt))
-//       : undefined
-//   }
-// }
+// Accessors
+//
+
+interface Modifiable {
+  modification?: ModificationDetails
+}
+
+export function createCreatedAtAccessor() {
+  return (row: Modifiable) => {
+    return row.modification?.createdAt
+      ? new Date(toJson(TimestampSchema, row.modification.createdAt))
+      : undefined
+  }
+}
+
+export function createUpdatedAtAccessor() {
+  return (row: Modifiable) => {
+    return row.modification?.updatedAt
+      ? new Date(toJson(TimestampSchema, row.modification.updatedAt))
+      : undefined
+  }
+}
+
+//
+// Formatters
+//
 
 export function createBooleanCellFormatter<TData extends RowData>() {
   return (props: CellContext<TData, boolean>) => {
@@ -29,9 +48,25 @@ export function createISODateCellFormatter<TData extends RowData>() {
   }
 }
 
+export function createWordTruncateCellFormatter<TData extends RowData>(
+  count: number
+) {
+  return (props: CellContext<TData, string>) => {
+    let value = props.getValue()
+    if (value) {
+      value = value.trim()
+      const words = value.split(' ')
+      return words.length > count
+        ? words.slice(0, count).join(' ') + '...'
+        : value
+    }
+  }
+}
+
 export function createCellFormatters<TData extends RowData>() {
   return {
     boolean: createBooleanCellFormatter<TData>(),
-    isoDate: createISODateCellFormatter<TData>()
+    isoDate: createISODateCellFormatter<TData>(),
+    wordTruncate: createWordTruncateCellFormatter<TData>(10)
   }
 }

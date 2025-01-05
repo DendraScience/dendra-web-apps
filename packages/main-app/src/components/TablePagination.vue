@@ -16,7 +16,7 @@
     <v-btn
       v-if="stepToPage"
       :icon="mdiPageFirst"
-      color="on-surface"
+      color="high-emphasis"
       density="comfortable"
       variant="text"
       @click="stepToPage(0)"
@@ -24,9 +24,9 @@
     <v-btn
       v-if="stepToPage"
       :disabled="isPreviousDisabled"
-      :text="t('table.previous_text')"
+      :text="t('button_text.previous_page')"
       class="text-none"
-      color="on-surface"
+      color="high-emphasis"
       slim
       variant="text"
       @click="stepToPage(-1)"
@@ -34,9 +34,9 @@
     <v-btn
       v-if="stepToPage"
       :disabled="isNextDisabled"
-      :text="t('table.next_text')"
+      :text="t('button_text.next_page')"
       class="text-none"
-      color="on-surface"
+      color="high-emphasis"
       slim
       variant="text"
       @click="stepToPage(1)"
