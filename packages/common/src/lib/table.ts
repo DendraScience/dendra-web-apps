@@ -1,7 +1,12 @@
-import type { CellContext, RowData } from '@tanstack/vue-table'
+import type { SortDirection, CellContext, RowData } from '@tanstack/vue-table'
 import type { ModificationDetails } from '@buf/dendrascience_api.bufbuild_es/dendra/api/metadata/v3alpha1/types_pb'
 import { h } from 'vue'
-import { VIcon } from 'vuetify/components'
+import { VBtn, VIcon } from 'vuetify/components'
+import {
+  mdiSortReverseVariant,
+  mdiSortVariant,
+  mdiSortVariantOff
+} from '@mdi/js'
 import { toJson } from '@bufbuild/protobuf'
 import { TimestampSchema } from '@bufbuild/protobuf/wkt'
 
@@ -41,6 +46,18 @@ export function createBooleanCellFormatter<TData extends RowData>() {
   }
 }
 
+export function createEditCellFormatter<TData extends RowData>() {
+  return (props: CellContext<TData, string>) => {
+    return h(VBtn, {
+      class: 'text-none',
+      size: 'x-small',
+      rounded: 'pill',
+      text: 'Edit',
+      variant: 'tonal'
+    })
+  }
+}
+
 export function createISODateCellFormatter<TData extends RowData>() {
   return (props: CellContext<TData, Date | undefined>) => {
     const value = props.getValue()
@@ -66,7 +83,24 @@ export function createWordTruncateCellFormatter<TData extends RowData>(
 export function createCellFormatters<TData extends RowData>() {
   return {
     boolean: createBooleanCellFormatter<TData>(),
+    edit: createEditCellFormatter<TData>(),
     isoDate: createISODateCellFormatter<TData>(),
     wordTruncate: createWordTruncateCellFormatter<TData>(10)
+  }
+}
+
+//
+// Helpers
+//
+
+export function sortIconProps(value: false | SortDirection) {
+  if (value === false) {
+    return { color: 'disabled', icon: mdiSortVariantOff }
+  }
+  switch (value) {
+    case 'asc':
+      return { color: 'primary', icon: mdiSortReverseVariant }
+    case 'desc':
+      return { color: 'primary', icon: mdiSortVariant }
   }
 }

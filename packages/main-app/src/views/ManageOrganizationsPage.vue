@@ -1,13 +1,6 @@
 <template>
   <v-container fluid style="position: relative">
-    <v-progress-linear
-      :active="isFetching"
-      absolute
-      color="info"
-      indeterminate
-      location="top"
-      tile
-    />
+    <FetchingProgress :active="isFetching" />
 
     <v-row>
       <v-col cols="12">
@@ -24,42 +17,23 @@
               <v-row align="center" dense>
                 <v-col>
                   <h1 class="text-h5 text-sm-h4">Organizations</h1>
-
-                  <div class="d-flex align-center mt-2">
-                    <p class="text-body-2">
-                      <span class="text-medium-emphasis text-uppercase"
-                        >Filtered By:</span
-                      >
-                      <span class="mx-1">Not Hidden</span>&<span class="mx-1"
-                        >Is Enabled</span
-                      >&<span class="mx-1">Place: California Reserve</span>
-                    </p>
-
-                    <v-btn
-                      :icon="mdiCloseCircle"
-                      class="text-medium-emphasis"
-                      color="on-surface"
-                      density="compact"
-                      variant="text"
-                    />
-                  </div>
+                  <FilteredByText
+                    :items="filteredByItems"
+                    @clear="clearFilters"
+                  />
                 </v-col>
 
                 <v-col cols="auto">
-                  <FiltersMenuButton>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-                    sed do eiusmod tempor incididunt ut labore et dolore magna
-                    aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-                    ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                    Duis aute irure dolor in reprehenderit in voluptate velit
-                    esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
-                    occaecat cupidatat non proident, sunt in culpa qui officia
-                    deserunt mollit anim id est laborum.
+                  <FiltersMenuButton :is-filtered="!!filteredByItems.length">
+                    <FiltersMenuItemIsEnabled v-model.ss="isEnabledFilter" />
+                    <FiltersMenuItemIsHidden v-model.ss="isHiddenFilter" />
                   </FiltersMenuButton>
 
                   <ColumnsMenuButton>
                     <v-list-item
-                      v-for="column in table.getAllLeafColumns()"
+                      v-for="column in table
+                        .getAllLeafColumns()
+                        .filter(c => c.id !== 'edit')"
                       :key="column.id"
                       :title="column.columnDef.header?.toString()"
                       @click="toggleColumnVisibility(column)"
@@ -81,16 +55,7 @@
 
               <v-row dense>
                 <v-col cols="12" lg="6">
-                  <v-text-field
-                    v-model="searchText"
-                    :prepend-inner-icon="mdiMagnify"
-                    clearable
-                    density="compact"
-                    hide-details
-                    placeholder="Search"
-                    rounded
-                    variant="outlined"
-                  />
+                  <SearchTextField v-model="searchText" />
                 </v-col>
               </v-row>
             </v-card-text>
@@ -108,13 +73,18 @@
                   v-for="header in headerGroup.headers"
                   :key="header.id"
                   :colSpan="header.colSpan"
+                  :class="header.column.columnDef.meta?.headerClass"
                   class="text-subtitle-2 text-uppercase text-left pa-3 border-b-sm"
                 >
                   <FlexRender
                     v-if="!header.isPlaceholder"
                     :render="header.column.columnDef.header"
                     :props="header.getContext()"
-                  />&nbsp;<v-icon color="disabled" icon="mso:sort" />
+                  />&nbsp;<v-icon
+                    v-if="header.column.getCanSort()"
+                    v-bind="sortIconProps(header.column.getIsSorted())"
+                    @click="header.column.getToggleSortingHandler()?.($event)"
+                  />
                 </th>
               </tr>
             </thead>
@@ -124,6 +94,7 @@
                 <td
                   v-for="cell in row.getVisibleCells()"
                   :key="cell.id"
+                  :class="cell.column.columnDef.meta?.cellClass"
                   class="text-body-2 pa-3 sticky-td border-b-sm"
                   style="word-break: break-all"
                 >
@@ -145,7 +116,7 @@
           v-model="pageSize"
           :is-next-disabled="isNextDisabled"
           :is-previous-disabled="isPreviousDisabled"
-          :step-to-page="stepToPage"
+          @step="stepToPage"
         />
       </v-col>
     </v-row>
@@ -154,34 +125,49 @@
 
 <script setup lang="ts">
 import type { Organization } from '@buf/dendrascience_api.bufbuild_es/dendra/api/metadata/v3alpha1/organization_pb'
-import { ListOrganizationsRequest_OrderField } from '@buf/dendrascience_api.bufbuild_es/dendra/api/metadata/v3alpha1/organization_request_response_pb'
 import { ref, shallowRef, watchEffect } from 'vue'
 import { useQuery } from '@tanstack/vue-query'
-import { useFilters } from '#common/composables/filter'
-import { usePager, usePageState } from '#common/composables/pagination'
-import { useNotify } from '#common/composables/notify'
 import {
   type Column,
+  type SortingState,
   type VisibilityState,
   FlexRender,
   getCoreRowModel,
   useVueTable,
   createColumnHelper
 } from '@tanstack/vue-table'
-import { mdiCloseCircle, mdiMagnify } from '@mdi/js'
-import { createClient } from '@connectrpc/connect'
-import { OrganizationService } from '@buf/dendrascience_api.bufbuild_es/dendra/api/metadata/v3alpha1/organization_service_pb'
-import { transport } from '#common/lib/dendra-v3'
+import { useFilters } from '#common/composables/filter'
+import { usePager, usePageState } from '#common/composables/pagination'
+import { useNotify } from '#common/composables/notify'
 import {
   createCellFormatters,
   createCreatedAtAccessor,
-  createUpdatedAtAccessor
+  createUpdatedAtAccessor,
+  sortIconProps
 } from '#common/lib/table'
+import { createClient } from '@connectrpc/connect'
+import { ListOrganizationsRequest_OrderField } from '@buf/dendrascience_api.bufbuild_es/dendra/api/metadata/v3alpha1/organization_request_response_pb'
+import { OrganizationService } from '@buf/dendrascience_api.bufbuild_es/dendra/api/metadata/v3alpha1/organization_service_pb'
+import { transport } from '#common/lib/dendra-v3'
 
 const { notify } = useNotify()
 const { pageSize, pageToken } = usePageState()
-const { isEnabledFilter, isHiddenFilter, searchText, searchTextDebounced } =
-  useFilters()
+const {
+  applyRouteQueryFilters,
+  clearFilters,
+  filteredByItems,
+  isEnabledFilter,
+  isHiddenFilter,
+  searchText,
+  searchTextDebounced
+} = useFilters()
+
+applyRouteQueryFilters()
+
+// IMPORTANT: Initial order and sorting state must match to prevent requerying
+const orderByField = ref(ListOrganizationsRequest_OrderField.NAME)
+const orderByIsDesc = ref(false)
+const sorting = ref<SortingState>([{ id: 'name', desc: false }])
 
 //
 // Configure query
@@ -197,7 +183,8 @@ async function listOrganizations() {
       searchText: searchTextDebounced.value
     },
     orderBy: {
-      field: ListOrganizationsRequest_OrderField.SLUG
+      field: orderByField.value,
+      isDescending: orderByIsDesc.value
     },
     pageSize: pageSize.value,
     pageToken: pageToken.value
@@ -205,7 +192,18 @@ async function listOrganizations() {
 }
 
 const { data, error, isError, isFetching, isPending, suspense } = useQuery({
-  queryKey: ['organizations', { pageSize, pageToken, searchTextDebounced }],
+  queryKey: [
+    'organizations',
+    {
+      isEnabledFilter,
+      isHiddenFilter,
+      orderByField,
+      orderByIsDesc,
+      pageSize,
+      pageToken,
+      searchTextDebounced
+    }
+  ],
   queryFn: () => listOrganizations()
 })
 
@@ -242,6 +240,7 @@ const columnHelper = createColumnHelper<Organization>()
 const columnVisibility = ref<VisibilityState>({
   id: false,
   fullName: false,
+  sortValue: false,
   slug: false,
   email: false,
   url: false,
@@ -256,7 +255,37 @@ const cellFormatters = createCellFormatters<Organization>()
 const createdAtAccessor = createCreatedAtAccessor()
 const updatedAtAccessor = createUpdatedAtAccessor()
 
+watchEffect(() => {
+  if (sorting.value.length) {
+    orderByIsDesc.value = sorting.value[0].desc
+
+    switch (sorting.value[0].id) {
+      case 'id':
+        orderByField.value = ListOrganizationsRequest_OrderField.ID
+        break
+      case 'name':
+        orderByField.value = ListOrganizationsRequest_OrderField.NAME
+        break
+      case 'slug':
+        orderByField.value = ListOrganizationsRequest_OrderField.SLUG
+        break
+      case 'sortValue':
+        orderByField.value = ListOrganizationsRequest_OrderField.SORT_VALUE
+        break
+      case 'email':
+        orderByField.value = ListOrganizationsRequest_OrderField.EMAIL
+        break
+    }
+  }
+})
+
 const columns = [
+  columnHelper.accessor('id', {
+    cell: cellFormatters.edit,
+    enableSorting: false,
+    header: '',
+    id: 'edit'
+  }),
   columnHelper.accessor('id', {
     header: 'ID'
   }),
@@ -264,19 +293,30 @@ const columns = [
     header: 'Name'
   }),
   columnHelper.accessor('fullName', {
+    enableSorting: false,
     header: 'Full Name'
   }),
   columnHelper.accessor('description', {
-    header: 'Description',
-    cell: cellFormatters.wordTruncate
+    cell: cellFormatters.wordTruncate,
+    enableSorting: false,
+    header: 'Description'
   }),
   columnHelper.accessor('isEnabled', {
-    header: 'Enabled',
-    cell: cellFormatters.boolean
+    cell: cellFormatters.boolean,
+    enableSorting: false,
+    header: 'Enabled'
   }),
   columnHelper.accessor('isHidden', {
-    header: 'Hidden',
-    cell: cellFormatters.boolean
+    cell: cellFormatters.boolean,
+    enableSorting: false,
+    header: 'Hidden'
+  }),
+  columnHelper.accessor('sortValue', {
+    header: 'Sort Value',
+    meta: {
+      cellClass: 'text-right',
+      headerClass: 'text-right'
+    }
   }),
   columnHelper.accessor('slug', {
     header: 'Slug'
@@ -285,33 +325,40 @@ const columns = [
     header: 'Email'
   }),
   columnHelper.accessor('url', {
+    enableSorting: false,
     header: 'URL'
   }),
   columnHelper.accessor(row => createdAtAccessor(row), {
-    id: 'createdAt',
+    cell: cellFormatters.isoDate,
+    enableSorting: false,
     header: 'Created At',
-    cell: cellFormatters.isoDate
+    id: 'createdAt'
   }),
   columnHelper.accessor('modification.createdByName', {
-    id: 'createdByName',
-    header: 'Created By Name'
+    header: 'Created By Name',
+    enableSorting: false,
+    id: 'createdByName'
   }),
   columnHelper.accessor('modification.createdBySubject', {
-    id: 'createdBySubject',
-    header: 'Created By Subject'
+    header: 'Created By Subject',
+    enableSorting: false,
+    id: 'createdBySubject'
   }),
   columnHelper.accessor(row => updatedAtAccessor(row), {
-    id: 'updatedAt',
+    cell: cellFormatters.isoDate,
+    enableSorting: false,
     header: 'Updated At',
-    cell: cellFormatters.isoDate
+    id: 'updatedAt'
   }),
   columnHelper.accessor('modification.updatedByName', {
-    id: 'updatedByName',
-    header: 'Updated By Name'
+    header: 'Updated By Name',
+    enableSorting: false,
+    id: 'updatedByName'
   }),
   columnHelper.accessor('modification.updatedBySubject', {
-    id: 'updatedBySubject',
-    header: 'Updated By Subject'
+    header: 'Updated By Subject',
+    enableSorting: false,
+    id: 'updatedBySubject'
   })
 ]
 
@@ -320,12 +367,23 @@ const table = useVueTable({
     return tableData.value
   },
   columns,
+  enableSortingRemoval: false,
+  getCoreRowModel: getCoreRowModel(),
+  manualSorting: true,
+  onSortingChange: updaterOrValue => {
+    sorting.value =
+      typeof updaterOrValue === 'function'
+        ? updaterOrValue(sorting.value)
+        : updaterOrValue
+  },
   state: {
     get columnVisibility() {
       return columnVisibility.value
+    },
+    get sorting() {
+      return sorting.value
     }
-  },
-  getCoreRowModel: getCoreRowModel()
+  }
 })
 
 function toggleColumnVisibility(column: Column<Organization, unknown>) {

@@ -13,7 +13,7 @@
     <v-row>
       <v-col cols="12" md="6" xl="3">
         <StartCard :to="{ name: 'query' }">
-          <h2 class="text-h5 font-weight-medium my-3">
+          <h2 class="text-h5 font-weight-medium mb-3">
             {{ t('home_cards.query_title') }}
           </h2>
           <p class="text-body-1">
@@ -30,7 +30,7 @@
 
       <v-col cols="12" md="6" xl="3">
         <StartCard :to="{ name: 'manage-places' }">
-          <h2 class="text-h5 font-weight-medium my-3">
+          <h2 class="text-h5 font-weight-medium mb-3">
             {{ t('home_cards.manage_title') }}
           </h2>
           <p class="text-body-1">
@@ -47,7 +47,7 @@
 
       <v-col v-if="HREF_DOCUMENTATION" cols="12" md="6" xl="3">
         <StartCard :href="HREF_DOCUMENTATION">
-          <h2 class="text-h5 font-weight-medium my-3">
+          <h2 class="text-h5 font-weight-medium mb-3">
             {{ t('home_cards.documentation_title') }}
           </h2>
           <p class="text-body-1">
@@ -58,7 +58,7 @@
 
       <v-col v-if="!session" cols="12" md="6" xl="3">
         <StartCard :href="LOGIN_URL">
-          <h2 class="text-h5 font-weight-medium my-3">
+          <h2 class="text-h5 font-weight-medium mb-3">
             {{ t('home_cards.login_title') }}
           </h2>
           <p class="text-body-1">

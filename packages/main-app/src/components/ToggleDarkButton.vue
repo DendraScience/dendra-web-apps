@@ -12,9 +12,9 @@
 </template>
 
 <script setup lang="ts">
-import { useI18n } from 'vue-i18n'
-import { useTheme } from 'vuetify'
 import { useDark, useToggle } from '@vueuse/core'
+import { useTheme } from 'vuetify'
+import { useI18n } from 'vue-i18n'
 import { mdiWeatherNight, mdiWhiteBalanceSunny } from '@mdi/js'
 
 const { t } = useI18n()

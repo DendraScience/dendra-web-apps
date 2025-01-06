@@ -36,6 +36,7 @@
         "components.d.ts",
         "env.d.ts",
         "router.d.ts",
+        "tanstack.d.ts",
         "src/**/*",
         "src/**/*.vue",
         "../../packages/common/src/**/*",

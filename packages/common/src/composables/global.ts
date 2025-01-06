@@ -8,6 +8,11 @@ import { transport } from '#common/lib/dendra-v3'
 export const useGlobalState = createGlobalState(() => {
   const client = createClient(SessionService, transport)
   const session = shallowRef<Session>()
+  const sessionChannel = new BroadcastChannel('session')
+
+  sessionChannel.onmessage = ({ data }) => {
+    if (data === 'login' || data === 'logout') window.location.reload()
+  }
 
   async function fetchSession() {
     session.value = undefined
@@ -18,6 +23,7 @@ export const useGlobalState = createGlobalState(() => {
 
   return {
     fetchSession,
-    session
+    session,
+    sessionChannel
   }
 })

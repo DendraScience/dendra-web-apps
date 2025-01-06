@@ -9,9 +9,16 @@
     {
         "columns": "Columns",
         "filters": "Filters",
-        "new_item": "New",
-        "next_page": "Next",
-        "previous_page": "Previous"
+        "new_item": "New"
+    },
+    "filter":
+    {
+        "filtered_by_text": "Filtered By:",
+        "is_enabled": "Is Enabled",
+        "is_hidden": "Is Hidden",
+        "not_enabled": "Not Enabled",
+        "not_hidden": "Not Hidden",
+        "search_text": "Search"
     },
     "footer_links":
     {
@@ -111,9 +118,11 @@
         "query": "Query Data",
         "status": "Status"
     },
-    "table":
+    "table_pagination":
     {
-        "items_per_page": "Items per page:"
+        "items_per_page": "Items per page:",
+        "next_page": "Next",
+        "previous_page": "Previous"
     },
     "tooltips":
     {

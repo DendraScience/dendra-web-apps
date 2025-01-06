@@ -19,6 +19,8 @@
 
     <NotifySnackbar />
 
+    <EditDrawer v-model="edit" />
+
     <v-main>
       <div class="h-100">
         <slot />
@@ -32,5 +34,7 @@ import { ref } from 'vue'
 import { useToggle } from '@vueuse/core'
 
 const drawer = ref(null)
+const edit = ref(true)
 const toggleDrawer = useToggle(drawer)
+// const toggleEdit = useToggle(edit)
 </script>

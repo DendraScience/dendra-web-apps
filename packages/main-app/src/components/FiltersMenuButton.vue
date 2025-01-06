@@ -3,7 +3,7 @@
     <template #activator="{ props }">
       <v-btn
         v-bind="props"
-        :prepend-icon="mdiFilterCog"
+        :prepend-icon="isFiltered ? mdiFilterCheck : mdiFilterCogOutline"
         :text="t('button_text.filters')"
         border
         class="text-none ma-1"
@@ -13,7 +13,7 @@
       />
     </template>
 
-    <v-card max-width="400">
+    <v-card color="surface-light" max-width="400">
       <v-card-text>
         <slot />
       </v-card-text>
@@ -23,7 +23,11 @@
 
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
-import { mdiFilterCog } from '@mdi/js'
+import { mdiFilterCheck, mdiFilterCogOutline } from '@mdi/js'
+
+defineProps<{
+  isFiltered?: boolean
+}>()
 
 const { t } = useI18n()
 </script>

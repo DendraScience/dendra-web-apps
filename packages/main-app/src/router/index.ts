@@ -68,6 +68,24 @@ router.beforeEach(async to => {
   }
 })
 
+router.afterEach(async to => {
+  const { login, logout } = to.query
+  const { sessionChannel } = useGlobalState()
+
+  // Check for params to sync auth w/ other browsing contexts
+  if (login === null && logout === undefined) {
+    sessionChannel.postMessage('login')
+    const url = new URL(window.location.href)
+    url.searchParams.delete('login')
+    window.history.replaceState({}, '', url.href)
+  } else if (login === undefined && logout === null) {
+    sessionChannel.postMessage('logout')
+    const url = new URL(window.location.href)
+    url.searchParams.delete('logout')
+    window.history.replaceState({}, '', url.href)
+  }
+})
+
 router.onError(error => {
   const { notify } = useNotify()
   notify(error)
