@@ -1,5 +1,4 @@
-import type { EventBusKey } from '@vueuse/core'
-import { useEventBus } from '@vueuse/core'
+import { type EventBusKey, useEventBus } from '@vueuse/core'
 
 export interface Notification {
   error?: Error

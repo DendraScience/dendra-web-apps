@@ -1,10 +1,10 @@
 <template>
   <v-app>
-    <ManagementDrawer v-model="drawer" />
+    <ManagementDrawer v-model="navDrawer" />
 
     <v-app-bar title="Dendra Management" border="b" flat>
       <template #prepend>
-        <v-app-bar-nav-icon @click="toggleDrawer()" />
+        <v-app-bar-nav-icon @click="toggleNavDrawer()" />
       </template>
 
       <template #append>
@@ -19,7 +19,8 @@
 
     <NotifySnackbar />
 
-    <EditDrawer v-model="edit" />
+    <SmallSideDrawer v-model="smallSideDrawer" />
+    <LargeSideDrawer v-model="largeSideDrawer" />
 
     <v-main>
       <div class="h-100">
@@ -30,11 +31,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import { useToggle } from '@vueuse/core'
+import {
+  useProvideOverlay,
+  useOverlayOrThrow
+} from '#common/composables/overlay'
 
-const drawer = ref(null)
-const edit = ref(true)
-const toggleDrawer = useToggle(drawer)
-// const toggleEdit = useToggle(edit)
+useProvideOverlay()
+
+const { largeSideDrawer, smallSideDrawer, navDrawer, toggleNavDrawer } =
+  useOverlayOrThrow()
 </script>

@@ -7,7 +7,7 @@
 
       <v-app-bar-nav-icon
         v-if="$vuetify.display.smAndDown"
-        @click="toggleDrawer()"
+        @click="toggleNavDrawer()"
       />
 
       <template v-else>
@@ -33,7 +33,7 @@
       </template>
     </v-app-bar>
 
-    <QueryDrawer v-if="$vuetify.display.smAndDown" v-model="drawer" />
+    <QueryDrawer v-if="$vuetify.display.smAndDown" v-model="navDrawer" />
 
     <NotifySnackbar />
 
@@ -48,19 +48,22 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
-import { useToggle } from '@vueuse/core'
+import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useGlobalState } from '#common/composables/global'
+import {
+  useProvideOverlay,
+  useOverlayOrThrow
+} from '#common/composables/overlay'
 import logoColor from '#common/assets/site-logomark-color.svg'
 
 const LOGIN_URL = import.meta.env.VITE_CANOPY_LOGIN_URL
 
+useProvideOverlay()
+
 const { t } = useI18n()
 const { session } = useGlobalState()
-
-const drawer = ref(null)
-const toggleDrawer = useToggle(drawer)
+const { navDrawer, toggleNavDrawer } = useOverlayOrThrow()
 
 const items = computed(() => {
   return [

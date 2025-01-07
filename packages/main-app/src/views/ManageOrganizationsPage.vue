@@ -120,6 +120,16 @@
         />
       </v-col>
     </v-row>
+
+    <Teleport :to="LARGE_SIDE_DRAWER_TO">
+      <SideDrawerHeader
+        :subtitle="editSubtitle"
+        :title="editTitle"
+        @close="showLargeSideDrawer(false)"
+      />
+
+      <EditOrganizationView v-if="editID" :key="editID" />
+    </Teleport>
   </v-container>
 </template>
 
@@ -140,7 +150,12 @@ import { useFilters } from '#common/composables/filter'
 import { usePager, usePageState } from '#common/composables/pagination'
 import { useNotify } from '#common/composables/notify'
 import {
+  LARGE_SIDE_DRAWER_TO,
+  useOverlayOrThrow
+} from '#common/composables/overlay'
+import {
   createCellFormatters,
+  createEditButtonCellFormatter,
   createCreatedAtAccessor,
   createUpdatedAtAccessor,
   sortIconProps
@@ -151,6 +166,7 @@ import { OrganizationService } from '@buf/dendrascience_api.bufbuild_es/dendra/a
 import { transport } from '#common/lib/dendra-v3'
 
 const { notify } = useNotify()
+const { showLargeSideDrawer } = useOverlayOrThrow()
 const { pageSize, pageToken } = usePageState()
 const {
   applyRouteQueryFilters,
@@ -255,6 +271,18 @@ const cellFormatters = createCellFormatters<Organization>()
 const createdAtAccessor = createCreatedAtAccessor()
 const updatedAtAccessor = createUpdatedAtAccessor()
 
+const editID = ref('')
+const editTitle = ref('')
+const editSubtitle = ref('')
+const editButtonCellFormatter = createEditButtonCellFormatter<Organization>(
+  props => {
+    editID.value = props.getValue()
+    editTitle.value = props.row.getValue('name')
+    editSubtitle.value = props.row.getValue('description')
+    showLargeSideDrawer(true)
+  }
+)
+
 watchEffect(() => {
   if (sorting.value.length) {
     orderByIsDesc.value = sorting.value[0].desc
@@ -281,7 +309,7 @@ watchEffect(() => {
 
 const columns = [
   columnHelper.accessor('id', {
-    cell: cellFormatters.edit,
+    cell: editButtonCellFormatter,
     enableSorting: false,
     header: '',
     id: 'edit'

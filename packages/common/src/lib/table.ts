@@ -46,14 +46,17 @@ export function createBooleanCellFormatter<TData extends RowData>() {
   }
 }
 
-export function createEditCellFormatter<TData extends RowData>() {
+export function createEditButtonCellFormatter<TData extends RowData>(
+  handler: (props: CellContext<TData, string>) => void
+) {
   return (props: CellContext<TData, string>) => {
     return h(VBtn, {
       class: 'text-none',
       size: 'x-small',
       rounded: 'pill',
       text: 'Edit',
-      variant: 'tonal'
+      variant: 'tonal',
+      onClick: () => handler(props)
     })
   }
 }
@@ -83,7 +86,6 @@ export function createWordTruncateCellFormatter<TData extends RowData>(
 export function createCellFormatters<TData extends RowData>() {
   return {
     boolean: createBooleanCellFormatter<TData>(),
-    edit: createEditCellFormatter<TData>(),
     isoDate: createISODateCellFormatter<TData>(),
     wordTruncate: createWordTruncateCellFormatter<TData>(10)
   }

@@ -50,7 +50,7 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/manage/places',
     name: 'manage-places',
-    component: () => import('#root/views/ManagePlacesPage.vue'),
+    component: () => import('#root/views/PlaceholderPage.vue'),
     meta: {
       headProps: {
         title: t('page_titles.manage_places')
